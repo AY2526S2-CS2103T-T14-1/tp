@@ -21,15 +21,15 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Project Advisor
 
-### Jane Doe
+### Jai
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/jaiwalker01.png" width="250px">
 
-[[github](http://github.com/johndoe)]
+[[github](http://github.com/jaiwalker01)]
 [[portfolio](team/johndoe.md)]
 
-* Role: Team Lead
-* Responsibilities: UI
+* Role: Code Quality Sheriff
+* Responsibilities: Code Quality
 
 ### Johnny Doe
 
@@ -52,7 +52,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ### Anirudh
 
-<img src="images/anir2212.png" width="200px">
+<img src="images/anir2212.png" width="500px">
 
 [[github](http://github.com/johndoe)]
 
