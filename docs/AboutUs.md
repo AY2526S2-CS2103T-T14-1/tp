@@ -54,7 +54,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 <img src="images/anir2212.png" width="500px">
 
-[[github](http://github.com/johndoe)]
+[[github](http://github.com/anir2212)]
 
-* Role: Developer
-* Responsibilities: UI
+* Role: Integration
+* Responsibilities: In charge of versioning the code, maintaining the code repository, integrating various parts of the software to create a whole.
