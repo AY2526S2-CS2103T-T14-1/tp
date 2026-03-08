@@ -4,7 +4,7 @@
   pageNav: 3
 ---
 
-# AB-3 Developer Guide
+# ManageUp Developer Guide
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -274,42 +274,71 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
+* managers in companies 
 * prefer desktop apps over other types
+* responsible for managing different teams of people
 * can type fast
 * prefers typing to mouse interactions
 * is reasonably comfortable using CLI apps
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: manage employees and tasks faster than a typical mouse/GUI driven app
 
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                 | So that I can…​                                                        |
-|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| `* * *`  | new user                                   | see usage instructions       | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person             |                                                                        |
-| `* * *`  | user                                       | delete a person              | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name        | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name         | locate a person easily                                                 |
+| Priority | As a …​ | I want to …​ | So that I can…​ |
+|----------|--------|--------------|----------------|
+| `* * *` | new user | see usage instructions | refer to instructions when I forget how to use the app |
+| `* * *` | first-time user | see examples of valid command formats | avoid input errors |
+| `* * *` | user | view all my employees | have an overall view of all employees under my management |
+| `* * *` | user | view all tasks assigned | understand the current workload of the company |
+| `* * *` | user | see my employees' details | quickly access key information to contact them or assign work |
+| `* * *` | user | add employee's department | understand where they belong in the organisation and route requests correctly |
+| `* * *` | user | add employee's task | assign tasks to specific employees |
+| `* * *` | user | delete employees | remove outdated records when someone leaves |
+| `* * *` | user | search for an employee using name | find the right person quickly without scrolling through the entire list |
+| `* * *` | user | search for an employee using department | find employees within a specific department quickly |
+| `* * *` | user | search for an employee using job title | locate the appropriate employee for a specific role |
+| `* * *` | administrative user | find employee assigned to task | contact the responsible employee for follow-ups |
+| `* *` | user | add employee's address | arrange deliveries, site visits, or confirm work locations |
+| `* *` | user | add employee's contact number | call or text employees for urgent coordination |
+| `* *` | user | add employee's email | email employees directly regarding tasks and updates |
+| `* *` | user | add employee's job title | assign appropriate tasks based on their role |
+| `* *` | forgetful user | add employee's profile picture | recognise employees quickly |
+| `* *` | user | add employee's task description | include more details for easier future reference |
+| `* *` | user with many employees | add notes or facts to an employee's details | remember conversations or important information |
+| `* *` | user | edit employee's details | update information when promotions or role changes occur |
+| `* *` | user | edit task description | ensure task details remain accurate |
+| `* *` | user handling many departments | filter employees by department | quickly find employees in a particular sector |
+| `* *` | user | search employees working on a specific task | identify people responsible for that task |
+| `* *` | user | search tasks by keywords | quickly locate tasks already assigned |
+| `* *` | user | set task deadline | easily refer to when a task is due |
+| `* *` | user | see all tasks assigned to a department | allocate work more evenly across departments |
+| `* *` | user | sort tasks based on deadlines | identify overdue or upcoming tasks |
+| `*` | busy user | batch delete assigned tasks | update records more efficiently |
+| `*` | busy user | batch delete employees | remove multiple outdated records quickly |
+| `*` | user | sort employees by number of tasks assigned | see who currently has the heaviest workload |
+| `*` | frequent user | see command autocomplete suggestions | execute commands more quickly |
+| `*` | frequent user | see autocomplete suggestions with existing names or job titles | avoid duplicate or inconsistent entries |
+| `*` | frequent user | use shortcuts for commands | save time typing full commands |
+| `*` | first-time user | see sample contacts when opening the app | understand how the application works |
+| `*` | user | undo my last action | correct mistakes quickly |
 
-*{More to be added}*
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is the `ManageUp` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: Delete a person**
+**Use case: Delete an employee**
 
 **MSS**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1.  User requests to list employees
+2.  ManageUp shows the list of employees
+3.  User requests to delete a specific employee in the list
+4.  ManageUp deletes the employee 
 
     Use case ends.
 
@@ -321,25 +350,75 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 3a. The given index is invalid.
 
-    * 3a1. AddressBook shows an error message.
+    * 3a1. ManageUp shows an error message.
 
       Use case resumes at step 2.
 
-*{More to be added}*
+### Use case: Assign a task to an employee
+
+**MSS**
+
+1. User requests to view the list of employees.
+2. ManageUp displays the employee list.
+3. User enters a command to assign a task to a selected employee.
+4. ManageUp records the task and links it to the employee.
+5. ManageUp displays a confirmation message.
+
+Use case ends.
+
+**Extensions**
+
+* 3a. The given employee index is invalid.
+
+    * 3a1. ManageUp shows an error message.
+
+  Use case resumes at step 2.
+
+* 3b. The task description is missing or invalid.
+
+    * 3b1. ManageUp shows an error message.
+
+  Use case ends.
+
+### Use case: Search for employees by department
+
+**MSS**
+
+1. User enters a command to filter employees by department.
+2. ManageUp processes the request.
+3. ManageUp displays a list of employees belonging to that department.
+
+Use case ends.
+
+**Extensions**
+
+* 1a. No employees belong to the specified department.
+
+    * 1a1. ManageUp displays an empty result message.
+
+  Use case ends.
+
+
 
 ### Non-Functional Requirements
 
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
+2.  Should be able to hold up to 1000 employees without a noticeable sluggishness in performance for typical usage.
 3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+4.  The application should be **usable by a new user within 10 minutes** by referring to the help documentation.
+5.  The system should **prevent invalid or inconsistent data entries** through input validation.
+6.  The application should **respond to commands within 1 second** under typical operating conditions.
 
-*{More to be added}*
+
+
 
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
-
+* **Private contact detail**: Employee details that are not meant to be shared with others
+* **Employee**: A staff member stored in the system whose details and tasks are managed by the application.
+* **Task**: A piece of work assigned to an employee that may include a description and deadline.
+* **Department**: A category used to group employees within an organisation.
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Instructions for manual testing**
