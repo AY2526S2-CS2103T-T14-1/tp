@@ -125,4 +125,12 @@ public class CommandTestUtil {
         assertEquals(1, model.getFilteredPersonList().size());
     }
 
+    /**
+     * Updates {@code model}'s filtered list to show only the person with the given {@code name} in the
+     * {@code model}'s address book.
+     */
+    public static void showPersonByName(Model model, String name) {
+        model.updateFilteredPersonList(p -> p.getName().fullName.equals(name));
+        assertTrue(model.getFilteredPersonList().size() == 1);
+    }
 }
