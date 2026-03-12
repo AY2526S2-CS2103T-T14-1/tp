@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.employee.Department;
 import seedu.address.model.employee.Email;
 import seedu.address.model.employee.Employee;
 import seedu.address.model.employee.Name;
@@ -27,6 +28,7 @@ class JsonAdaptedPerson {
     private final String name;
     private final String phone;
     private final String email;
+    private final String department;
     private final String position;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
@@ -35,11 +37,12 @@ class JsonAdaptedPerson {
      */
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
-            @JsonProperty("email") String email, @JsonProperty("value") String position,
+            @JsonProperty("email") String email, @JsonProperty("department") String department, @JsonProperty("position") String position,
             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.department = department;
         this.position = position;
         if (tags != null) {
             this.tags.addAll(tags);
@@ -53,6 +56,7 @@ class JsonAdaptedPerson {
         name = source.getName().fullName;
         phone = source.getPhone().value;
         email = source.getEmail().value;
+        department = source.getDepartment().value;
         position = source.getPosition().value;
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
@@ -94,6 +98,14 @@ class JsonAdaptedPerson {
         }
         final Email modelEmail = new Email(email);
 
+        if (department == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Department.class.getSimpleName()));
+        }
+        if (!Department.isValidDepartment(department)) {
+            throw new IllegalValueException(Department.MESSAGE_CONSTRAINTS);
+        }
+        final Department modelDepartment = new Department(department);
+
         if (position == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Position.class.getSimpleName()));
         }
@@ -103,7 +115,7 @@ class JsonAdaptedPerson {
         final Position modelPosition = new Position(position);
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Employee(modelName, modelPhone, modelEmail, modelPosition, modelTags);
+        return new Employee(modelName, modelPhone, modelEmail, modelDepartment, modelPosition, modelTags);
     }
 
 }

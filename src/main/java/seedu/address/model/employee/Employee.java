@@ -22,17 +22,19 @@ public class Employee {
     private final Email email;
 
     // Data fields
+    private final Department department;
     private final Position position;
     private final Set<Tag> tags = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
-    public Employee(Name name, Phone phone, Email email, Position position, Set<Tag> tags) {
+    public Employee(Name name, Phone phone, Email email, Department department, Position position, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, position, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
+        this.department = department;
         this.position = position;
         this.tags.addAll(tags);
     }
@@ -48,6 +50,8 @@ public class Employee {
     public Email getEmail() {
         return email;
     }
+
+    public Department getDepartment() { return department; }
 
     public Position getPosition() {
         return position;
@@ -94,6 +98,7 @@ public class Employee {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && position.equals(otherPerson.position)
+                && department.equals(otherPerson.department)
                 && tags.equals(otherPerson.tags);
     }
 
@@ -109,7 +114,8 @@ public class Employee {
                 .add("name", name)
                 .add("phone", phone)
                 .add("email", email)
-                .add("value", position)
+                .add("position", position)
+                .add("department", department)
                 .add("tags", tags)
                 .toString();
     }
