@@ -3,6 +3,7 @@ package seedu.address.testutil;
 import java.util.HashSet;
 import java.util.Set;
 
+import seedu.address.model.employee.Department;
 import seedu.address.model.employee.Email;
 import seedu.address.model.employee.Employee;
 import seedu.address.model.employee.Name;
@@ -19,11 +20,13 @@ public class PersonBuilder {
     public static final String DEFAULT_NAME = "Amy Bee";
     public static final String DEFAULT_PHONE = "85355255";
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
+    public static final String DEFAULT_DEPARTMENT = "IT";
     public static final String DEFAULT_POSITION = "Software developer";
 
     private Name name;
     private Phone phone;
     private Email email;
+    private Department department;
     private Position position;
     private Set<Tag> tags;
 
@@ -34,6 +37,7 @@ public class PersonBuilder {
         name = new Name(DEFAULT_NAME);
         phone = new Phone(DEFAULT_PHONE);
         email = new Email(DEFAULT_EMAIL);
+        department = new Department(DEFAULT_DEPARTMENT);
         position = new Position(DEFAULT_POSITION);
         tags = new HashSet<>();
     }
@@ -45,6 +49,7 @@ public class PersonBuilder {
         name = personToCopy.getName();
         phone = personToCopy.getPhone();
         email = personToCopy.getEmail();
+        department = personToCopy.getDepartment();
         position = personToCopy.getPosition();
         tags = new HashSet<>(personToCopy.getTags());
     }
@@ -62,6 +67,14 @@ public class PersonBuilder {
      */
     public PersonBuilder withTags(String ... tags) {
         this.tags = SampleDataUtil.getTagSet(tags);
+        return this;
+    }
+
+    /**
+     * Sets the {@code Department} of the {@code Employee} that we are building.
+     */
+    public PersonBuilder withDepartment(String department) {
+        this.department = new Department(department);
         return this;
     }
 
@@ -90,7 +103,7 @@ public class PersonBuilder {
     }
 
     public Employee build() {
-        return new Employee(name, phone, email, position, tags);
+        return new Employee(name, phone, email, department, position, tags);
     }
 
 }

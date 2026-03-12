@@ -243,7 +243,8 @@ public class EditCommand extends Command {
                     .add("name", name)
                     .add("phone", phone)
                     .add("email", email)
-                    .add("value", position)
+                    .add("department", department)
+                    .add("position", position)
                     .add("tags", tags)
                     .toString();
         }
