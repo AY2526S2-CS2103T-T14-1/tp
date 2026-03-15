@@ -2,7 +2,6 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 
 /**
@@ -24,8 +23,7 @@ public class ShowCommand extends Command {
          */
         return new CommandResult(MESSAGE_SUCCESS);
     }
-}
 
-/*
-to test if workflow is correct
- */
+
+    // to test if  workflow is correct
+}
