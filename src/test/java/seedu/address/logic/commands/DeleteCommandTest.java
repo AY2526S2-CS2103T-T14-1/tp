@@ -117,4 +117,9 @@ public class DeleteCommandTest {
 
         assertTrue(model.getFilteredPersonList().isEmpty());
     }
+
+    /**
+     * Removes all completed tasks from the task list.
+     * Placeholder implementation for upcoming MVP feature.
+     */
 }
