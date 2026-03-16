@@ -7,6 +7,7 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonByName;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.person.Person;
+import seedu.address.model.employee.Employee;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -26,7 +27,7 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_validNameUnfilteredList_success() {
-        Person personToDelete = model.getFilteredPersonList().get(0);
+        Employee personToDelete = model.getFilteredPersonList().get(0);
         DeleteCommand deleteCommand = new DeleteCommand(personToDelete.getName().fullName);
 
         String expectedMessage = String.format(
@@ -50,7 +51,7 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_validNameFilteredList_success() {
-        Person personToDelete = model.getFilteredPersonList().get(0);
+        Employee personToDelete = model.getFilteredPersonList().get(0);
         showPersonByName(model, personToDelete.getName().fullName);
 
         DeleteCommand deleteCommand = new DeleteCommand(personToDelete.getName().fullName);
@@ -68,7 +69,7 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_invalidNameFilteredList_throwsCommandException() {
-        Person personToDelete = model.getFilteredPersonList().get(0);
+        Employee personToDelete = model.getFilteredPersonList().get(0);
         showPersonByName(model, personToDelete.getName().fullName);
         String invalidName = "Nonexistent Employee";
         DeleteCommand deleteCommand = new DeleteCommand(invalidName);
@@ -79,8 +80,8 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_validIndexUnfilteredList_success() {
-        Person personToDelete = model.getFilteredPersonList().get(0);
-        DeleteCommand deleteCommand = new DeleteCommand(1);
+        Employee personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON.getOneBased());
 
         String expectedMessage = String.format(
                 DeleteCommand.MESSAGE_DELETE_EMPLOYEE_SUCCESS,
@@ -100,7 +101,7 @@ public class DeleteCommandTest {
 
     @Test
     public void equals() {
-        Person person = model.getFilteredPersonList().get(0);
+        Employee person = model.getFilteredPersonList().get(0);
         DeleteCommand deleteFirstCommand = new DeleteCommand(person.getName().fullName);
         DeleteCommand deleteSecondCommand = new DeleteCommand("Another Employee");
 
@@ -123,7 +124,7 @@ public class DeleteCommandTest {
 
     @Test
     public void toStringMethod() {
-        Person person = model.getFilteredPersonList().get(0);
+        Employee person = model.getFilteredPersonList().get(0);
         DeleteCommand deleteCommand = new DeleteCommand(person.getName().fullName);
         String expected = DeleteCommand.class.getCanonicalName() + "{targetName=" + person.getName().fullName + "}";
         assertEquals(expected, deleteCommand.toString());

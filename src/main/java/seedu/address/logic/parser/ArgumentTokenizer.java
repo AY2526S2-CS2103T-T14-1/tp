@@ -86,7 +86,7 @@ public class ArgumentTokenizer {
      */
     private static ArgumentMultimap extractArguments(String argsString, List<PrefixPosition> prefixPositions) {
 
-        // Sort by start position
+        // Sort by start value
         prefixPositions.sort((prefix1, prefix2) -> prefix1.getStartPosition() - prefix2.getStartPosition());
 
         // Insert a PrefixPosition to represent the preamble
@@ -111,7 +111,7 @@ public class ArgumentTokenizer {
 
     /**
      * Returns the trimmed value of the argument in the arguments string specified by {@code currentPrefixPosition}.
-     * The end position of the value is determined by {@code nextPrefixPosition}.
+     * The end value of the value is determined by {@code nextPrefixPosition}.
      */
     private static String extractArgumentValue(String argsString,
                                         PrefixPosition currentPrefixPosition,
@@ -125,7 +125,7 @@ public class ArgumentTokenizer {
     }
 
     /**
-     * Represents a prefix's position in an arguments string.
+     * Represents a prefix's value in an arguments string.
      */
     private static class PrefixPosition {
         private int startPosition;

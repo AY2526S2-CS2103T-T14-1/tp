@@ -7,7 +7,7 @@ import java.util.List;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.person.Person;
+import seedu.address.model.employee.Employee;
 
 /**
  * Deletes an employee identified using their name or index from the address book.
@@ -57,8 +57,8 @@ public class DeleteCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        Person personToDelete = null;
-        List<Person> lastShownList = model.getFilteredPersonList();
+        Employee personToDelete = null;
+        List<Employee> lastShownList = model.getFilteredPersonList();
 
         if (targetIndex != null) {
             // Index-based deletion
@@ -73,10 +73,10 @@ public class DeleteCommand extends Command {
             if (!isValidName(normalizedTarget)) {
                 throw new CommandException(MESSAGE_INVALID_NAME);
             }
-            for (Person person : lastShownList) {
-                String personName = normalizeName(person.getName().fullName);
-                if (personName.equals(normalizedTarget)) {
-                    personToDelete = person;
+            for (Employee employee : lastShownList) {
+                String employeeName = normalizeName(employee.getName().fullName);
+                if (employeeName.equals(normalizedTarget)) {
+                    personToDelete = employee;
                     break;
                 }
             }
@@ -85,6 +85,7 @@ public class DeleteCommand extends Command {
                         String.format(MESSAGE_EMPLOYEE_NOT_FOUND, targetName));
             }
         }
+
         model.deletePerson(personToDelete);
         return new CommandResult(
                 String.format(MESSAGE_DELETE_EMPLOYEE_SUCCESS, Messages.format(personToDelete)));
