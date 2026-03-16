@@ -17,10 +17,18 @@ public class Task {
         this.taskDescription = taskDescription;
     }
 
+    /**
+     * Returns the name of the task.
+     * @return the name of the task.
+     */
     public String getTaskName() {
         return taskName;
     }
 
+    /**
+     * Returns the description of the task.
+     * @return the description of the task.
+     */
     public String getTaskDescription() {
         return taskDescription;
     }
