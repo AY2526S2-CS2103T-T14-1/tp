@@ -4,6 +4,8 @@ package seedu.address.model.person;
  * A class to represent a Task.
  */
 public class Task {
+    public static final String MESSAGE_CONSTRAINTS_TASK_NAME = "Enter a valid task name.";
+    public static final String MESSAGE_CONSTRAINTS_TASK_DESCRIPTION = "Enter a valid task description.";
     private String taskName;
     private String taskDescription;
 
@@ -15,6 +17,14 @@ public class Task {
     public Task(String taskName, String taskDescription) {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
+    }
+
+    public static boolean isValidTaskName(String taskName) {
+        return taskName != null && !taskName.trim().isEmpty();
+    }
+
+    public static boolean isValidTaskDescription(String taskDescription) {
+        return taskDescription != null && !taskDescription.trim().isEmpty();
     }
 
     /**

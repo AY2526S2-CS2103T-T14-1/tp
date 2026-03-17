@@ -1,5 +1,6 @@
 package seedu.address.storage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import seedu.address.model.person.Task;
@@ -8,13 +9,13 @@ import seedu.address.model.person.Task;
  * A class to represent the storage of TaskList.
  */
 public class TaskListStorage {
-    private List<Task> tasks;
+    private ArrayList<Task> tasks;
 
     /**
      * Constructor for TaskListStorage.
      * @param tasks the list of tasks to be stored.
      */
-    TaskListStorage(List<Task> tasks) {
+    public TaskListStorage(ArrayList<Task> tasks) {
         this.tasks = tasks;
     }
 
@@ -22,11 +23,21 @@ public class TaskListStorage {
      * Returns the list of tasks stored.
      * @return the list of tasks stored.
      */
-    public List<Task> getTasks() {
+    public ArrayList<Task> getTasks() {
         return tasks;
     }
 
+    @Override
+    public String toString() {
+        String result = "";
 
+        for (Task task : tasks) {
+            result += task.toString() + "\n";
+        }
+        return result;
+    }
 
-
+    public void addTask(Task modelType) {
+        tasks.add(modelType);
+    }
 }

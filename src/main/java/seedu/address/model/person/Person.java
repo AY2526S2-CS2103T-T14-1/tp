@@ -2,6 +2,8 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -9,6 +11,7 @@ import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.tag.Tag;
+import seedu.address.storage.TaskListStorage;
 
 /**
  * Represents a Person in the address book.
@@ -24,17 +27,19 @@ public class Person {
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
+    private final TaskListStorage taskListStorage;
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, TaskListStorage taskListStorage) {
         requireAllNonNull(name, phone, email, address, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
+        this.taskListStorage = taskListStorage;
     }
 
     public Name getName() {
@@ -65,6 +70,11 @@ public class Person {
      * Returns true if both persons have the same name.
      * This defines a weaker notion of equality between two persons.
      */
+
+    public TaskListStorage getTaskListStorage() {
+        return taskListStorage;
+    }
+
     public boolean isSamePerson(Person otherPerson) {
         if (otherPerson == this) {
             return true;
@@ -94,13 +104,14 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
-                && tags.equals(otherPerson.tags);
+                && tags.equals(otherPerson.tags)
+                && taskListStorage.equals(otherPerson.taskListStorage);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags);
+        return Objects.hash(name, phone, email, address, tags, taskListStorage);
     }
 
     @Override
@@ -111,7 +122,15 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
+                .add("Tasks Assigned:", taskListStorage)
                 .toString();
     }
 
+    public ArrayList<Task> getTasks() {
+        return taskListStorage.getTasks();
+    }
+
+    public void addTask(Task task) {
+        taskListStorage.addTask(task);
+    }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Task;
 import seedu.address.model.person.UniquePersonList;
 
 /**
@@ -126,5 +127,10 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public int hashCode() {
         return persons.hashCode();
+    }
+
+    public void addTaskToPerson(Person target, Task task) {
+        requireNonNull(task);
+        persons.addTaskToPerson(target, task);
     }
 }
