@@ -7,11 +7,11 @@ import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.employee.Employee;
 
-public class DepartmentContainsKeywordsPredicate implements Predicate<Employee> {
+public class EmailContainsKeywordsPredicate implements Predicate<Employee> {
 
     private final List<String> keywords;
 
-    public DepartmentContainsKeywordsPredicate(List<String> keywords) {
+    public EmailContainsKeywordsPredicate(List<String> keywords) {
         this.keywords = keywords;
     }
 
@@ -19,14 +19,14 @@ public class DepartmentContainsKeywordsPredicate implements Predicate<Employee> 
     public boolean test(Employee employee) {
         return keywords.stream()
                 .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(
-                        employee.getDepartment().value, keyword));
+                        employee.getEmail().value, keyword));
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this
-                || (other instanceof DepartmentContainsKeywordsPredicate
-                && keywords.equals(((DepartmentContainsKeywordsPredicate) other).keywords));
+                || (other instanceof EmailContainsKeywordsPredicate
+                && keywords.equals(((EmailContainsKeywordsPredicate) other).keywords));
     }
 
     @Override

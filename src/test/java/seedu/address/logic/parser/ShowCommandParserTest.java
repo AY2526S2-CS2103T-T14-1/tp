@@ -8,13 +8,8 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-<<<<<<< Updated upstream:src/test/java/seedu/address/logic/parser/ShowCommandParserTest.java
 import seedu.address.logic.commands.ShowCommand;
-import seedu.address.model.employee.NameContainsKeywordsPredicate;
-=======
-import seedu.address.logic.commands.FindCommand;
-import seedu.address.model.employee.predicate_checker.NameContainsKeywordsPredicate;
->>>>>>> Stashed changes:src/test/java/seedu/address/logic/parser/FindCommandParserTest.java
+import seedu.address.model.employee.predicate_checker.*;
 
 public class ShowCommandParserTest {
 

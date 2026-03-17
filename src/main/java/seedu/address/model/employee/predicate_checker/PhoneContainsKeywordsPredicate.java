@@ -3,30 +3,28 @@ package seedu.address.model.employee.predicate_checker;
 import java.util.List;
 import java.util.function.Predicate;
 
-import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.employee.Employee;
 
-public class DepartmentContainsKeywordsPredicate implements Predicate<Employee> {
+public class PhoneContainsKeywordsPredicate implements Predicate<Employee> {
 
     private final List<String> keywords;
 
-    public DepartmentContainsKeywordsPredicate(List<String> keywords) {
+    public PhoneContainsKeywordsPredicate(List<String> keywords) {
         this.keywords = keywords;
     }
 
     @Override
     public boolean test(Employee employee) {
         return keywords.stream()
-                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(
-                        employee.getDepartment().value, keyword));
+                .anyMatch(keyword -> employee.getPhone().value.contains(keyword));
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this
-                || (other instanceof DepartmentContainsKeywordsPredicate
-                && keywords.equals(((DepartmentContainsKeywordsPredicate) other).keywords));
+                || (other instanceof PhoneContainsKeywordsPredicate
+                && keywords.equals(((PhoneContainsKeywordsPredicate) other).keywords));
     }
 
     @Override

@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.employee.NameContainsKeywordsPredicate;
+import seedu.address.model.employee.predicate_checker.*;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code ShowCommand}.
