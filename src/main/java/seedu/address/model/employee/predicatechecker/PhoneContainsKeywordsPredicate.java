@@ -1,4 +1,4 @@
-package seedu.address.model.employee.predicate_checker;
+package seedu.address.model.employee.predicatechecker;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -6,6 +6,9 @@ import java.util.function.Predicate;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.employee.Employee;
 
+/**
+ * Tests that a {@code Employee}'s {@code Phone} matches any of the keywords given.
+ */
 public class PhoneContainsKeywordsPredicate implements Predicate<Employee> {
 
     private final List<String> keywords;
@@ -17,7 +20,8 @@ public class PhoneContainsKeywordsPredicate implements Predicate<Employee> {
     @Override
     public boolean test(Employee employee) {
         return keywords.stream()
-                .anyMatch(keyword -> employee.getPhone().value.contains(keyword));
+                .anyMatch(keyword -> employee.getPhone().value
+                        .contains(keyword));
     }
 
     @Override

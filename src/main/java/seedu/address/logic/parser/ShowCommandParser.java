@@ -8,14 +8,23 @@ import java.util.function.Predicate;
 import seedu.address.logic.commands.ShowCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.employee.Employee;
-import seedu.address.model.employee.predicate_checker.DepartmentContainsKeywordsPredicate;
-import seedu.address.model.employee.predicate_checker.EmailContainsKeywordsPredicate;
-import seedu.address.model.employee.predicate_checker.NameContainsKeywordsPredicate;
-import seedu.address.model.employee.predicate_checker.PhoneContainsKeywordsPredicate;
-import seedu.address.model.employee.predicate_checker.PositionContainsKeywordsPredicate;
+import seedu.address.model.employee.predicatechecker.DepartmentContainsKeywordsPredicate;
+import seedu.address.model.employee.predicatechecker.EmailContainsKeywordsPredicate;
+import seedu.address.model.employee.predicatechecker.NameContainsKeywordsPredicate;
+import seedu.address.model.employee.predicatechecker.PhoneContainsKeywordsPredicate;
+import seedu.address.model.employee.predicatechecker.PositionContainsKeywordsPredicate;
 
+/**
+ * Parses input arguments and creates
+ * a new ShowCommand object
+ */
 public class ShowCommandParser implements Parser<ShowCommand> {
 
+    /**
+     * Parses the given {@code String} of arguments in the context of the ShowCommand
+     * and returns a ShowCommand object for execution.
+     * @throws ParseException if the user input does not conform the expected format
+     */
     public ShowCommand parse(String args) throws ParseException {
         String input = args.trim();
 
@@ -25,67 +34,87 @@ public class ShowCommandParser implements Parser<ShowCommand> {
         }
 
         Predicate<Employee> predicate = employee -> true;
+        boolean hasFilter = false;
 
         // Name
-        if (input.contains("/n")) {
-            String value = extract(input, "/n");
-            predicate = predicate.and(
-                    new NameContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
-            );
+        if (input.contains("n/")) {
+            String value = extract(input, "n/");
+            if (!value.isEmpty()) {
+                predicate = predicate.and(
+                        new NameContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
+                );
+                hasFilter = true;
+            }
         }
 
         // Department
-        if (input.contains("/d")) {
-            String value = extract(input, "/d");
-            predicate = predicate.and(
-                    new DepartmentContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
-            );
-        }
-
-        // Position
-        if (input.contains("/p")) {
-            String value = extract(input, "/p");
-            predicate = predicate.and(
-                    new PositionContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
-            );
-        }
-
-        // Email
-        if (input.contains("/e")) {
-            String value = extract(input, "/e");
-            predicate = predicate.and(
-                    new EmailContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
-            );
+        if (input.contains("d/")) {
+            String value = extract(input, "d/");
+            if (!value.isEmpty()) {
+                predicate = predicate.and(
+                        new DepartmentContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
+                );
+                hasFilter = true;
+            }
         }
 
         // Phone
-        if (input.contains("/ph")) {
-            String value = extract(input, "/ph");
-            predicate = predicate.and(
-                    new PhoneContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
-            );
+        if (input.contains("p/")) {
+            String value = extract(input, "p/");
+            if (!value.isEmpty()) {
+                predicate = predicate.and(
+                        new PhoneContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
+                );
+                hasFilter = true;
+            }
+        }
+
+        // Position
+        if (input.contains("pos/")) {
+            String value = extract(input, "pos/");
+            if (!value.isEmpty()) {
+                predicate = predicate.and(
+                        new PositionContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
+                );
+                hasFilter = true;
+            }
+        }
+
+        // Email
+        if (input.contains("e/")) {
+            String value = extract(input, "e/");
+            if (!value.isEmpty()) {
+                predicate = predicate.and(
+                        new EmailContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
+                );
+                hasFilter = true;
+            }
+        }
+
+        // If no valid filters → show nothing
+        if (!hasFilter) {
+            predicate = employee -> false;
         }
 
         return new ShowCommand(predicate);
     }
 
     /**
-     * Extracts value after a flag (e.g. /n, /d) until next flag or end.
+     * Extracts value after a prefix (e.g. n/, d/) until next space or end.
      */
-    private String extract(String input, String flag) {
-        String[] parts = input.split(flag, 2);
-
-        if (parts.length < 2) {
+    private String extract(String input, String prefix) {
+        int start = input.indexOf(prefix);
+        if (start == -1) {
             return "";
         }
 
-        String after = parts[1].trim();
+        start += prefix.length();
 
-        int nextFlagIndex = after.indexOf(" /");
-        if (nextFlagIndex != -1) {
-            return after.substring(0, nextFlagIndex).trim();
+        int end = input.indexOf(" ", start);
+        if (end == -1) {
+            return input.substring(start).trim();
         }
 
-        return after;
+        return input.substring(start, end).trim();
     }
 }

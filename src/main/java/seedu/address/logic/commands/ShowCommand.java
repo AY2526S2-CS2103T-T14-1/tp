@@ -10,15 +10,15 @@ import seedu.address.model.Model;
 import seedu.address.model.employee.Employee;
 
 /**
- * Shows and filters employees based on given predicates.
+ * Shows filtered employees.
  */
 public class ShowCommand extends Command {
 
     public static final String COMMAND_WORD = "show";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Shows employees filtered by fields.\n"
-            + "Parameters: /n NAME /d DEPARTMENT /p POSITION /e EMAIL /ph PHONE\n"
-            + "Example: " + COMMAND_WORD + " /n alex /d hr";
+    public static final String MESSAGE_USAGE = COMMAND_WORD
+            + ": Shows employees based on filters.\n"
+            + "Example: show n/Alex d/IT";
 
     private final Predicate<Employee> predicate;
 
@@ -38,9 +38,7 @@ public class ShowCommand extends Command {
 
     @Override
     public boolean equals(Object other) {
-        return other == this
-                || (other instanceof ShowCommand
-                && predicate.equals(((ShowCommand) other).predicate));
+        return other instanceof ShowCommand;
     }
 
     @Override

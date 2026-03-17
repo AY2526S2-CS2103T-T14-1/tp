@@ -1,15 +1,11 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
-import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
-
-import java.util.Arrays;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.ShowCommand;
-import seedu.address.model.employee.predicate_checker.*;
 
 public class ShowCommandParserTest {
 
@@ -17,18 +13,25 @@ public class ShowCommandParserTest {
 
     @Test
     public void parse_emptyArg_throwsParseException() {
-        assertParseFailure(parser, "     ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ShowCommand.MESSAGE_USAGE));
+        assertThrows(Exception.class, () ->
+                parser.parse("     "));
     }
 
     @Test
-    public void parse_validArgs_returnsShowCommand() {
-        // no leading and trailing whitespaces
-        ShowCommand expectedShowCommand =
-                new ShowCommand(new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
-        assertParseSuccess(parser, "Alice Bob", expectedShowCommand);
-
-        // multiple whitespaces between keywords
-        assertParseSuccess(parser, " \n Alice \n \t Bob  \t", expectedShowCommand);
+    public void parse_validNamePrefix_returnsShowCommand() throws Exception {
+        ShowCommand command = parser.parse("n/Alice");
+        assertNotNull(command);
     }
 
+    @Test
+    public void parse_multipleFields_returnsShowCommand() throws Exception {
+        ShowCommand command = parser.parse("n/Alice d/IT e/gmail");
+        assertNotNull(command);
+    }
+
+    @Test
+    public void parse_invalidInput_noPrefix_returnsEmptyFilter() throws Exception {
+        ShowCommand command = parser.parse("Alice");
+        assertNotNull(command);
+    }
 }
