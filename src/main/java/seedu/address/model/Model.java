@@ -80,6 +80,16 @@ public interface Model {
     ObservableList<Employee> getFilteredPersonList();
 
     /**
+     * Returns the existing employee with the same phone number, or null if none exists.
+     */
+    Employee getEmployeeWithSamePhone(Employee employee);
+
+    /**
+     * Returns the existing employee with the same email, or null if none exists.
+     */
+    Employee getEmployeeWithSameEmail(Employee employee);
+
+    /**
      * Updates the filter of the filtered person list to filter by the given {@code predicate}.
      * @throws NullPointerException if {@code predicate} is null.
      */

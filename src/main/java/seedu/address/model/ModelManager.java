@@ -111,6 +111,22 @@ public class ModelManager implements Model {
         addressBook.setPerson(target, editedPerson);
     }
 
+    @Override
+    public Employee getEmployeeWithSamePhone(Employee employee) {
+        return addressBook.getPersonList().stream()
+                .filter(e -> e.getPhone().equals(employee.getPhone()) && !e.equals(employee))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public Employee getEmployeeWithSameEmail(Employee employee) {
+        return addressBook.getPersonList().stream()
+                .filter(e -> e.getEmail().equals(employee.getEmail()) && !e.equals(employee))
+                .findFirst()
+                .orElse(null);
+    }
+
     //=========== Filtered Employee List Accessors =============================================================
 
     /**

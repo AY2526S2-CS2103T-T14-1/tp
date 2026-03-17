@@ -40,6 +40,10 @@ public class AddCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";
+    public static final String MESSAGE_DUPLICATE_PHONE =
+            "Contact number is already assigned to another contact: %1$s";
+    public static final String MESSAGE_DUPLICATE_EMAIL =
+            "Email is already assigned to another contact: %1$s";
 
     private final Employee toAdd;
 
@@ -57,6 +61,17 @@ public class AddCommand extends Command {
 
         if (model.hasPerson(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        }
+
+        Employee employeeWithSamePhone = model.getEmployeeWithSamePhone(toAdd);
+        Employee employeeWithSameEmail = model.getEmployeeWithSameEmail(toAdd);
+
+        if (employeeWithSameEmail != null) {
+            throw new CommandException(String.format(MESSAGE_DUPLICATE_EMAIL, Messages.format(employeeWithSameEmail)));
+        }
+
+        if (employeeWithSamePhone != null) {
+            throw new CommandException(String.format(MESSAGE_DUPLICATE_PHONE, Messages.format(employeeWithSamePhone)));
         }
 
         model.addPerson(toAdd);

@@ -47,16 +47,33 @@ public class EmployeeCard extends UiPart<Region> {
      * Creates a {@code EmployeeCode} with the given {@code Employee} and index to display.
      */
     public EmployeeCard(Employee employee, int displayedIndex) {
+
         super(FXML);
         this.person = employee;
         id.setText(displayedIndex + ". ");
         name.setText(employee.getName().fullName);
-        phone.setText(employee.getPhone().value);
-        position.setText(employee.getPosition().value);
-        department.setText(employee.getDepartment().value);
-        email.setText(employee.getEmail().value);
+        phone.setText(formatPhone(employee.getPhone().value));
+        email.setText(formatEmail(employee.getEmail().value));
+        department.setText(formatDepartment(employee.getDepartment().value));
+        position.setText(formatPosition(employee.getPosition().value));
         employee.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+    }
+
+    static String formatPhone(String phone) {
+        return "📞  " + phone;
+    }
+
+    static String formatEmail(String email) {
+        return "📧  " + email;
+    }
+
+    static String formatDepartment(String department) {
+        return "🏢  " + department;
+    }
+
+    static String formatPosition(String position) {
+        return "💼  " + position;
     }
 }

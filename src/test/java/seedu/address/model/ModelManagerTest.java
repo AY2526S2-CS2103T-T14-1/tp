@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -15,8 +16,10 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.employee.Employee;
 import seedu.address.model.employee.NameContainsKeywordsPredicate;
 import seedu.address.testutil.AddressBookBuilder;
+import seedu.address.testutil.PersonBuilder;
 
 public class ModelManagerTest {
 
@@ -86,6 +89,34 @@ public class ModelManagerTest {
     public void hasPerson_personInAddressBook_returnsTrue() {
         modelManager.addPerson(ALICE);
         assertTrue(modelManager.hasPerson(ALICE));
+    }
+
+    @Test
+    public void getEmployeeWithSamePhone_noMatch_returnsNull() {
+        modelManager.addPerson(ALICE);
+        assertNull(modelManager.getEmployeeWithSamePhone(BENSON));
+    }
+
+    @Test
+    public void getEmployeeWithSamePhone_matchFound_returnsEmployee() {
+        modelManager.addPerson(ALICE);
+        Employee samePhone = new PersonBuilder(BENSON)
+                .withPhone(ALICE.getPhone().value).build();
+        assertEquals(ALICE, modelManager.getEmployeeWithSamePhone(samePhone));
+    }
+
+    @Test
+    public void getEmployeeWithSameEmail_noMatch_returnsNull() {
+        modelManager.addPerson(ALICE);
+        assertNull(modelManager.getEmployeeWithSameEmail(BENSON));
+    }
+
+    @Test
+    public void getEmployeeWithSameEmail_matchFound_returnsEmployee() {
+        modelManager.addPerson(ALICE);
+        Employee sameEmail = new PersonBuilder(BENSON)
+                .withEmail(ALICE.getEmail().value).build();
+        assertEquals(ALICE, modelManager.getEmployeeWithSameEmail(sameEmail));
     }
 
     @Test
