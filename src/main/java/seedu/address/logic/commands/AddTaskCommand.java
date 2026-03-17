@@ -6,7 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK_NAME;
 
 import seedu.address.model.Model;
-import seedu.address.model.person.Person;
+import seedu.address.model.employee.Employee;
 import seedu.address.model.person.Task;
 
 public class AddTaskCommand extends Command {
@@ -34,15 +34,13 @@ public class AddTaskCommand extends Command {
         this.personName = personName;
 
 
-
-
     }
 
     @Override
     public CommandResult execute(Model model) {
 
         requireNonNull(model);
-        Person person = getPerson(personName, model);
+        Employee person = getPerson(personName, model);
         if (model.hasPerson(person)) {
             model.addTaskToPerson(person, task);
             return new CommandResult(String.format(MESSAGE_SUCCESS, task));
@@ -53,8 +51,8 @@ public class AddTaskCommand extends Command {
 
     }
 
-    public Person getPerson(String personName, Model model) {
-        for (Person p : model.getAddressBook().getPersonList()) {
+    public Employee getPerson(String personName, Model model) {
+        for (Employee p : model.getAddressBook().getPersonList()) {
             if (p.getName().toString().equals(personName)) {
                 return p;
             }
