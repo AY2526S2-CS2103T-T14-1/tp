@@ -8,15 +8,15 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import seedu.address.model.person.Person;
+import seedu.address.model.employee.Employee;
 import seedu.address.model.person.Task;
 
 /**
- * An UI component that displays information of a {@code Person}.
+ * An UI component that displays information of a {@code Employee}.
  */
-public class PersonCard extends UiPart<Region> {
+public class EmployeeCard extends UiPart<Region> {
 
-    private static final String FXML = "PersonListCard.fxml";
+    private static final String FXML = "EmployeeListCard.fxml";
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -26,7 +26,7 @@ public class PersonCard extends UiPart<Region> {
      * @see <a href="https://github.com/se-edu/addressbook-level4/issues/336">The issue on AddressBook level 4</a>
      */
 
-    public final Person person;
+    public final Employee person;
 
     @FXML
     private HBox cardPane;
@@ -37,7 +37,9 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label phone;
     @FXML
-    private Label address;
+    private Label position;
+    @FXML
+    private Label department;
     @FXML
     private Label email;
     @FXML
@@ -48,17 +50,18 @@ public class PersonCard extends UiPart<Region> {
 
 
     /**
-     * Creates a {@code PersonCode} with the given {@code Person} and index to display.
+     * Creates a {@code EmployeeCode} with the given {@code Employee} and index to display.
      */
-    public PersonCard(Person person, int displayedIndex) {
+    public EmployeeCard(Employee employee, int displayedIndex) {
         super(FXML);
-        this.person = person;
+        this.person = employee;
         id.setText(displayedIndex + ". ");
-        name.setText(person.getName().fullName);
-        phone.setText(person.getPhone().value);
-        address.setText(person.getAddress().value);
-        email.setText(person.getEmail().value);
-        person.getTags().stream()
+        name.setText(employee.getName().fullName);
+        phone.setText(employee.getPhone().value);
+        position.setText(employee.getPosition().value);
+        department.setText(employee.getDepartment().value);
+        email.setText(employee.getEmail().value);
+        employee.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
         tasks.setWrapText(true);

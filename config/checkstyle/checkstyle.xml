@@ -262,7 +262,7 @@
     WHITESPACE CHECKS
     -->
 
-    <!-- Checks that comments are indented relative to their position in the code -->
+    <!-- Checks that comments are indented relative to their value in the code -->
     <module name="CommentsIndentation"/>
 
     <module name="WhitespaceAround">

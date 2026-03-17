@@ -1,4 +1,4 @@
-package seedu.address.model.person;
+package seedu.address.model.employee;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
@@ -10,14 +10,16 @@ import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.employee.Name;
+import seedu.address.model.person.Task;
 import seedu.address.model.tag.Tag;
 import seedu.address.storage.TaskListStorage;
 
 /**
- * Represents a Person in the address book.
+ * Represents an Employee in the address book.
  * Guarantees: details are present and not null, field values are validated, immutable.
  */
-public class Person {
+public class Employee {
 
     // Identity fields
     private final Name name;
@@ -25,19 +27,21 @@ public class Person {
     private final Email email;
 
     // Data fields
-    private final Address address;
+    private final Department department;
+    private final Position position;
     private final Set<Tag> tags = new HashSet<>();
     private final TaskListStorage taskListStorage;
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, TaskListStorage taskListStorage) {
-        requireAllNonNull(name, phone, email, address, tags);
+    public Employee(Name name, Phone phone, Email email, Department department, Position position, Set<Tag> tags) {
+        requireAllNonNull(name, phone, email, position, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.address = address;
+        this.department = department;
+        this.position = position;
         this.tags.addAll(tags);
         this.taskListStorage = taskListStorage;
     }
@@ -54,8 +58,12 @@ public class Person {
         return email;
     }
 
-    public Address getAddress() {
-        return address;
+    public Department getDepartment() {
+        return department;
+    }
+
+    public Position getPosition() {
+        return position;
     }
 
     /**
@@ -67,15 +75,14 @@ public class Person {
     }
 
     /**
-     * Returns true if both persons have the same name.
+     * Returns true if both employees have the same name.
      * This defines a weaker notion of equality between two persons.
      */
 
     public TaskListStorage getTaskListStorage() {
         return taskListStorage;
     }
-
-    public boolean isSamePerson(Person otherPerson) {
+    public boolean isSamePerson(Employee otherPerson) {
         if (otherPerson == this) {
             return true;
         }
@@ -85,7 +92,7 @@ public class Person {
     }
 
     /**
-     * Returns true if both persons have the same identity and data fields.
+     * Returns true if both employees have the same identity and data fields.
      * This defines a stronger notion of equality between two persons.
      */
     @Override
@@ -95,15 +102,16 @@ public class Person {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof Person)) {
+        if (!(other instanceof Employee)) {
             return false;
         }
 
-        Person otherPerson = (Person) other;
+        Employee otherPerson = (Employee) other;
         return name.equals(otherPerson.name)
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
-                && address.equals(otherPerson.address)
+                && position.equals(otherPerson.position)
+                && department.equals(otherPerson.department)
                 && tags.equals(otherPerson.tags)
                 && taskListStorage.equals(otherPerson.taskListStorage);
     }
@@ -111,7 +119,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, taskListStorage);
+        return Objects.hash(name, phone, email, position, tags, taskListStorage);
     }
 
     @Override
@@ -120,7 +128,8 @@ public class Person {
                 .add("name", name)
                 .add("phone", phone)
                 .add("email", email)
-                .add("address", address)
+                .add("position", position)
+                .add("department", department)
                 .add("tags", tags)
                 .add("Tasks Assigned:", taskListStorage)
                 .toString();
