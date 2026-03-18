@@ -19,7 +19,6 @@ public class TaskListTest {
         taskList.addTask(t2);
 
         taskList.removeCompletedTasks();
-        
         assertTrue(true);
     }
 }
