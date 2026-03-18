@@ -1,8 +1,6 @@
-package seedu.address.model.tag;
+package seedu.address.model.person;
 
 import org.junit.jupiter.api.Test;
-import seedu.address.model.person.Task;
-import seedu.address.model.person.TaskList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,7 +19,7 @@ public class TaskListTest {
         taskList.addTask(t2);
 
         taskList.removeCompletedTasks();
-
+        
         assertTrue(true);
     }
 }
