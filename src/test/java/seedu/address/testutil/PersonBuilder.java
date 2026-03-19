@@ -109,12 +109,19 @@ public class PersonBuilder {
     }
 
 
-
-
+    /**
+     * Builds and returns the {@code Employee} object with the given details.
+     * @return the Employee object with the given details
+     */
     public Employee build() {
         return new Employee(name, phone, email, department, position, tags, taskListStorage);
     }
 
+    /**
+     * Sets the {@code TaskListStorage} of the {@code Employee} that we are building.
+     * @param taskListStorage the TaskListStorage to set for the Employee being built.
+     * @return the PersonBuilder object with the given TaskListStorage
+     */
     public PersonBuilder withTaskListStorage(TaskListStorage taskListStorage) {
         this.taskListStorage = new TaskListStorage(taskListStorage.getTasks());
         return this;
