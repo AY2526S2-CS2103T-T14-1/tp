@@ -130,6 +130,12 @@ public class AddressBook implements ReadOnlyAddressBook {
         return persons.hashCode();
     }
 
+    /**
+     * Adds a task to the specified person.
+     *
+     * @param target The person to add the task to.
+     * @param task The task to be added.
+     */
     public void addTaskToPerson(Employee target, Task task) {
         requireNonNull(task);
         persons.addTaskToPerson(target, task);

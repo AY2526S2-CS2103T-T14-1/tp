@@ -3,14 +3,12 @@ package seedu.address.model.employee;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.model.employee.Name;
 import seedu.address.model.person.Task;
 import seedu.address.model.tag.Tag;
 import seedu.address.storage.TaskListStorage;
@@ -35,7 +33,8 @@ public class Employee {
     /**
      * Every field must be present and not null.
      */
-    public Employee(Name name, Phone phone, Email email, Department department, Position position, Set<Tag> tags, TaskListStorage taskListStorage) {
+    public Employee(Name name, Phone phone, Email email, Department department,
+                    Position position, Set<Tag> tags, TaskListStorage taskListStorage) {
         requireAllNonNull(name, phone, email, position, tags);
         this.name = name;
         this.phone = phone;
@@ -78,10 +77,6 @@ public class Employee {
      * Returns true if both employees have the same name.
      * This defines a weaker notion of equality between two persons.
      */
-
-    public TaskListStorage getTaskListStorage() {
-        return taskListStorage;
-    }
     public boolean isSamePerson(Employee otherPerson) {
         if (otherPerson == this) {
             return true;
@@ -91,6 +86,15 @@ public class Employee {
                 && otherPerson.getName().equals(getName())
                 && (otherPerson.getPhone().equals(getPhone())
                 || otherPerson.getEmail().equals(getEmail()));
+    }
+
+    /**
+     * Returns the TaskListStorage associated with the employee.
+     *
+     * @return the TaskListStorage associated with the employee
+     */
+    public TaskListStorage getTaskListStorage() {
+        return taskListStorage;
     }
 
     /**
@@ -137,10 +141,20 @@ public class Employee {
                 .toString();
     }
 
+    /**
+     * Returns the list of tasks assigned to the employee.
+     *
+     * @return the list of tasks assigned to the employee
+     */
     public ArrayList<Task> getTasks() {
         return taskListStorage.getTasks();
     }
 
+    /**
+     * Adds a task to the employee's task list.
+     *
+     * @param task the task to be added
+     */
     public void addTask(Task task) {
         taskListStorage.addTask(task);
     }

@@ -12,6 +12,7 @@ public class TaskListStorage {
 
     /**
      * Constructor for TaskListStorage.
+     *
      * @param tasks the list of tasks to be stored.
      */
     public TaskListStorage(ArrayList<Task> tasks) {
@@ -20,6 +21,7 @@ public class TaskListStorage {
 
     /**
      * Returns the list of tasks stored.
+     *
      * @return the list of tasks stored.
      */
     public ArrayList<Task> getTasks() {

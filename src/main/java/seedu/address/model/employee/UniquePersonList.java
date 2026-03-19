@@ -149,6 +149,11 @@ public class UniquePersonList implements Iterable<Employee> {
         return true;
     }
 
+    /**
+     * Adds a task to the specified person in the list.
+     * @param target The person to add the task to.
+     * @param task The task to be added.
+     */
     public void addTaskToPerson(Employee target, Task task) {
         requireNonNull(task);
         int index = internalList.indexOf(target);
@@ -157,7 +162,8 @@ public class UniquePersonList implements Iterable<Employee> {
         }
         Employee personToEdit = internalList.get(index);
         Employee editedPerson = new Employee(personToEdit.getName(), personToEdit.getPhone(),
-                personToEdit.getEmail(), personToEdit.getDepartment(), personToEdit.getPosition(), personToEdit.getTags(),
+                personToEdit.getEmail(), personToEdit.getDepartment(), personToEdit.getPosition(),
+                personToEdit.getTags(),
                 personToEdit.getTaskListStorage());
         editedPerson.addTask(task);
         setPerson(personToEdit, editedPerson);

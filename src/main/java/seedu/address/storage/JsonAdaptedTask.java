@@ -4,6 +4,7 @@ import static seedu.address.storage.JsonAdaptedPerson.MISSING_FIELD_MESSAGE_FORM
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Task;
 
@@ -17,7 +18,8 @@ class JsonAdaptedTask {
 
     /**
      * Constructs a {@code JsonAdaptedTask} with the given task details.
-     * @param taskName the name of the task.
+     *
+     * @param taskName        the name of the task.
      * @param taskDescription the description of the task.
      */
     @JsonCreator
@@ -30,6 +32,7 @@ class JsonAdaptedTask {
 
     /**
      * Converts a given {@code Task} into this class for Jackson use.
+     *
      * @param source the Task to convert. Must not be null.
      */
     public JsonAdaptedTask(Task source) {
@@ -39,6 +42,7 @@ class JsonAdaptedTask {
 
     /**
      * Converts this Jackson-friendly adapted task object into the model's {@code Task} object.
+     *
      * @return the Task object converted from this adapted task.
      * @throws IllegalValueException if there were any data constraints violated in the adapted task.
      */
