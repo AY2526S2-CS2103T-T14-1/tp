@@ -4,9 +4,11 @@
   pageNav: 3
 ---
 
-# AB-3 User Guide
+# Employee Manager User Guide
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a  Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+Employee Manager is a **desktop app for managing employee records, optimized for use via a Line Interface**
+(CLI) while still providing the benefits of a Graphical User Interface (GUI). It helps teams manage employee
+contact details, roles, departments, and assigned tasks more efficiently.
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -20,7 +22,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
 1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+1. Copy the file to the folder you want to use as the _home folder_ for Employee Manager.
 
 1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
@@ -29,13 +31,15 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-   * `list` : Lists all contacts.
+   * `list` : Lists all employees.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+   * `add n/John Doe p/98765432 e/johnd@example.com d/IT pos/Software Engineer` : Adds an employee named `John Doe`.
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+   * `delete John Doe` : Deletes the employee named `John Doe` if the name is unique in the current list.
 
-   * `clear` : Deletes all contacts.
+   * `addtask task/Prepare Report desc/Submit by Friday n/John Doe` : Adds a task to employee `John Doe`.
+
+   * `clear` : Deletes all employees.
 
    * `exit` : Exits the app.
 
@@ -76,47 +80,64 @@ Shows a message explaining how to access the help page.
 Format: `help`
 
 
-### Adding a person: `add`
+### Adding an employee: `add`
 
-Adds a person to the address book.
+Adds an employee to the address book.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+Format: `add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...`
 
 <box type="tip" seamless>
 
-**Tip:** A person can have any number of tags (including 0)
+**Tip:** An employee can have any number of tags (including 0).
 </box>
 
 Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* `add n/John Doe p/98765432 e/johnd@example.com d/IT pos/Software Engineer`
+* `add n/Betsy Crowe p/91234567 e/betsycrowe@example.com d/HR pos/Recruiter t/fulltime`
 
-### Listing all persons : `list`
+### Listing all employees : `list`
 
-Shows a list of all persons in the address book.
+Shows a list of all employees in the address book.
 
 Format: `list`
 
-### Editing a person : `edit`
+### Showing filtered employees : `show`
 
-Edits an existing person in the address book.
+Shows employees that match one or more field-based filters.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
+Format: `show [n/NAME_KEYWORD] [d/DEPARTMENT_KEYWORD] [p/PHONE_KEYWORD] [e/EMAIL_KEYWORD] [pos/POSITION_KEYWORD]`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* You must provide at least one filter.
+* Multiple filters are combined together, so only employees matching all provided filters are shown.
+* Each filter matches by keyword containment.
+
+Examples:
+* `show d/IT` shows employees in the IT department.
+* `show n/Alex pos/Manager` shows employees whose name matches `Alex` and whose position matches `Manager`.
+
+### Editing an employee : `edit`
+
+Edits an existing employee in the address book.
+
+Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...`
+
+* Edits the employee at the specified `INDEX`.
+* The index refers to the index number shown in the displayed employee list.
+* The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags by typing `t/` without
+* When editing tags, the existing tags of the employee will be removed; adding of tags is not cumulative.
+* You can remove all the employee's tags by typing `t/` without
     specifying any tags after it.
 
 Examples:
-*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+* `edit 1 p/91234567 e/johndoe@example.com` edits the phone number and email of the 1st employee.
+* `edit 2 d/Sales pos/Team Lead` edits the department and position of the 2nd employee.
+* `edit 3 n/Betsy Crower t/` edits the name of the 3rd employee and clears all existing tags.
 
-### Locating persons by name: `find`
+### Locating employees by name: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds employees whose names contain any of the given keywords.
 
 Format: `find KEYWORD [MORE_KEYWORDS]`
 
@@ -124,7 +145,7 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
 * Only the name is searched.
 * Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
+* Employees matching at least one keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
 
 Examples:
@@ -150,6 +171,19 @@ Examples:
 * `find Betsy` followed by `delete 1` deletes the 1st employee in the results of the `find` command.
 * `delete John Doe` deletes the employee named `John Doe` if the name is unique in the current list.
 
+### Adding a task to an employee : `addtask`
+
+Adds a task to a specific employee.
+
+Format: `addtask task/TASK_NAME desc/TASK_DESCRIPTION n/EMPLOYEE_NAME`
+
+* The employee name must match an existing employee name exactly.
+* The task will be added to that employee's task list and shown on the employee card.
+
+Examples:
+* `addtask task/Prepare Report desc/Submit by Friday n/John Doe`
+* `addtask task/Client Followup desc/Call client before Monday n/Amy Bee`
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
@@ -164,29 +198,31 @@ Format: `exit`
 
 ### Saving the data
 
-AddressBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+Employee Manager data are saved in the hard disk automatically after any command that changes the data.
+There is no need to save manually.
 
 ### Editing the data file
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+Employee Manager data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`.
+Advanced users are welcome to update data directly by editing that data file.
 
 <box type="warning" seamless>
 
 **Caution:**
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
+If your changes to the data file makes its format invalid, Employee Manager will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </box>
 
-### Archiving data files `[coming in v2.0]`
+### More features `[coming in v2.0]`
 
-_Details coming soon ..._
+_More features coming soon ..._
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+**A**: Install the app on the other computer and overwrite the empty data file it creates with the file that contains the data of your previous Employee Manager home folder.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -201,10 +237,12 @@ _Details coming soon ..._
 
 Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Add**    | `add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...`<br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com d/Finance pos/Analyst t/fulltime`
+**Add Task** | `addtask task/TASK_NAME desc/TASK_DESCRIPTION n/EMPLOYEE_NAME`<br> e.g., `addtask task/Prepare Slides desc/Send by Friday n/James Ho`
 **Clear**  | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
+**Delete** | `delete NAME` or `delete INDEX`<br> e.g., `delete James Ho`, `delete 3`
+**Edit**   | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List**   | `list`
 **Help**   | `help`
+**Show**   | `show [n/NAME_KEYWORD] [d/DEPARTMENT_KEYWORD] [p/PHONE_KEYWORD] [e/EMAIL_KEYWORD] [pos/POSITION_KEYWORD]`<br> e.g., `show d/Finance pos/Analyst`
