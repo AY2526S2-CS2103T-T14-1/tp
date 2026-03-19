@@ -58,4 +58,37 @@ class AddTaskCommandTest {
         assertTrue(updatedEmployee.getTaskListStorage().getTasks().contains(task));
     }
 
+    @Test
+    void execute_employeeNotFound_returnsErrorMessage() {
+        Task task = new Task("Finish Homework", "Complete math homework by tomorrow");
+        AddTaskCommand command = new AddTaskCommand(task, "Nonexistent Person");
+
+        CommandResult result = command.execute(model);
+
+        assertEquals("Person not found in the address book.", result.getFeedbackToUser());
+    }
+
+    @Test
+    void equals() {
+        Task task1 = new Task("Task1", "Desc1");
+        Task task2 = new Task("Task2", "Desc2");
+
+        AddTaskCommand command1 = new AddTaskCommand(task1, "John Doe");
+        AddTaskCommand command2 = new AddTaskCommand(task1, "John Doe");
+        AddTaskCommand command3 = new AddTaskCommand(task2, "John Doe");
+        AddTaskCommand command4 = new AddTaskCommand(task1, "Jane Doe");
+
+        assertTrue(command1.equals(command2));
+
+        assertTrue(!command1.equals(command3));
+
+        assertTrue(!command1.equals(command4));
+
+        assertTrue(command1.equals(command1));
+
+        assertTrue(!command1.equals(null));
+
+        assertTrue(!command1.equals(new Object()));
+    }
+
 }

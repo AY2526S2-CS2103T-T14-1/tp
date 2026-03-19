@@ -54,7 +54,7 @@ public class AddTaskCommand extends Command {
 
         requireNonNull(model);
         Employee person = getPerson(personName, model);
-        if (model.hasPerson(person)) {
+        if (person != null) {
             model.addTaskToPerson(person, task);
             return new CommandResult(String.format(MESSAGE_SUCCESS, task));
         } else {
