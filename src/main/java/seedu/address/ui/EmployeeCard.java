@@ -1,18 +1,18 @@
 package seedu.address.ui;
 
 import java.util.Comparator;
-import java.util.stream.Collectors;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import seedu.address.model.employee.Employee;
 import seedu.address.model.employee.Task;
 
 /**
- * An UI component that displays information of a {@code Employee}.
+ * A UI component that displays information of a {@code Employee}.
  */
 public class EmployeeCard extends UiPart<Region> {
 
@@ -45,7 +45,7 @@ public class EmployeeCard extends UiPart<Region> {
     @FXML
     private FlowPane tags;
     @FXML
-    private Label tasks;
+    private VBox tasks;
 
 
 
@@ -65,11 +65,19 @@ public class EmployeeCard extends UiPart<Region> {
         employee.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
-        tasks.setWrapText(true);
-        String taskText = person.getTaskListStorage().getTasks().stream()
+        person.getTaskListStorage().getTasks().stream()
                 .map(Task::toString)
-                .collect(Collectors.joining("\n"));
-        tasks.setText(taskText);
+                .forEach(taskStr -> tasks.getChildren().add(buildTaskLabel(taskStr)));
+    }
+
+    /**
+     * Builds a styled card label for a single task string
+     */
+    static Label buildTaskLabel(String taskStr) {
+        Label label = new Label(taskStr);
+        label.getStyleClass().add("task-card-label");
+        label.setWrapText(false);
+        return label;
     }
 
     static String formatPhone(String phone) {

@@ -4,7 +4,7 @@
 }
 
 .label {
-    -fx-font-size: 11pt;
+    -fx-font-size: 17pt;
     -fx-font-family: "Segoe UI Semibold";
     -fx-text-fill: #555555;
     -fx-opacity: 0.9;
@@ -305,6 +305,28 @@
 
 .scroll-bar:horizontal .increment-arrow, .scroll-bar:horizontal .decrement-arrow {
     -fx-padding: 8 1 8 1;
+}
+
+.task-header-label {
+    -fx-font-family: "Segue UI Semibold";
+    -fx-font-size: 11px;
+    -fx-text-fill: #aaaaaa;
+    -fx-padding: 0 0 2 0;
+}
+
+.task-flow-pane {
+    -fx-padding: 0;
+}
+
+.task-card-label {
+    -fx-font-family: "Segue UI";
+    -fx-font-size: 13px;
+    -fx-background-color: #c0392b;
+    -fx-border-color: #888888;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-padding: 4 8 4 8;
 }
 
 #cardPane {
