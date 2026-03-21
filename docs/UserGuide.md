@@ -102,21 +102,23 @@ Shows a list of all employees in the address book.
 
 Format: `list`
 
-### Showing filtered employees : `show`
+### Showing filtered employees: `show`
 
 Shows employees that match one or more field-based filters.
 
-Format: `show [n/NAME_KEYWORD] [d/DEPARTMENT_KEYWORD] [p/PHONE_KEYWORD] [e/EMAIL_KEYWORD] [pos/POSITION_KEYWORD]`
+**Format:** `show [n/NAME_KEYWORD] [d/DEPARTMENT_KEYWORD] [p/PHONE_KEYWORD] [e/EMAIL_KEYWORD] [pos/POSITION_KEYWORD]`
 
 * You must provide at least one filter.
-* Multiple filters are combined together, so only employees matching all provided filters are shown.
-* Each filter matches by keyword containment.
+* Filters can be written in any order.
+* You may use any combination of supported filters in a single command.
+* Multiple filters are combined together, so only employees matching **all** provided filters are shown.
+* Each filter matches by keyword containment, so partial keywords are allowed. For example, `n/Al` can match names such as `Alex` and `Sally`.
 
-Examples:
+**Examples:**
 * `show d/IT` shows employees in the IT department.
 * `show n/Alex pos/Manager` shows employees whose name matches `Alex` and whose position matches `Manager`.
-
-### Editing an employee : `edit`
+* `show pos/Manager d/HR` shows employees who are managers in the HR department.
+* `show n/Al` shows employees whose names contain `Al`, such as `Alex` and `Sally`.
 
 Edits an existing employee in the address book.
 
