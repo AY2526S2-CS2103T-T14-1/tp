@@ -209,8 +209,6 @@ There is no need to save manually.
 ManageUp data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`.
 Advanced users are welcome to update data directly by editing that data file.
 
-<box type="warning" seamless>
-
 **Caution:**
 If your changes to the data file makes its format invalid, ManageUp will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 Furthermore, certain edits can cause ManageUp to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
@@ -238,14 +236,13 @@ _More features coming soon ..._
 
 ## Command summary
 
-Action     | Format, Examples
------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...`<br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com d/Finance pos/Analyst t/fulltime`
-**Add Task** | `addtask task/TASK_NAME desc/TASK_DESCRIPTION n/EMPLOYEE_NAME`<br> e.g., `addtask task/Prepare Slides desc/Send by Friday n/James Ho`
-**Clear**  | `clear`
-**Delete** | `delete NAME` or `delete INDEX`<br> e.g., `delete James Ho`, `delete 3`
-**Edit**   | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
-**Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
-**List**   | `list`
-**Help**   | `help`
-**Show**   | `show [n/NAME_KEYWORD] [d/DEPARTMENT_KEYWORD] [p/PHONE_KEYWORD] [e/EMAIL_KEYWORD] [pos/POSITION_KEYWORD]`<br> e.g., `show d/Finance pos/Analyst`
+| Action                                | Command      | Format                                                                                                                                                                                                                                                                                               |
+|---------------------------------------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Add an employee to contacts           | **Add**      | `add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...`<br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com d/Finance pos/Analyst t/fulltime`                                                                                                                                       |
+| Delete an employee from contacts      | **Delete**   | `delete NAME` or `delete INDEX`<br> e.g., `delete James Ho`, `delete 3`                                                                                                                                                                                                                              |
+| Edit an employee's details            | **Edit**     | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`                                                                                                                                                             |
+| List all employees in contacts        | **List**     | `list`                                                                                                                                                                                                                                                                                               |
+| Show filtered employees from contacts | **Show**     | `show [n/NAME_KEYWORD] [d/DEPARTMENT_KEYWORD] [p/PHONE_KEYWORD] [e/EMAIL_KEYWORD] [pos/POSITION_KEYWORD]`<br>Shows employees matching one or more filters. Filters can be entered in any order and in any combination. Partial keyword matching is supported.<br> e.g., `show d/Finance pos/Analyst` |
+| Delete ALL employees from contacts    | **Clear**    | `clear`                                                                                                                                                                                                                                                                                              |
+| Add tasks to an employee              | **Add Task** | `addtask task/TASK_NAME desc/TASK_DESCRIPTION n/EMPLOYEE_NAME`<br> e.g., `addtask task/Prepare Slides desc/Send by Friday n/James Ho`                                                                                                                                                                |
+| Display help message                  | **Help**     | `help`                                                                                                                                                                                                                                                                                               |
