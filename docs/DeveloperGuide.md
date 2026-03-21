@@ -274,7 +274,7 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* managers in companies 
+* managers in companies
 * prefer desktop apps over other types
 * responsible for managing different teams of people
 * can type fast
@@ -338,7 +338,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1.  User requests to list employees
 2.  ManageUp shows the list of employees
 3.  User requests to delete a specific employee in the list
-4.  ManageUp deletes the employee 
+4.  ManageUp deletes the employee
 
     Use case ends.
 
