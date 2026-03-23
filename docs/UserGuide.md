@@ -135,28 +135,25 @@ Shows a list of all employees in the address book.
 
 Format: `list`
 
-<a id="showing-filtered-employees"></a>
-### Showing filtered employees : `show`
+### Showing filtered employees: `show`
 
 Shows employees that match one or more field-based filters.
 
-Format: `show [n/NAME_KEYWORD] [d/DEPARTMENT_KEYWORD] [p/PHONE_KEYWORD] [e/EMAIL_KEYWORD] [pos/POSITION_KEYWORD]`
+**Format:** `show [n/NAME_KEYWORD] [d/DEPARTMENT_KEYWORD] [p/PHONE_KEYWORD] [e/EMAIL_KEYWORD] [pos/POSITION_KEYWORD]`
 
 * You must provide at least one filter.
 * Filters can be written in any order.
 * You may use any combination of supported filters in a single command.
-* Multiple filters are combined together, so only employees matching all provided filters are shown.
+* Multiple filters are combined together, so only employees matching **all** provided filters are shown.
 * Each filter matches by case-insensitive keyword containment.
 * Each prefix currently accepts a single keyword token. For example, use `show pos/Engineer` instead of `show pos/Software Engineer`.
+* Each filter matches by keyword containment, so partial keywords are allowed. For example, `n/Al` can match names such as `Alex` and `Sally`.
 
-Examples:
+**Examples:**
 * `show d/IT` shows employees in the IT department.
 * `show n/Alex pos/Manager` shows employees whose name matches `Alex` and whose position matches `Manager`.
 * `show pos/Manager d/HR` shows employees who are managers in the HR department.
 * `show n/Al` shows employees whose names contain `Al`, such as `Alex` and `Sally`.
-
-<a id="editing-an-employee"></a>
-### Editing an employee : `edit`
 
 Edits an existing employee in the address book.
 
@@ -236,8 +233,6 @@ There is no need to save manually.
 ManageUp data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`.
 Advanced users are welcome to update data directly by editing that data file.
 
-<box type="warning" seamless>
-
 **Caution:**
 If your changes to the data file makes its format invalid, ManageUp will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 Furthermore, certain edits can cause ManageUp to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
@@ -265,14 +260,13 @@ _More features coming soon ..._
 
 ## Command summary
 
-Action     | Format, Examples
------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...`<br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com d/Finance pos/Analyst t/fulltime`
-**Add Task** | `addtask task/TASK_NAME desc/TASK_DESCRIPTION n/EMPLOYEE_NAME`<br> e.g., `addtask task/Prepare Slides desc/Send by Friday n/James Ho`
-**Clear**  | `clear`
-**Delete** | `delete NAME` or `delete INDEX`<br> e.g., `delete James Ho`, `delete 3`
-**Edit**   | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [pos/POSITION] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`
-**Help**   | `help`
-**List**   | `list`
-**Exit**   | `exit`
-**Show**   | `show [n/NAME_KEYWORD] [d/DEPARTMENT_KEYWORD] [p/PHONE_KEYWORD] [e/EMAIL_KEYWORD] [pos/POSITION_KEYWORD]`<br> e.g., `show d/Finance pos/Analyst`
+| Action                                | Command      | Format                                                                                                                                                                                                                                                                                               |
+|---------------------------------------|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Add an employee to contacts           | **Add**      | `add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...`<br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com d/Finance pos/Analyst t/fulltime`                                                                                                                                       |
+| Delete an employee from contacts      | **Delete**   | `delete NAME` or `delete INDEX`<br> e.g., `delete James Ho`, `delete 3`                                                                                                                                                                                                                              |
+| Edit an employee's details            | **Edit**     | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`                                                                                                                                                             |
+| List all employees in contacts        | **List**     | `list`                                                                                                                                                                                                                                                                                               |
+| Show filtered employees from contacts | **Show**     | `show [n/NAME_KEYWORD] [d/DEPARTMENT_KEYWORD] [p/PHONE_KEYWORD] [e/EMAIL_KEYWORD] [pos/POSITION_KEYWORD]`<br>Shows employees matching one or more filters. Filters can be entered in any order and in any combination. Partial keyword matching is supported.<br> e.g., `show d/Finance pos/Analyst` |
+| Delete ALL employees from contacts    | **Clear**    | `clear`                                                                                                                                                                                                                                                                                              |
+| Add tasks to an employee              | **Add Task** | `addtask task/TASK_NAME desc/TASK_DESCRIPTION n/EMPLOYEE_NAME`<br> e.g., `addtask task/Prepare Slides desc/Send by Friday n/James Ho`                                                                                                                                                                |
+| Display help message                  | **Help**     | `help`                                                                                                                                                                                                                                                                                               |
