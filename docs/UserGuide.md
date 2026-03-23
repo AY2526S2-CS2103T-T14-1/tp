@@ -6,12 +6,35 @@
 
 # ManageUp User Guide
 
-ManageUp is a **desktop app for managing employee records, optimized for use via a Line Interface**
+ManageUp is a **desktop app for managing employee records, optimized for use via a Command Line Interface**
 (CLI) while still providing the benefits of a Graphical User Interface (GUI). It helps teams manage employee
 contact details, roles, departments, and assigned tasks more efficiently.
 
 <!-- * Table of Contents -->
 <page-nav-print />
+
+## Contents
+
+* [Quick start](#quick-start)
+* [Features](#features)
+  * Employee management
+    * [Adding an employee: `add`](#adding-an-employee)
+    * [Listing all employees: `list`](#listing-all-employees)
+    * [Editing an employee: `edit`](#editing-an-employee)
+    * [Deleting an employee: `delete`](#deleting-an-employee)
+  * Task management
+    * [Adding a task to an employee: `addtask`](#adding-a-task-to-an-employee)
+  * General features
+    * [Viewing help: `help`](#viewing-help)
+    * [Showing filtered employees: `show`](#showing-filtered-employees)
+    * [Clearing all entries: `clear`](#clearing-all-entries)
+    * [Exiting the program: `exit`](#exiting-the-program)
+  * Data management
+    * [Saving the data](#saving-the-data)
+    * [Editing the data file](#editing-the-data-file)
+* [FAQ](#faq)
+* [Known issues](#known-issues)
+* [Command summary](#command-summary)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -24,9 +47,9 @@ contact details, roles, departments, and assigned tasks more efficiently.
 
 1. Copy the file to the folder you want to use as the _home folder_ for ManageUp.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the
-   `java -jar ManageUp.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
+1. Open Terminal or Command Prompt, go to the folder where you saved the jar file
+   (for example, by using `cd` to change folders), and run `java -jar ManageUp.jar`.<br>
+   A window similar to the one below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
@@ -39,6 +62,8 @@ contact details, roles, departments, and assigned tasks more efficiently.
    * `delete John Doe` : Deletes the employee named `John Doe` if the name is unique in the current list.
 
    * `addtask task/Prepare Report desc/Submit by Friday n/John Doe` : Adds a task to employee `John Doe`.
+
+   * `show d/IT` : Shows employees whose department contains `IT`.
 
    * `clear` : Deletes all employees.
 
@@ -66,12 +91,13 @@ contact details, roles, departments, and assigned tasks more efficiently.
 * Parameters can be in any order.<br>
   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
+* If you type extra text after commands like `help`, `list`, `exit`, or `clear`, ManageUp will ignore it.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
 
+<a id="viewing-help"></a>
 ### Viewing help : `help`
 
 Shows a message explaining how to access the help page.
@@ -81,6 +107,7 @@ Shows a message explaining how to access the help page.
 Format: `help`
 
 
+<a id="adding-an-employee"></a>
 ### Adding an employee: `add`
 
 Adds an employee to the address book.
@@ -92,10 +119,16 @@ Format: `add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...`
 **Tip:** An employee can have any number of tags (including 0).
 </box>
 
+* Phone numbers must contain only digits and be at least 3 digits long.
+* Names, departments, and positions must be non-empty and use only alphanumeric characters and spaces.
+* Emails must be valid email addresses.
+* Phone numbers and email addresses must be unique across employees.
+
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com d/IT pos/Software Engineer`
 * `add n/Betsy Crowe p/91234567 e/betsycrowe@example.com d/HR pos/Recruiter t/fulltime`
 
+<a id="listing-all-employees"></a>
 ### Listing all employees : `list`
 
 Shows a list of all employees in the address book.
@@ -112,6 +145,8 @@ Shows employees that match one or more field-based filters.
 * Filters can be written in any order.
 * You may use any combination of supported filters in a single command.
 * Multiple filters are combined together, so only employees matching **all** provided filters are shown.
+* Each filter matches by case-insensitive keyword containment.
+* Each prefix currently accepts a single keyword token. For example, use `show pos/Engineer` instead of `show pos/Software Engineer`.
 * Each filter matches by keyword containment, so partial keywords are allowed. For example, `n/Al` can match names such as `Alex` and `Sally`.
 
 **Examples:**
@@ -122,7 +157,7 @@ Shows employees that match one or more field-based filters.
 
 Edits an existing employee in the address book.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...`
+Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [pos/POSITION] [t/TAG]...`
 
 * Edits the employee at the specified `INDEX`.
 * The index refers to the index number shown in the displayed employee list.
@@ -132,30 +167,14 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [
 * When editing tags, the existing tags of the employee will be removed; adding of tags is not cumulative.
 * You can remove all the employee's tags by typing `t/` without
     specifying any tags after it.
+* After a successful edit, ManageUp returns to showing the full employee list.
 
 Examples:
 * `edit 1 p/91234567 e/johndoe@example.com` edits the phone number and email of the 1st employee.
-* `edit 2 d/Sales pos/Team Lead` edits the department and position of the 2nd employee.
+* `edit 2 pos/Team Lead` edits the position of the 2nd employee.
 * `edit 3 n/Betsy Crower t/` edits the name of the 3rd employee and clears all existing tags.
 
-### Locating employees by name: `find`
-
-Finds employees whose names contain any of the given keywords.
-
-Format: `find KEYWORD [MORE_KEYWORDS]`
-
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Employees matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
-
-Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
-
+<a id="deleting-an-employee"></a>
 ### Deleting an employee : `delete`
 
 Deletes the specified employee from the address book.
@@ -171,39 +190,44 @@ Format: `delete NAME` or `delete INDEX`
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd employee in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st employee in the results of the `find` command.
+* `show d/HR` followed by `delete 1` deletes the 1st employee in the filtered employee list.
 * `delete John Doe` deletes the employee named `John Doe` if the name is unique in the current list.
 
+<a id="adding-a-task-to-an-employee"></a>
 ### Adding a task to an employee : `addtask`
 
 Adds a task to a specific employee.
 
 Format: `addtask task/TASK_NAME desc/TASK_DESCRIPTION n/EMPLOYEE_NAME`
 
-* The employee name must match an existing employee name exactly.
+* The employee name must match an existing employee name exactly as stored in ManageUp.
 * The task will be added to that employee's task list and shown on the employee card.
 
 Examples:
 * `addtask task/Prepare Report desc/Submit by Friday n/John Doe`
 * `addtask task/Client Followup desc/Call client before Monday n/Amy Bee`
 
+<a id="clearing-all-entries"></a>
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
 
 Format: `clear`
 
+<a id="exiting-the-program"></a>
 ### Exiting the program : `exit`
 
 Exits the program.
 
 Format: `exit`
 
+<a id="saving-the-data"></a>
 ### Saving the data
 
 ManageUp data are saved in the hard disk automatically after any command that changes the data.
 There is no need to save manually.
 
+<a id="editing-the-data-file"></a>
 ### Editing the data file
 
 ManageUp data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`.
