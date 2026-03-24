@@ -241,7 +241,7 @@
     -fx-background-color: linear-gradient(to right, #5ecbff, #7da7ff, #9f8cff);
     -fx-border-color: transparent transparent rgba(191, 219, 254, 0.6) transparent;
     -fx-border-width: 0 0 1 0;
-    -fx-padding: 5 10 5 10;
+    -fx-padding:  10 5 10;
 }
 
 
@@ -254,6 +254,28 @@
 
 .menu .left-container {
     -fx-background-color: transparent;
+}
+
+.menu-item {
+    -fx-background-color: transparent;
+}
+
+.menu-item .label {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Segoe UI";
+    -fx-text-fill: #24324a;
+}
+
+.menu-item:focused,
+.menu-item:hover {
+    -fx-background-color: linear-gradient(to right, rgba(200, 211, 252, 0.6), rgba(167, 139, 250, 0.5));
+    -fx-background-insets: 0;
+    -fx-background-radius: 16;
+}
+
+.menu-item:focused .label,
+.menu-item:hover .label {
+    -fx-text-fill: #24324a;
 }
 
 .button {
