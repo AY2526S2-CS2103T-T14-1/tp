@@ -147,6 +147,55 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_duplicateEmail_failure() {
+        Employee firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Employee secondPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withEmail(secondPerson.getEmail().value)
+                .build();
+
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model,
+                String.format(EditCommand.MESSAGE_DUPLICATE_EMAIL, Messages.format(secondPerson)));
+    }
+
+    @Test
+    public void execute_duplicatePhone_failure() {
+        Employee firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Employee secondPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withPhone(secondPerson.getPhone().value)
+                .build();
+
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model,
+                String.format(EditCommand.MESSAGE_DUPLICATE_PHONE, Messages.format(secondPerson)));
+    }
+
+    @Test
+    public void execute_sameEmailSamePerson_success() {
+        Employee person = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withEmail(person.getEmail().value)
+                .build();
+
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                Messages.format(person));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void equals() {
         final EditCommand standardCommand = new EditCommand(INDEX_FIRST_PERSON, DESC_AMY);
 
