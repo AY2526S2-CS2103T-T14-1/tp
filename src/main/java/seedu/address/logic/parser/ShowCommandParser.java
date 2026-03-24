@@ -15,6 +15,7 @@ import seedu.address.model.employee.predicatechecker.NameContainsKeywordsPredica
 import seedu.address.model.employee.predicatechecker.PhoneContainsKeywordsPredicate;
 import seedu.address.model.employee.predicatechecker.PositionContainsKeywordsPredicate;
 import seedu.address.model.employee.predicatechecker.TagContainsKeywordsPredicate;
+import seedu.address.model.employee.predicatechecker.TaskContainsKeywordsPredicate;
 
 /**
  * Parses input arguments and creates
@@ -105,6 +106,17 @@ public class ShowCommandParser implements Parser<ShowCommand> {
             }
         }
 
+        // Task
+        if (input.contains("task/")) {
+            String value = extract(input, "task/");
+            if (!value.isEmpty()) {
+                predicate = predicate.and(
+                        new TaskContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
+                );
+                hasFilter = true;
+            }
+        }
+
         // If no valid filters → show nothing
         if (!hasFilter) {
             predicate = employee -> false;
@@ -125,7 +137,7 @@ public class ShowCommandParser implements Parser<ShowCommand> {
         start += prefix.length();
         int end = input.length();
 
-        String[] prefixes = {"n/", "d/", "p/", "e/", "pos/", "t/"};
+        String[] prefixes = {"n/", "d/", "p/", "e/", "pos/", "t/", "task/"};
 
         for (String nextPrefix : prefixes) {
             if (nextPrefix.equals(prefix)) {

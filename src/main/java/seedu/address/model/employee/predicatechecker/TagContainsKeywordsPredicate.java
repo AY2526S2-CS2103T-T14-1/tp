@@ -8,7 +8,7 @@ import seedu.address.model.employee.Employee;
 import seedu.address.model.tag.Tag;
 
 /**
- * Tests that an {@code Employee}'s tags match all of the keywords given.
+ * Tests that an {@code Employee}'s {@code Tag} match any of the keywords given.
  */
 public class TagContainsKeywordsPredicate implements Predicate<Employee> {
 
