@@ -55,7 +55,13 @@ public class EditCommand extends Command {
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Employee: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
+
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
+    public static final String MESSAGE_DUPLICATE_PHONE =
+            "Phone number is already assigned to another employee: %1$s";
+    public static final String MESSAGE_DUPLICATE_EMAIL =
+            "Email is already assigned to another employee: %1$s";
+
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -86,6 +92,17 @@ public class EditCommand extends Command {
 
         if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        }
+
+        Employee employeeWithSamePhone = model.getEmployeeWithSamePhone(editedPerson);
+        Employee employeeWithSameEmail = model.getEmployeeWithSameEmail(editedPerson);
+
+        if (employeeWithSameEmail != null && !employeeWithSameEmail.equals(personToEdit)) {
+            throw new CommandException(String.format(MESSAGE_DUPLICATE_EMAIL, Messages.format(employeeWithSameEmail)));
+        }
+
+        if (employeeWithSamePhone != null && !employeeWithSamePhone.equals(personToEdit)) {
+            throw new CommandException(String.format(MESSAGE_DUPLICATE_PHONE, Messages.format(employeeWithSamePhone)));
         }
 
         model.setPerson(personToEdit, editedPerson);
@@ -168,7 +185,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, position, tags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, department, position, tags);
         }
 
         public void setName(Name name) {
@@ -243,6 +260,7 @@ public class EditCommand extends Command {
             return Objects.equals(name, otherEditPersonDescriptor.name)
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
+                    && Objects.equals(department, otherEditPersonDescriptor.department)
                     && Objects.equals(position, otherEditPersonDescriptor.position)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags);
         }

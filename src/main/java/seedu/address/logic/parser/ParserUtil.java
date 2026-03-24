@@ -75,8 +75,8 @@ public class ParserUtil {
     public static Department parseDepartment(String department) throws ParseException {
         requireNonNull(department);
         String trimmedDepartment = department.trim();
-        if (!Position.isValidPosition(trimmedDepartment)) {
-            throw new ParseException(Position.MESSAGE_CONSTRAINTS);
+        if (!Department.isValidDepartment(trimmedDepartment)) {
+            throw new ParseException(Department.MESSAGE_CONSTRAINTS);
         }
         return new Department(trimmedDepartment);
     }
