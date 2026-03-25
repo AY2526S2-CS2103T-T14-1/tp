@@ -119,6 +119,7 @@
         "showing-filtered-employees-show": "Showing filtered employees: show",
         "deleting-an-employee-delete": "Deleting an employee : delete",
         "adding-a-task-to-an-employee-addtask": "Adding a task to an employee : addtask",
+        "deleting-a-task-deletetask": "Deleting a task : deletetask",
         "clearing-all-entries-clear": "Clearing all entries : clear",
         "exiting-the-program-exit": "Exiting the program : exit",
         "saving-the-data": "Saving the data",
