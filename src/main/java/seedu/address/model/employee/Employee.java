@@ -157,4 +157,13 @@ public class Employee {
     public void addTask(Task task) {
         taskListStorage.addTask(task);
     }
+
+    /**
+     * Deletes a task from the employee's task list.
+     *
+     * @param task the task to be deleted
+     */
+    public void deleteTask(Task task) {
+        taskListStorage.deleteTask(task);
+    }
 }

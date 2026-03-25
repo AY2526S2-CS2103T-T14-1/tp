@@ -181,8 +181,13 @@ public class UniquePersonList implements Iterable<Employee> {
         if (index == -1) {
             throw new PersonNotFoundException();
         }
-
-        internalList.get(index).getTaskListStorage().deleteTask(task);
+        Employee personToEdit = internalList.get(index);
+        Employee editedPerson = new Employee(personToEdit.getName(), personToEdit.getPhone(),
+                personToEdit.getEmail(), personToEdit.getDepartment(), personToEdit.getPosition(),
+                personToEdit.getTags(),
+                personToEdit.getTaskListStorage());
+        editedPerson.deleteTask(task);
+        setPerson(personToEdit, editedPerson);
     }
 
 }
