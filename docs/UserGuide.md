@@ -130,6 +130,7 @@ Format: `add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...`
 Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com d/IT pos/Software Engineer`
 * `add n/Betsy Crowe p/91234567 e/betsycrowe@example.com d/HR pos/Recruiter t/fulltime`
+* `add n/Jacob Smith p/87763456 e/jacob@example.com d/Finance pos/Marketer t/intern t/partTime`
 
 <a id="listing-all-employees"></a>
 ### Listing all employees : `list`
@@ -285,6 +286,7 @@ For example:
 - `show t/intern task/report`  
   Shows employees with a tag containing `intern` **and** a task containing `report`.
 
+### Editing an employee : `edit` 
 Edits an existing employee in the address book.
 
 Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [pos/POSITION] [t/TAG]...`
@@ -303,6 +305,7 @@ Examples:
 * `edit 1 p/91234567 e/johndoe@example.com` edits the phone number and email of the 1st employee.
 * `edit 2 pos/Team Lead` edits the position of the 2nd employee.
 * `edit 3 n/Betsy Crower t/` edits the name of the 3rd employee and clears all existing tags.
+* `edit 4 d/Finance t/likesCats t/golfs` edits the department of the 4th employee and replaces all existing tags. 
 
 <a id="deleting-an-employee"></a>
 ### Deleting an employee : `delete`
