@@ -5,9 +5,9 @@
 <?import javafx.scene.Scene?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.stage.Stage?>
@@ -34,8 +34,15 @@
             </children>
           </VBox>
           <StackPane styleClass="result-display-shell" VBox.vgrow="ALWAYS">
-            <TextArea fx:id="helpContent" editable="false" focusTraversable="false" prefHeight="420.0"
-                      wrapText="true" styleClass="help-display" />
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" pannable="true" styleClass="help-scroll-pane">
+              <content>
+                <VBox fx:id="helpSections" spacing="14.0">
+                  <padding>
+                    <Insets bottom="18.0" left="18.0" right="18.0" top="18.0" />
+                  </padding>
+                </VBox>
+              </content>
+            </ScrollPane>
           </StackPane>
           <HBox alignment="CENTER_RIGHT" fx:id="helpFooterBar" spacing="10.0">
             <children>
