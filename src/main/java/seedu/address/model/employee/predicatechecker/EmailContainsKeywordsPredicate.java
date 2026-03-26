@@ -13,11 +13,22 @@ public class EmailContainsKeywordsPredicate implements Predicate<Employee> {
 
     private final List<String> keywords;
 
+    /**
+     * Creates an {@code EmailContainsKeywordsPredicate} with the given keywords.
+     *
+     * @param keywords Keywords to match against an employee's email.
+     */
     public EmailContainsKeywordsPredicate(List<String> keywords) {
         assert keywords != null : "Keywords list should not be null";
         this.keywords = keywords;
     }
 
+    /**
+     * Returns true if the employee's email contains any of the keywords, ignoring case.
+     *
+     * @param employee Employee whose email is to be tested.
+     * @return True if the employee's email matches any keyword, false otherwise.
+     */
     @Override
     public boolean test(Employee employee) {
         return keywords.stream()
