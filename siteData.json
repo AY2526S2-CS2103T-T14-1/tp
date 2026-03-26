@@ -117,6 +117,7 @@
         "adding-an-employee-add": "Adding an employee: add",
         "listing-all-employees-list": "Listing all employees : list",
         "showing-filtered-employees-show": "Showing filtered employees: show",
+        "editing-an-employee-edit": "Editing an employee : edit",
         "deleting-an-employee-delete": "Deleting an employee : delete",
         "adding-a-task-to-an-employee-addtask": "Adding a task to an employee : addtask",
         "deleting-a-task-deletetask": "Deleting a task : deletetask",
