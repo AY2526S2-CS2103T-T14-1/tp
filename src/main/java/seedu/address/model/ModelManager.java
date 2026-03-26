@@ -13,6 +13,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.employee.Employee;
 import seedu.address.model.employee.Task;
+import seedu.address.storage.TaskList;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -23,6 +24,7 @@ public class ModelManager implements Model {
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Employee> filteredPersons;
+    private final TaskList tasks;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -35,6 +37,8 @@ public class ModelManager implements Model {
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        this.tasks = new TaskList(filteredPersons);
+
     }
 
     public ModelManager() {
@@ -171,16 +175,16 @@ public class ModelManager implements Model {
 
 
     public void addTaskOverall(Task task, Employee person) {
-        addressBook.addTask(task, person);
+        addressBook.addTask(task, person, tasks);
     }
 
     public void showAllTasks() {
-        addressBook.showAllTask();
+        addressBook.showAllTask(tasks);
     }
 
     @Override
     public void deleteTask(int taskIndex) {
-        addressBook.deleteTask(taskIndex);
+        addressBook.deleteTask(taskIndex, tasks);
     }
 
 

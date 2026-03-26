@@ -19,7 +19,7 @@ import seedu.address.storage.TaskList;
 public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
-    private final TaskList tasks;
+
 
     /*
      * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
@@ -30,7 +30,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     {
         persons = new UniquePersonList();
-        tasks = new TaskList();
+
     }
 
 
@@ -107,7 +107,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      *
      * @param taskIndex the displayed task index
      */
-    public void deleteTask(int taskIndex) {
+    public void deleteTask(int taskIndex, TaskList tasks) {
         Employee assignedPerson = tasks.getPersonAssignedToTask(taskIndex);
         Task deletedTask = tasks.deleteTask(taskIndex);
         persons.deleteTaskFromPerson(assignedPerson, deletedTask);
@@ -120,11 +120,11 @@ public class AddressBook implements ReadOnlyAddressBook {
     /**
      * Adds a task to the task list.
      */
-    public void addTask(Task task, Employee person) {
+    public void addTask(Task task, Employee person, TaskList tasks) {
         tasks.addTaskOverall(task, person);
     }
 
-    public void showAllTask() {
+    public void showAllTask(TaskList tasks) {
         tasks.showFullTaskList();
     }
 

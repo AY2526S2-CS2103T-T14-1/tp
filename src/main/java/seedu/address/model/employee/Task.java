@@ -1,6 +1,14 @@
 package seedu.address.model.employee;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Objects;
+
+import seedu.address.storage.TaskList;
 
 /**
  * A class to represent a Task.
@@ -98,6 +106,53 @@ public class Task {
     public static int getOverallIndex() {
         return taskIndex;
     }
+
+    public static int loadTaskIndex() {
+        File file = new File("taskindex.txt");
+
+        if (!file.exists()) {
+            return 1;
+
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = reader.readLine();
+            if (line != null) {
+                return Integer.parseInt(line.trim());
+            }
+        } catch (IOException | NumberFormatException e) {
+            return 1;
+        }
+
+        return 1;
+
+    }
+
+    public static int readTaskIndex() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("taskindex.txt"))) {
+            String line = reader.readLine();
+            return Integer.parseInt(line.trim());
+        } catch (Exception e) {
+            return 1;
+        }
+    }
+
+    public static void incrementAndSaveTaskIndex() {
+        int current = readTaskIndex();
+        int updated = current + 1;
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("taskindex.txt"))) {
+            writer.write(String.valueOf(updated));
+        } catch (IOException e) {
+            System.err.println("Error writing task index: " + e.getMessage());
+        }
+    }
+
+    public static void setTaskIndex(int index) {
+        taskIndex = index;
+    }
+
+
 
 
 }

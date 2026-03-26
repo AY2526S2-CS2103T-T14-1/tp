@@ -58,6 +58,7 @@ public class AddTaskCommand extends Command {
 
         if (person != null) {
             task.incrementTaskIndex();
+            Task.incrementAndSaveTaskIndex();
             model.addTaskToPerson(person, task);
             model.addTaskOverall(task, person);
             model.showAllTasks();

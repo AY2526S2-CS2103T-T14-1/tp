@@ -2,13 +2,19 @@ package seedu.address.storage;
 
 import static java.util.Objects.requireNonNull;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
+import javafx.collections.transformation.FilteredList;
 import seedu.address.model.employee.Employee;
 import seedu.address.model.employee.Task;
+import seedu.address.model.employee.UniquePersonList;
 
 /**
  * A list of tasks.
@@ -16,6 +22,27 @@ import seedu.address.model.employee.Task;
 public class TaskList {
 
     private final Map<Task, Employee> internalMap = new HashMap<>();
+    private static int latestTaskIndex = 1;
+
+    public TaskList(FilteredList<Employee> employees) {
+        requireNonNull(employees);
+
+        for (Employee person : employees) {
+            for (Task task : person.getTasks()) {
+                if (task.getCurrentTaskIndex() > latestTaskIndex) {
+                    latestTaskIndex = task.getCurrentTaskIndex();
+                }
+                internalMap.put(task, person);
+                Task.setTaskIndex(latestTaskIndex + 1);
+            }
+        }
+
+
+    }
+
+    public static int getLatestTaskIndex() {
+        return latestTaskIndex;
+    }
 
     /**
      * Adds a task to the list with the assigned employee.
@@ -26,6 +53,7 @@ public class TaskList {
         requireNonNull(task);
         requireNonNull(person);
         internalMap.put(task, person);
+
     }
 
     /**
@@ -83,5 +111,12 @@ public class TaskList {
             }
         }
         throw new NoSuchElementException();
+    }
+
+    private String extractPersonDetails(Employee person) {
+
+        return "n/" + person.getName() + " " + "p/" + person.getPhone() + " " + "e/" + person.getEmail() + " " + "d/"
+                + person.getDepartment() + " " + "pos/" + person.getPosition() + " " + "t/"
+                + person.getTags() + " " + "task/" + person.getTaskListStorage();
     }
 }
