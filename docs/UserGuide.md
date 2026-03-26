@@ -103,7 +103,9 @@ contact details, roles, departments, and assigned tasks more efficiently.
 <a id="viewing-help"></a>
 ### Viewing help : `help`
 
-Shows a message explaining how to access the help page.
+Shows an in-app help window with supported commands, allowed inputs, and examples.
+The help window also includes a button to copy the online user guide URL if you want
+to open the full guide in a browser.
 
 ![help message](images/helpMessage.png)
 

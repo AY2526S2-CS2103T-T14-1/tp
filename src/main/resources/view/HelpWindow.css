@@ -1,19 +1,95 @@
-#copyButton, #helpMessage {
-    -fx-text-fill: white;
+#helpWindowContainer {
+    -fx-background-color:
+            radial-gradient(center 12% 0%, radius 90%, rgba(125, 211, 252, 0.22), transparent 42%),
+            radial-gradient(center 100% 0%, radius 95%, rgba(196, 181, 253, 0.26), transparent 40%),
+            linear-gradient(to bottom right, #eef6ff 0%, #f5f7ff 45%, #f8f4ff 100%);
 }
 
 #copyButton {
-    -fx-background-color: dimgray;
+    -fx-background-color: linear-gradient(to right, #38bdf8, #8b5cf6);
+    -fx-background-radius: 999;
+    -fx-border-radius: 999;
+    -fx-text-fill: white;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-size: 12px;
+    -fx-padding: 8 16 8 16;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.18), 14, 0.15, 0, 3);
 }
 
 #copyButton:hover {
-    -fx-background-color: gray;
+    -fx-background-color: linear-gradient(to right, #22d3ee, #7c3aed);
 }
 
 #copyButton:armed {
-    -fx-background-color: darkgray;
+    -fx-background-color: linear-gradient(to right, #0ea5e9, #6d28d9);
 }
 
-#helpMessageContainer {
-    -fx-background-color: derive(#1d1d1d, 20%);
+#helpHeaderCard {
+    -fx-background-color:
+            radial-gradient(center 0% 0%, radius 100%, rgba(125, 211, 252, 0.18), transparent 36%),
+            radial-gradient(center 100% 0%, radius 100%, rgba(196, 181, 253, 0.18), transparent 34%),
+            linear-gradient(to bottom right, rgba(255, 255, 255, 0.98), rgba(246, 249, 255, 0.96));
+    -fx-background-radius: 24;
+    -fx-border-color: rgba(203, 213, 225, 0.65);
+    -fx-border-radius: 24;
+    -fx-border-width: 1;
+    -fx-padding: 18 20 18 20;
+    -fx-effect: dropshadow(gaussian, rgba(148, 163, 184, 0.16), 20, 0.18, 0, 6);
+}
+
+#helpSubtitle {
+    -fx-font-size: 13.5px;
+    -fx-text-fill: #52627c;
+}
+
+.help-display {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14px;
+    -fx-text-fill: #334155;
+    -fx-highlight-fill: rgba(125, 211, 252, 0.22);
+    -fx-highlight-text-fill: #1f2f46;
+    -fx-padding: 18 18 18 18;
+}
+
+.help-display .content {
+    -fx-background-color:
+            radial-gradient(center 0% 0%, radius 100%, rgba(125, 211, 252, 0.12), transparent 40%),
+            radial-gradient(center 100% 0%, radius 100%, rgba(196, 181, 253, 0.12), transparent 38%),
+            linear-gradient(to bottom right, rgba(255, 255, 255, 0.98), rgba(246, 248, 255, 0.96));
+    -fx-background-radius: 20;
+}
+
+.help-display .viewport {
+    -fx-background-color: transparent;
+}
+
+.help-display .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.help-display .scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+.help-display .scroll-bar:vertical .thumb {
+    -fx-background-color: linear-gradient(to bottom, rgba(56, 189, 248, 0.75), rgba(139, 92, 246, 0.75));
+    -fx-background-radius: 999;
+}
+
+#helpFooterBar {
+    -fx-background-color: rgba(255, 255, 255, 0.55);
+    -fx-background-radius: 18;
+    -fx-border-color: rgba(191, 219, 254, 0.75);
+    -fx-border-radius: 18;
+    -fx-border-width: 1;
+    -fx-padding: 10 12 10 12;
+}
+
+#helpFooterText {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: #52627c;
 }
