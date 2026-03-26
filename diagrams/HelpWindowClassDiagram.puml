@@ -1,0 +1,23 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor UI_COLOR_T4
+skinparam classBackgroundColor UI_COLOR
+
+package UI <<Rectangle>> {
+Class MainWindow
+Class HelpWindow
+Class HelpWindowContent
+Class "{abstract}\nUiPart" as UiPart
+}
+
+package Logic <<Rectangle>> {
+Class CommandResult
+}
+
+MainWindow --> "0..1" HelpWindow : shows or focuses
+HelpWindow --|> UiPart
+HelpWindow ..> HelpWindowContent : formats help text
+MainWindow ..> CommandResult : checks showHelp
+
+@enduml
