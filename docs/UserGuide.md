@@ -341,6 +341,8 @@ Format: `addtask task/TASK_NAME desc/TASK_DESCRIPTION n/EMPLOYEE_NAME`
 
 * The employee name must match an existing employee name exactly as stored in ManageUp.
 * The task will be added to that employee's task list and shown on the employee card.
+* The task will have an index number attached to it, to indicate task number.
+* The format should be followed exactly as stated and no jumbling of task name and task description tags
 
 Examples:
 * `addtask task/Prepare Report desc/Submit by Friday n/John Doe`
