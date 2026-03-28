@@ -190,4 +190,29 @@ public class UniquePersonList implements Iterable<Employee> {
         setPerson(personToEdit, editedPerson);
     }
 
+
+    /**
+     * Replaces {@code oldTask} with {@code newTask} in the task list of {@code employee}.
+     *
+     * @param employee  the employee whose task should be edited.
+     * @param oldTask the task to be edited
+     * @param newTask the new edited task
+     * @throws PersonNotFoundException if {@code employee} does not exist in the list.
+     */
+    public void replaceTaskForPerson(Employee employee, Task oldTask, Task newTask) {
+        requireAllNonNull(employee, oldTask, newTask);
+        int index = internalList.indexOf(employee);
+        if (index == -1) {
+            throw new PersonNotFoundException();
+        }
+        Employee personToEdit = internalList.get(index);
+        Employee editedPerson = new Employee(personToEdit.getName(), personToEdit.getPhone(),
+                personToEdit.getEmail(), personToEdit.getDepartment(), personToEdit.getPosition(),
+                personToEdit.getTags(), personToEdit.getTaskListStorage());
+        editedPerson.deleteTask(oldTask);
+        editedPerson.addTask(newTask);
+        setPerson(personToEdit, editedPerson);
+    }
+
+
 }

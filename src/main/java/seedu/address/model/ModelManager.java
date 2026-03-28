@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -185,6 +186,16 @@ public class ModelManager implements Model {
     @Override
     public void deleteTask(int taskIndex) {
         addressBook.deleteTask(taskIndex, tasks);
+    }
+
+    @Override
+    public Optional<Task> getTaskByIndex(int taskIndex) {
+        return tasks.getTaskByIndex(taskIndex);
+    }
+
+    @Override
+    public void setTask(int taskIndex, Task newTask) {
+        addressBook.setTask(taskIndex, newTask, tasks);
     }
 
 

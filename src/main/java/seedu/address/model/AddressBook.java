@@ -3,6 +3,7 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.Optional;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
@@ -127,6 +128,25 @@ public class AddressBook implements ReadOnlyAddressBook {
     public void showAllTask(TaskList tasks) {
         tasks.showFullTaskList();
     }
+
+    /**
+     * Replaces the task at {@code taskIndex} with {@code newTask} in both the overall
+     * task list and the owning employee's individual task list.
+     *
+     * @param taskIndex the task index of the task to edit.
+     * @param newTask   the new edited task.
+     * @param tasks     the overall task list to update.
+     */
+    public void setTask(int taskIndex, Task newTask, TaskList tasks) {
+        requireNonNull(newTask);
+        Optional<Task> oldTaskOpt = tasks.getTaskByIndex(taskIndex);
+        assert oldTaskOpt.isPresent() : "setTask called with non-existent taskIndex: " + taskIndex;
+        Task oldTask = oldTaskOpt.get();
+
+        Employee assignedPerson = tasks.replaceTask(taskIndex, newTask);
+        persons.replaceTaskForPerson(assignedPerson, oldTask, newTask);
+    }
+
 
 
     /// / util methods

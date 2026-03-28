@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
@@ -104,6 +105,17 @@ public interface Model {
 
     void deleteTask(int taskIndex);
 
+    /**
+     * Returns the task with the given {@code taskIndex}, or {@code Optional#empty()}
+     * if no such task exists
+     */
+    Optional<Task> getTaskByIndex(int taskIndex);
+
+    /**
+     * Replaces the task identified by {@code taskIndex} with {@code newTask},
+     * updating both the overall task list and the owning employee's task list.
+     */
+    void setTask(int taskIndex, Task newTask);
 
 
 

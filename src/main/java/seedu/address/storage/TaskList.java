@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import javafx.collections.transformation.FilteredList;
 import seedu.address.model.employee.Employee;
@@ -106,6 +107,34 @@ public class TaskList {
      */
     public Employee getPersonAssignedToTask(int taskIndex) {
         return findEntryByTaskIndex(taskIndex).getValue();
+    }
+
+    /**
+     * Returns the task with the specified task index
+     * or {@code Optional#empty()} if no such task exists.
+     *
+     * @param taskIndex the task index to look up.
+     */
+    public Optional<Task> getTaskByIndex(int taskIndex) {
+        return internalMap.keySet().stream()
+                .filter(task -> task.getCurrentTaskIndex() == taskIndex)
+                .findFirst();
+    }
+
+    /**
+     * Returns the employee assigned to the edited task
+     *
+     * @param taskIndex the task index of the task to edit.
+     * @param newTask   the edited task.
+     * @return the {@code Employee} that was assigned to the replaced task.
+     */
+    public Employee replaceTask(int taskIndex, Task newTask) {
+        requireNonNull(newTask);
+        Entry<Task, Employee> entry = findEntryByTaskIndex(taskIndex);
+        Employee assignedPerson = entry.getValue();
+        internalMap.remove(entry.getKey());
+        internalMap.put(newTask, assignedPerson);
+        return assignedPerson;
     }
 
     private Entry<Task, Employee> findEntryByTaskIndex(int taskIndex) {
