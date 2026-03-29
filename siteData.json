@@ -120,6 +120,7 @@
         "editing-an-employee-edit": "Editing an employee : edit",
         "deleting-an-employee-delete": "Deleting an employee : delete",
         "adding-a-task-to-an-employee-addtask": "Adding a task to an employee : addtask",
+        "editing-a-task-edittask": "Editing a task: edittask",
         "deleting-a-task-deletetask": "Deleting a task : deletetask",
         "clearing-all-entries-clear": "Clearing all entries : clear",
         "exiting-the-program-exit": "Exiting the program : exit",
