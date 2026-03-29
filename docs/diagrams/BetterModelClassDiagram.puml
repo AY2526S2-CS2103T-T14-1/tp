@@ -10,7 +10,7 @@ UniqueTagList -[hidden]down- UniquePersonList
 UniqueTagList -[hidden]down- UniquePersonList
 
 UniqueTagList -right-> "*" Tag
-UniqueEmployeeList -right-> Employee
+UniqueEmployeeList -right->C Employee
 
 Employee -up-> "*" Tag
 
