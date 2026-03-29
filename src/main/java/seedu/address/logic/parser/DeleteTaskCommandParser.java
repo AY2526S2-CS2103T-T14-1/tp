@@ -2,6 +2,9 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
+import java.util.Arrays;
+import java.util.List;
+
 import seedu.address.logic.commands.DeleteTaskCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -19,11 +22,16 @@ public class DeleteTaskCommandParser implements Parser<DeleteTaskCommand> {
         }
 
         try {
-            int index = Integer.parseInt(trimmedArgs);
-            if (index < 1) {
-                throw new ParseException(DeleteTaskCommand.MESSAGE_INVALID_INDEX);
+            List<Integer> indices = Arrays.stream(trimmedArgs.split("\\s+"))
+                    .map(Integer::parseInt)
+                    .toList();
+
+            for (int index : indices) {
+                if (index < 1) {
+                    throw new ParseException(DeleteTaskCommand.MESSAGE_INVALID_INDEX);
+                }
             }
-            return new DeleteTaskCommand(index);
+            return new DeleteTaskCommand(indices);
         } catch (NumberFormatException e) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteTaskCommand.MESSAGE_USAGE));

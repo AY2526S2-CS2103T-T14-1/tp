@@ -6,6 +6,7 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,13 +26,16 @@ import seedu.address.model.employee.TaskListStorage;
 class DeleteTaskCommandTest {
 
     private ModelManager model;
-    private Task task;
+    private Task firstTask;
+    private Task secondTask;
 
     @BeforeEach
     void setUp() {
-        task = new Task("Finish Homework", "Complete math homework by tomorrow", 1);
+        firstTask = new Task("Finish Homework", "Complete math homework by tomorrow", 1);
+        secondTask = new Task("Review PR", "Review the open pull request", 2);
         TaskListStorage taskListStorage = new TaskListStorage(new ArrayList<>());
-        taskListStorage.addTask(task);
+        taskListStorage.addTask(firstTask);
+        taskListStorage.addTask(secondTask);
 
         Employee employee = new Employee(
                 new Name("John Doe"),
@@ -46,23 +50,41 @@ class DeleteTaskCommandTest {
         AddressBook addressBook = new AddressBook();
         addressBook.addPerson(employee);
         model = new ModelManager(addressBook, new UserPrefs());
-        model.addTaskOverall(task, employee);
+        model.addTaskOverall(firstTask, employee);
+        model.addTaskOverall(secondTask, employee);
     }
 
     @Test
     void execute_validIndex_taskDeletedSuccessfully() throws Exception {
-        DeleteTaskCommand command = new DeleteTaskCommand(1);
+        DeleteTaskCommand command = new DeleteTaskCommand(List.of(1));
 
         CommandResult result = command.execute(model);
 
-        assertEquals(DeleteTaskCommand.MESSAGE_SUCCESS, result.getFeedbackToUser());
+        assertEquals(String.format(DeleteTaskCommand.MESSAGE_SUCCESS, 1), result.getFeedbackToUser());
+        Employee updatedEmployee = model.getAddressBook().getPersonList().get(0);
+        assertEquals(1, updatedEmployee.getTaskListStorage().getTasks().size());
+    }
+
+    @Test
+    void execute_validIndices_tasksDeletedSuccessfully() throws Exception {
+        DeleteTaskCommand command = new DeleteTaskCommand(List.of(1, 2));
+
+        CommandResult result = command.execute(model);
+
+        assertEquals(String.format(DeleteTaskCommand.MESSAGE_SUCCESS, 2), result.getFeedbackToUser());
         Employee updatedEmployee = model.getAddressBook().getPersonList().get(0);
         assertTrue(updatedEmployee.getTaskListStorage().getTasks().isEmpty());
     }
 
     @Test
     void execute_invalidIndex_throwsCommandException() {
-        DeleteTaskCommand command = new DeleteTaskCommand(999);
+        DeleteTaskCommand command = new DeleteTaskCommand(List.of(999));
+        assertCommandFailure(command, model, DeleteTaskCommand.MESSAGE_INVALID_INDEX);
+    }
+
+    @Test
+    void execute_duplicateIndices_throwsCommandException() {
+        DeleteTaskCommand command = new DeleteTaskCommand(List.of(1, 1));
         assertCommandFailure(command, model, DeleteTaskCommand.MESSAGE_INVALID_INDEX);
     }
 }
