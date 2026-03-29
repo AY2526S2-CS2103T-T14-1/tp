@@ -24,6 +24,7 @@ contact details, roles, departments, and assigned tasks more efficiently.
     * [Deleting an employee: `delete`](#deleting-an-employee)
   * Task management
     * [Adding a task to an employee: `addtask`](#adding-a-task-to-an-employee)
+    * [Editing a task: `edittask`](#editing-a-task)
     * [Deleting a task: `deletetask`](#deleting-a-task)
   * General features
     * [Viewing help: `help`](#viewing-help)
@@ -293,7 +294,7 @@ For example:
 ### Editing an employee : `edit` 
 Edits an existing employee in the address book.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [pos/POSITION] [t/TAG]...`
+Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...`
 
 * Edits the employee at the specified `INDEX`.
 * The index refers to the index number shown in the displayed employee list.
@@ -350,14 +351,32 @@ Examples:
 * `addtask task/Prepare Report desc/Submit by Friday n/John Doe`
 * `addtask task/Client Followup desc/Call client before Monday n/Amy Bee`
 
+<a id="editing-a-task"></a>
+### Editing a task: `edittask`
+
+
+Edits the name and/or description of an existing task identified by its task index.
+
+Format:  `edittask TASK_INDEX [task/TASK_NAME] [desc/TASK_DESCRIPTION]`
+
+* `TASK_INDEX` refers to the task index shown beside the task on the employee card, for example `#1`.
+* At least one of the optional fields (`task/` or `desc/`) must be provided.
+* Fields not specified will remain unchanged.
+* Duplicate prefixes are not allowed (e.g. multiple `task/`).
+
+Examples:
+* `edittask 1 task/Prepare Report desc/Submit by Friday` edits both the task name and task description
+* `edittask 2 task/Client Followup` edits only the task name
+* `edittask 3 desc/Submit by Friday` edits only the task description
+
 <a id="deleting-a-task"></a>
 ### Deleting a task : `deletetask`
 
 Deletes a task using its displayed task index.
 
-Format: `deletetask INDEX`
+Format: `deletetask TASK_INDEX`
 
-* `INDEX` refers to the task index shown beside the task on the employee card, for example `#1`.
+* `TASK_INDEX` refers to the task index shown beside the task on the employee card, for example `#1`.
 * The index **must be a positive integer** 1, 2, 3, …
 * Deleting a task removes it from both the employee's task list and the overall task list used internally by the app.
 
@@ -418,14 +437,15 @@ _More features coming soon ..._
 
 ## Command summary
 
-| Action                                | Command      | Format                                                                                                                                                             |
-|---------------------------------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Add an employee to contacts           | **Add**      | `add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...`<br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com d/Finance pos/Analyst t/fulltime`     |
-| Delete an employee from contacts      | **Delete**   | `delete NAME` or `delete INDEX [MORE_INDEXES]...`<br> e.g., `delete James Ho`, `delete 3`, `delete 1 3 5`                                                         |
-| Edit an employee's details            | **Edit**     | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`                           |
-| List all employees in contacts        | **List**     | `list`                                                                                                                                                             |
-| Show filtered employees from contacts | **Show**     | `show [n/NAME] [d/DEPARTMENT] [p/PHONE] [e/EMAIL] [pos/POSITION] [t/TAG] [task/TASK]...` <br> e.g., `show n/Ja d/Finance pos/Develepor HR Management t/Nightshift` |
-| Delete ALL employees from contacts    | **Clear**    | `clear`                                                                                                                                                            |
-| Add tasks to an employee              | **Add Task** | `addtask task/TASK_NAME desc/TASK_DESCRIPTION n/EMPLOYEE_NAME`<br> e.g., `addtask task/Prepare Slides desc/Send by Friday n/James Ho`                              |
-| Delete a task                         | **Delete Task** | `deletetask INDEX`<br> e.g., `deletetask 1`                                                                                                                     |
-| Display help message                  | **Help**     | `help`                                                                                                                                                             |
+| Action                                | Command         | Format                                                                                                                                                             |
+|---------------------------------------|-----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Add an employee to contacts           | **Add**         | `add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...`<br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com d/Finance pos/Analyst t/fulltime`     |
+| Delete an employee from contacts      | **Delete**      | `delete NAME` or `delete INDEX [MORE_INDEXES]...`<br> e.g., `delete James Ho`, `delete 3`, `delete 1 3 5`                                                          |
+| Edit an employee's details            | **Edit**        | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`                           |
+| List all employees in contacts        | **List**        | `list`                                                                                                                                                             |
+| Show filtered employees from contacts | **Show**        | `show [n/NAME] [d/DEPARTMENT] [p/PHONE] [e/EMAIL] [pos/POSITION] [t/TAG] [task/TASK]...` <br> e.g., `show n/Ja d/Finance pos/Develepor HR Management t/Nightshift` |
+| Delete ALL employees from contacts    | **Clear**       | `clear`                                                                                                                                                            |
+| Add tasks to an employee              | **Add Task**    | `addtask task/TASK_NAME desc/TASK_DESCRIPTION n/EMPLOYEE_NAME`<br> e.g., `addtask task/Prepare Slides desc/Send by Friday n/James Ho`                              |
+| Edit a task                           | **Edit Task**   | `edittask TASK_INDEX task/TASK_NAME desc/TASK_DESCRIPTION `<br> e.g., `edittask 6 task/Close deal desc/Finalise by Wednesday`                                      |
+| Delete a task                         | **Delete Task** | `deletetask TASK_INDEX`<br> e.g., `deletetask 1`                                                                                                                   |
+| Display help message                  | **Help**        | `help`                                                                                                                                                             |
