@@ -31,7 +31,7 @@ public class Department {
     }
 
     /**
-     * Returns true if a given string is a valid name.
+     * Returns true if a given string is a valid department.
      */
     public static boolean isValidDepartment(String test) {
         return test.matches(VALIDATION_REGEX);

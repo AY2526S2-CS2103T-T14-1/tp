@@ -148,47 +148,61 @@ public class EditCommandTest {
 
     @Test
     public void execute_duplicateEmail_failure() {
-        Employee firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Employee secondPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+        Employee employee = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
 
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withEmail(secondPerson.getEmail().value)
+                .withEmail(employee.getEmail().value)
                 .build();
 
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
 
         assertCommandFailure(editCommand, model,
-                String.format(EditCommand.MESSAGE_DUPLICATE_EMAIL, Messages.format(secondPerson)));
+                String.format(EditCommand.MESSAGE_DUPLICATE_EMAIL, Messages.format(employee)));
     }
 
     @Test
     public void execute_duplicatePhone_failure() {
-        Employee firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Employee secondPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+        Employee employee = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withPhone(secondPerson.getPhone().value)
+                .withPhone(employee.getPhone().value)
                 .build();
 
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
 
         assertCommandFailure(editCommand, model,
-                String.format(EditCommand.MESSAGE_DUPLICATE_PHONE, Messages.format(secondPerson)));
+                String.format(EditCommand.MESSAGE_DUPLICATE_PHONE, Messages.format(employee)));
+    }
+
+    @Test
+    public void execute_duplicatePersonCaseInsensitive_failure() {
+        Employee employee = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+
+        String lowerCaseName = employee.getName().fullName.toLowerCase();
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withName(lowerCaseName)
+                .withPhone(employee.getPhone().value)
+                .build();
+
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
     }
 
     @Test
     public void execute_sameEmailSamePerson_success() {
-        Employee person = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Employee employee = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withEmail(person.getEmail().value)
+                .withEmail(employee.getEmail().value)
                 .build();
 
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
-                Messages.format(person));
+                Messages.format(employee));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
 

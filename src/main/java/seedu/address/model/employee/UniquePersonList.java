@@ -13,14 +13,14 @@ import seedu.address.model.employee.exceptions.PersonNotFoundException;
 
 /**
  * A list of persons that enforces uniqueness between its elements and does not allow nulls.
- * A person is considered unique by comparing using {@code Employee#isSamePerson(Employee)}. As such, adding and
- * updating of persons uses Employee#isSamePerson(Employee) for equality so as to ensure that the person being added
+ * A person is considered unique by comparing using {@code Employee#isSameEmployee(Employee)}. As such, adding and
+ * updating of persons uses Employee#isSameEmployee(Employee) for equality so as to ensure that the person being added
  * or updated is unique in terms of identity in the UniquePersonList. However, the removal of a person uses
  * Employee#equals(Object) so as to ensure that the person with exactly the same fields will be removed.
  * <p>
  * Supports a minimal set of list operations.
  *
- * @see Employee#isSamePerson(Employee)
+ * @see Employee#isSameEmployee(Employee)
  */
 public class UniquePersonList implements Iterable<Employee> {
 
@@ -33,7 +33,7 @@ public class UniquePersonList implements Iterable<Employee> {
      */
     public boolean contains(Employee toCheck) {
         requireNonNull(toCheck);
-        return internalList.stream().anyMatch(toCheck::isSamePerson);
+        return internalList.stream().anyMatch(toCheck::isSameEmployee);
     }
 
     /**
@@ -61,7 +61,7 @@ public class UniquePersonList implements Iterable<Employee> {
             throw new PersonNotFoundException();
         }
 
-        if (!target.isSamePerson(editedPerson) && contains(editedPerson)) {
+        if (!target.isSameEmployee(editedPerson) && contains(editedPerson)) {
             throw new DuplicatePersonException();
         }
 
@@ -140,7 +140,7 @@ public class UniquePersonList implements Iterable<Employee> {
     private boolean personsAreUnique(List<Employee> persons) {
         for (int i = 0; i < persons.size() - 1; i++) {
             for (int j = i + 1; j < persons.size(); j++) {
-                if (persons.get(i).isSamePerson(persons.get(j))) {
+                if (persons.get(i).isSameEmployee(persons.get(j))) {
                     return false;
                 }
             }

@@ -59,6 +59,16 @@ public class Name {
         return fullName.equals(otherName.fullName);
     }
 
+    /**
+     * Returns true if both names represent the same name, ignoring differences in letter casing.
+     */
+    public boolean equalsIgnoreCase(Name other) {
+        if (other == this) {
+            return true;
+        }
+        return other != null && fullName.equalsIgnoreCase(other.fullName);
+    }
+
     @Override
     public int hashCode() {
         return fullName.hashCode();

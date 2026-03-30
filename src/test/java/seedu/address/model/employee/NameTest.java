@@ -57,4 +57,22 @@ public class NameTest {
         // different values -> returns false
         assertFalse(name.equals(new Name("Other Valid Name")));
     }
+
+    @Test
+    public void equalsIgnoreCase() {
+        Name name = new Name("John Doe");
+
+        // same values, different casing -> true
+        assertTrue(name.equalsIgnoreCase(new Name("john doe")));
+
+        // same object -> true
+        assertTrue(name.equalsIgnoreCase(name));
+
+        // null -> false
+        assertFalse(name.equalsIgnoreCase(null));
+
+        // different values -> false
+        assertFalse(name.equalsIgnoreCase(new Name("Jane Doe")));
+    }
+
 }

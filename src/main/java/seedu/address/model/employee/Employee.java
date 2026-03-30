@@ -73,18 +73,23 @@ public class Employee {
     }
 
     /**
-     * Returns true if both employees have the same name.
-     * This defines a weaker notion of equality between two persons.
+     * Returns true if both employees have the same name (case-insensitive) and
+     * same phone or same email.
      */
-    public boolean isSamePerson(Employee otherPerson) {
+    public boolean isSameEmployee(Employee otherPerson) {
+        if (otherPerson == null) {
+            return false;
+        }
+
         if (otherPerson == this) {
             return true;
         }
 
-        return otherPerson != null
-                && otherPerson.getName().equals(getName())
-                && (otherPerson.getPhone().equals(getPhone())
-                || otherPerson.getEmail().equals(getEmail()));
+        boolean isSameName = name.equalsIgnoreCase(otherPerson.getName());
+        boolean isSamePhone = phone.equals(otherPerson.phone);
+        boolean isSameEmail = email.equals(otherPerson.email);
+
+        return isSameName && (isSamePhone || isSameEmail);
     }
 
     /**

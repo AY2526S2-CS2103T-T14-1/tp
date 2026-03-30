@@ -55,6 +55,27 @@ public class AddCommandTest {
     }
 
     @Test
+    public void execute_duplicateEmployeeCaseInsensitive_throwsCommandException() {
+        Employee existingPerson = new PersonBuilder().withName("John Doe")
+                                                     .withPhone("12345678")
+                                                     .withEmail("john@email.com")
+                                                     .build();
+
+        Employee samePersonDifferentCase = new PersonBuilder().withName("john doe")
+                                                              .withPhone("12345678")
+                                                              .withEmail("john@email.com")
+                                                              .build();
+
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+        modelStub.personsAdded.add(existingPerson);
+
+        AddCommand addCommand = new AddCommand(samePersonDifferentCase);
+
+        assertThrows(CommandException.class,
+                AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
+    }
+
+    @Test
     public void equals() {
         Employee alice = new PersonBuilder().withName("Alice").build();
         Employee bob = new PersonBuilder().withName("Bob").build();
@@ -217,7 +238,7 @@ public class AddCommandTest {
         @Override
         public boolean hasPerson(Employee person) {
             requireNonNull(person);
-            return this.person.isSamePerson(person);
+            return this.person.isSameEmployee(person);
         }
 
         @Override
@@ -240,7 +261,7 @@ public class AddCommandTest {
         @Override
         public boolean hasPerson(Employee person) {
             requireNonNull(person);
-            return personsAdded.stream().anyMatch(person::isSamePerson);
+            return personsAdded.stream().anyMatch(person::isSameEmployee);
         }
 
         @Override
