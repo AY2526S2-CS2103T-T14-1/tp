@@ -5,6 +5,8 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK_NAME;
 
+import seedu.address.logic.Messages;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.employee.Employee;
 import seedu.address.model.employee.Task;
@@ -14,6 +16,8 @@ import seedu.address.model.employee.Task;
  */
 public class AddTaskCommand extends Command {
     public static final String COMMAND_WORD = "addtask";
+
+    public static final String MESSAGE_DUPLICATE_TASK = "Task has already been added";
 
     public static final String MESSAGE_USAGE =
             COMMAND_WORD
@@ -57,6 +61,13 @@ public class AddTaskCommand extends Command {
         Employee person = getPerson(personName, model);
 
         if (person != null) {
+
+            Task taskWithSameDescription = model.getTaskWithSameDescription(task, person);
+
+            if (taskWithSameDescription != null) {
+                return new CommandResult("Task has already been added to user");
+            }
+
             task.incrementTaskIndex();
             model.addTaskToPerson(person, task);
             model.addTaskOverall(task, person);
