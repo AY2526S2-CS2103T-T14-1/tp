@@ -42,4 +42,11 @@ class TaskTest {
         Task task = new Task("Task 1", "2024-06-30", 0);
         assertEquals("#0 Task 1: 2024-06-30", task.toString());
     }
+
+    @Test
+    void equals_sameObject_returnsTrue() {
+        Task firstTask = new Task("Task 1", "2024-06-30", 0);
+        Task secondTask = new Task("Task 1", "2024-06-30", 1);
+        assertTrue(firstTask.equals(secondTask));
+    }
 }

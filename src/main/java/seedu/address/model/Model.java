@@ -117,6 +117,11 @@ public interface Model {
      */
     void setTask(int taskIndex, Task newTask);
 
-
-
+    /**
+     * Returns existing task in employee if the same task exists, or null if none exists.
+     * @param task Task to be checked against.
+     * @param person Person as to which the task is to be added.
+     * @return Task if it already exists in the employee's record.
+     */
+    Task getTaskWithSameDescription(Task task, Employee person);
 }

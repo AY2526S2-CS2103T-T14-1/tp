@@ -82,8 +82,7 @@ public class Task {
 
         Task otherTask = (Task) other;
         return taskName.equals(otherTask.taskName)
-                && taskDescription.equals(otherTask.taskDescription)
-                && currentTaskIndex == otherTask.currentTaskIndex;
+                && taskDescription.equals(otherTask.taskDescription);
     }
 
     @Override

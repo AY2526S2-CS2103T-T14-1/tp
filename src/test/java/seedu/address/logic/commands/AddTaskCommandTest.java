@@ -69,6 +69,17 @@ class AddTaskCommandTest {
     }
 
     @Test
+    void execute_duplicateTask_returnsDuplicateMessage() {
+        Task task = new Task("Finish Homework", "Complete math homework by tomorrow", 0);
+        model.addTaskToPerson(testEmployee, task);
+
+        AddTaskCommand command = new AddTaskCommand(task, "John Doe");
+        CommandResult result = command.execute(model);
+
+        assertEquals("Task already exists for this user", result.getFeedbackToUser());
+    }
+
+    @Test
     void equals() {
         Task task1 = new Task("Task1", "Desc1", 0);
         Task task2 = new Task("Task2", "Desc2", 0);

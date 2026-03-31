@@ -15,6 +15,8 @@ import seedu.address.model.employee.Task;
 public class AddTaskCommand extends Command {
     public static final String COMMAND_WORD = "addtask";
 
+    public static final String MESSAGE_DUPLICATE_TASK = "Task already exists for this user";
+
     public static final String MESSAGE_USAGE =
             COMMAND_WORD
                     + ": Adds a task to the task list. "
@@ -57,6 +59,13 @@ public class AddTaskCommand extends Command {
         Employee person = getPerson(personName, model);
 
         if (person != null) {
+
+            Task taskWithSameDescription = model.getTaskWithSameDescription(task, person);
+
+            if (taskWithSameDescription != null) {
+                return new CommandResult(MESSAGE_DUPLICATE_TASK);
+            }
+
             task.incrementTaskIndex();
             model.addTaskToPerson(person, task);
             model.addTaskOverall(task, person);
