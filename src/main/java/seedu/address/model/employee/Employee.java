@@ -34,7 +34,7 @@ public class Employee {
      */
     public Employee(Name name, Phone phone, Email email, Department department,
                     Position position, Set<Tag> tags, TaskListStorage taskListStorage) {
-        requireAllNonNull(name, phone, email, position, tags);
+        requireAllNonNull(name, phone, email, department, position, tags);
         this.name = name;
         this.phone = phone;
         this.email = email;

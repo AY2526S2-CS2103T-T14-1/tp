@@ -39,7 +39,7 @@ public class EditCommand extends Command {
 
     public static final String COMMAND_WORD = "edit";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the person identified "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the employee identified "
             + "by the index number used in the displayed employee list. "
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
@@ -53,15 +53,8 @@ public class EditCommand extends Command {
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
 
-    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Employee: %1$s";
-    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
-
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
-    public static final String MESSAGE_DUPLICATE_PHONE =
-            "Phone number is already assigned to another employee: %1$s";
-    public static final String MESSAGE_DUPLICATE_EMAIL =
-            "Email is already assigned to another employee: %1$s";
-
+    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Employee:\n%1$s";
+    public static final String MESSAGE_NOT_EDITED = "At least one employee field to edit must be provided.";
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -91,18 +84,20 @@ public class EditCommand extends Command {
         Employee editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
 
         if (!personToEdit.isSameEmployee(editedPerson) && model.hasPerson(editedPerson)) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+            throw new CommandException(Messages.MESSAGE_DUPLICATE_EMPLOYEE);
         }
 
         Employee employeeWithSamePhone = model.getEmployeeWithSamePhone(editedPerson);
         Employee employeeWithSameEmail = model.getEmployeeWithSameEmail(editedPerson);
 
         if (employeeWithSameEmail != null && !employeeWithSameEmail.equals(personToEdit)) {
-            throw new CommandException(String.format(MESSAGE_DUPLICATE_EMAIL, Messages.format(employeeWithSameEmail)));
+            throw new CommandException(String.format(Messages.MESSAGE_DUPLICATE_EMAIL,
+                                       Messages.format(employeeWithSameEmail)));
         }
 
         if (employeeWithSamePhone != null && !employeeWithSamePhone.equals(personToEdit)) {
-            throw new CommandException(String.format(MESSAGE_DUPLICATE_PHONE, Messages.format(employeeWithSamePhone)));
+            throw new CommandException(String.format(Messages.MESSAGE_DUPLICATE_PHONE,
+                                       Messages.format(employeeWithSamePhone)));
         }
 
         model.setPerson(personToEdit, editedPerson);
