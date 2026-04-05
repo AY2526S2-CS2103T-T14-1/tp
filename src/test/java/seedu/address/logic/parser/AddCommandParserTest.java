@@ -5,6 +5,7 @@ import static seedu.address.logic.commands.CommandTestUtil.DEPARTMENT_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DEPARTMENT_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_DEPARTMENT_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
@@ -22,6 +23,7 @@ import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.TAG_DESC_HUSBAND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DEPARTMENT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
@@ -35,6 +37,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.model.employee.Department;
 import seedu.address.model.employee.Email;
 import seedu.address.model.employee.Employee;
 import seedu.address.model.employee.Name;
@@ -81,6 +84,10 @@ public class AddCommandParserTest {
         assertParseFailure(parser, EMAIL_DESC_AMY + validExpectedPersonString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EMAIL));
 
+        // multiple departments
+        assertParseFailure(parser, DEPARTMENT_DESC_AMY + validExpectedPersonString,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_DEPARTMENT));
+
         // multiple positions
         assertParseFailure(parser, POSITION_DESC_AMY + validExpectedPersonString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_POSITION));
@@ -90,9 +97,9 @@ public class AddCommandParserTest {
                 validExpectedPersonString + PHONE_DESC_AMY + EMAIL_DESC_AMY + NAME_DESC_AMY
                         + DEPARTMENT_DESC_AMY + POSITION_DESC_AMY
                         + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_POSITION));
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
+                                                             PREFIX_DEPARTMENT, PREFIX_POSITION));
 
-        // invalid value followed by valid value
 
         // invalid name
         assertParseFailure(parser, INVALID_NAME_DESC + validExpectedPersonString,
@@ -105,6 +112,10 @@ public class AddCommandParserTest {
         // invalid phone
         assertParseFailure(parser, INVALID_PHONE_DESC + validExpectedPersonString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
+
+        //invalid department
+        assertParseFailure(parser, INVALID_DEPARTMENT_DESC + validExpectedPersonString,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_DEPARTMENT));
 
         // invalid position
         assertParseFailure(parser, INVALID_POSITION_DESC + validExpectedPersonString,
@@ -121,6 +132,10 @@ public class AddCommandParserTest {
         // invalid phone
         assertParseFailure(parser, validExpectedPersonString + INVALID_PHONE_DESC,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
+
+        // invalid department
+        assertParseFailure(parser, validExpectedPersonString + INVALID_DEPARTMENT_DESC,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_DEPARTMENT));
 
         // invalid position
         assertParseFailure(parser, validExpectedPersonString + INVALID_POSITION_DESC,
@@ -155,10 +170,16 @@ public class AddCommandParserTest {
                         + DEPARTMENT_DESC_BOB + POSITION_DESC_BOB,
                 expectedMessage);
 
+        // missing department prefix
+        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                        + POSITION_DESC_BOB,
+                expectedMessage);
+
         // missing position prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                         + DEPARTMENT_DESC_BOB,
                 expectedMessage);
+
 
         // all prefixes missing
         assertParseFailure(parser, "",
@@ -178,6 +199,10 @@ public class AddCommandParserTest {
         // invalid email
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + INVALID_EMAIL_DESC + DEPARTMENT_DESC_BOB
                 + POSITION_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, Email.MESSAGE_CONSTRAINTS);
+
+        // invalid department
+        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + INVALID_DEPARTMENT_DESC
+                + POSITION_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, Department.MESSAGE_CONSTRAINTS);
 
         // invalid position
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + DEPARTMENT_DESC_BOB
