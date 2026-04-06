@@ -4,7 +4,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -26,7 +26,7 @@ public class Employee {
     // Data fields
     private final Department department;
     private final Position position;
-    private final Set<Tag> tags = new HashSet<>();
+    private final Set<Tag> tags = new LinkedHashSet<>();
     private final TaskListStorage taskListStorage;
 
     /**

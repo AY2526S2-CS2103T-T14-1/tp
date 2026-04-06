@@ -6,9 +6,11 @@ import static seedu.address.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -26,13 +28,14 @@ public class ParserUtilTest {
     private static final String INVALID_POSITION = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
+    private static final String INVALID_TAG_TOO_LONG = "a".repeat(Tag.MAX_TAG_LENGTH + 1);
 
     private static final String VALID_NAME = "Rachel Walker";
     private static final String VALID_PHONE = "123456";
     private static final String VALID_POSITION = "Junior Software Developer";
     private static final String VALID_EMAIL = "rachel@example.com";
     private static final String VALID_TAG_1 = "friend";
-    private static final String VALID_TAG_2 = "neighbour";
+    private static final String VALID_TAG_MAX_LENGTH = "a".repeat(Tag.MAX_TAG_LENGTH);
 
     private static final String WHITESPACE = " \t\r\n";
 
@@ -159,6 +162,11 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseTag_invalidTooLongTag_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseTag(INVALID_TAG_TOO_LONG));
+    }
+
+    @Test
     public void parseTag_validValueWithoutWhitespace_returnsTag() throws Exception {
         Tag expectedTag = new Tag(VALID_TAG_1);
         assertEquals(expectedTag, ParserUtil.parseTag(VALID_TAG_1));
@@ -172,6 +180,12 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseTag_tagAtMaxLength_returnsTag() throws Exception {
+        Tag expectedTag = new Tag(VALID_TAG_MAX_LENGTH);
+        assertEquals(expectedTag, ParserUtil.parseTag(VALID_TAG_MAX_LENGTH));
+    }
+
+    @Test
     public void parseTags_null_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> ParserUtil.parseTags(null));
     }
@@ -182,15 +196,33 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parseTags_collectionWithInvalidTooLongTag_throwsParseException() {
+        assertThrows(ParseException.class, () ->
+                ParserUtil.parseTags(Arrays.asList(VALID_TAG_1, INVALID_TAG_TOO_LONG)));
+    }
+
+    @Test
     public void parseTags_emptyCollection_returnsEmptySet() throws Exception {
         assertTrue(ParserUtil.parseTags(Collections.emptyList()).isEmpty());
     }
 
     @Test
     public void parseTags_collectionWithValidTags_returnsTagSet() throws Exception {
-        Set<Tag> actualTagSet = ParserUtil.parseTags(Arrays.asList(VALID_TAG_1, VALID_TAG_2));
-        Set<Tag> expectedTagSet = new HashSet<Tag>(Arrays.asList(new Tag(VALID_TAG_1), new Tag(VALID_TAG_2)));
+        Set<Tag> actualTagSet = ParserUtil.parseTags(Arrays.asList(VALID_TAG_1, VALID_TAG_MAX_LENGTH));
+        Set<Tag> expectedTagSet = new LinkedHashSet<Tag>(Arrays.asList(new Tag(VALID_TAG_1),
+                                                         new Tag(VALID_TAG_MAX_LENGTH)));
 
         assertEquals(expectedTagSet, actualTagSet);
+    }
+
+    @Test
+    public void parseTags_collectionWithValidTags_preservesInsertionOrder() throws Exception {
+        List<String> input = Arrays.asList("tag3", "tag1", "tag2");
+        Set<Tag> result = ParserUtil.parseTags(input);
+
+        List<Tag> resultList = new ArrayList<>(result);
+        assertEquals(new Tag("tag3"), resultList.get(0));
+        assertEquals(new Tag("tag1"), resultList.get(1));
+        assertEquals(new Tag("tag2"), resultList.get(2));
     }
 }
