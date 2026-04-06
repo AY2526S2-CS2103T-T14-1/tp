@@ -152,7 +152,9 @@ If you type extra text after `help`, ManageUp will still interpret it as `help`.
 The help window displays a compact command reference and a button that copies the online User Guide URL to your
 clipboard so you can open the full guide in a browser if needed.
 
-![help message](images/helpMessage.png)
+After entering `help`, ManageUp opens the Help Window shown below.
+
+![Help Window](images/Help_PopOutWindow.png)
 
 #### Important notes
 
@@ -391,17 +393,7 @@ Both forms operate on the **currently displayed employee list**.
 This means the result depends on what is currently shown in the app window. For example, after a `show` command, the indexes
 refer to the filtered list instead of the full list.
 
-![ManageUp main window](images/Ui.png)
-
 #### Command usage
-
-##### Deleting by index
-
-Use `delete INDEX` when you want to remove one displayed employee by position in the current list.
-
-* The index refers to the number shown in the currently displayed employee list.
-* The index **must be a positive integer** such as `1`, `2`, or `3`.
-* Index-based deletion is useful when multiple employees have similar or identical names.
 
 ##### Deleting by name
 
@@ -411,15 +403,36 @@ Use `delete NAME` when you want to remove an employee by name instead of list po
 * Extra spaces in the input are ignored.
 * The entered name must match **one unique employee** in the currently displayed list.
 
+For example, after entering `delete betsy Crowe`, ManageUp deletes the matching employee and shows a success message.
+
+![Deleting an employee by name successfully](images/DeleteEmployee_ByName_Successful.png)
+
+##### Deleting by index
+
+Use `delete INDEX` when you want to remove one displayed employee by position in the current list.
+
+* The index refers to the number shown in the currently displayed employee list.
+* The index **must be a positive integer** such as `1`, `2`, or `3`.
+* Index-based deletion is useful when multiple employees have similar or identical names.
+
+For example, after entering `delete 2`, ManageUp deletes the 2nd displayed employee and shows a success message.
+
+![Deleting an employee by index successfully](images/DeleteEmployee_ByIndex_Successful.png)
+
 ##### Batch deletion
 
 You can delete several employees in one command by listing multiple indexes.
 
 * Example format: `delete 1 3 5`
 * Every index must be valid before ManageUp deletes any employee.
-* Duplicate indexes in the same command are not allowed.
+* The order of the indexes does not matter. For example, `delete 13 5 10` and `delete 5 10 13` are both valid as long as all the indexes exist in the currently displayed list.
+* Duplicate indexes in the same command are not allowed. For example, `delete 1 2 2` is not valid because index `2` is duplicated.
 
 This prevents partial deletion when one of the indexes is wrong.
+
+For example, after entering `delete 1 2 3`, ManageUp deletes all three displayed employees and lists them in the success message.
+
+![Batch deleting employees by index successfully](images/DeleteEmployee_BatchDeleteByIndex_Successful.png)
 
 #### Important notes
 
@@ -433,6 +446,19 @@ reset to the full list.
 * `delete INDEX` and batch delete also use the currently displayed list.
 * If an invalid index is provided, no employee will be deleted.
 * If no employee matches the given name, the command will fail.
+* If the entered name contains invalid characters, the command will fail.
+
+For example, entering `delete 100` fails because the provided index is invalid.
+
+![Deleting with an invalid index](images/DeleteEmployee_Error_InvalidIndex.png)
+
+For example, entering `delete max` fails because no displayed employee matches that name.
+
+![Deleting by a name that does not exist](images/DeleteEmployee_Error_NameNotFound.png)
+
+For example, entering `delete 1b#` fails because the name contains invalid characters.
+
+![Deleting with an invalid name](images/DeleteEmployee_Error_InvalidName.png)
 
 <box type="warning" seamless>
 
@@ -440,18 +466,22 @@ reset to the full list.
 `delete INDEX` instead.
 </box>
 
+For example, entering `delete john doe` fails because multiple displayed employees have the same name.
+
+![Deleting by name when duplicate names exist](images/DeleteEmployee_Error_DuplicatedNames.png)
+
 #### Examples
 
-- `list` followed by `delete 2`
+* `list` followed by `delete 2`
   Deletes the 2nd employee in the full employee list.
 
-- `show d/HR` followed by `delete 1`
+* `show d/HR` followed by `delete 1`
   Deletes the 1st employee in the filtered employee list.
 
-- `list` followed by `delete 1 3 5`
+* `list` followed by `delete 1 3 5`
   Deletes the 1st, 3rd, and 5th employees in the displayed employee list.
 
-- `delete John Doe`
+* `delete John Doe`
   Deletes the employee named `John Doe` if exactly one displayed employee matches that name.
 
 <a id="adding-a-task-to-an-employee"></a>
