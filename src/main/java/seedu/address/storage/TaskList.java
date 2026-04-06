@@ -3,6 +3,7 @@ package seedu.address.storage;
 import static java.util.Objects.requireNonNull;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
@@ -135,6 +136,23 @@ public class TaskList {
         internalMap.remove(entry.getKey());
         internalMap.put(newTask, assignedPerson);
         return assignedPerson;
+    }
+
+    /**
+     * Deletes all tasks assigned to the specified employee from the overall task list.
+     *
+     * @param employee the employee whose tasks should be removed
+     */
+    public void deleteTasksForEmployee(Employee employee) {
+        requireNonNull(employee);
+
+        Iterator<Entry<Task, Employee>> iterator = internalMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Entry<Task, Employee> entry = iterator.next();
+            if (employee.isSameEmployee(entry.getValue())) {
+                iterator.remove();
+            }
+        }
     }
 
     private Entry<Task, Employee> findEntryByTaskIndex(int taskIndex) {

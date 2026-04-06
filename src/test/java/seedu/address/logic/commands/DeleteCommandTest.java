@@ -9,6 +9,7 @@ import static seedu.address.logic.commands.CommandTestUtil.showPersonByName;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,8 @@ import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.employee.Task;
+import seedu.address.model.employee.TaskListStorage;
 import seedu.address.model.employee.Employee;
 import seedu.address.testutil.PersonBuilder;
 
@@ -130,6 +133,30 @@ public class DeleteCommandTest {
         expectedModel.deletePerson(personToDelete);
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_employeeWithTasks_tasksRemovedFromOverallTaskList() throws Exception {
+        Task task = new Task("Prepare Report", "Submit weekly report", 1);
+        TaskListStorage taskListStorage = new TaskListStorage(new ArrayList<>());
+        taskListStorage.addTask(task);
+
+        Employee employeeWithTask = new PersonBuilder()
+                .withName("Task Owner")
+                .withPhone("92345678")
+                .withEmail("taskowner@example.com")
+                .withTaskListStorage(taskListStorage)
+                .build();
+
+        ModelManager modelWithTasks = new ModelManager();
+        modelWithTasks.addPerson(employeeWithTask);
+        modelWithTasks.addTaskOverall(task, employeeWithTask);
+
+        DeleteCommand deleteCommand = new DeleteCommand(1);
+        deleteCommand.execute(modelWithTasks);
+
+        assertTrue(modelWithTasks.getAddressBook().getPersonList().isEmpty());
+        assertTrue(modelWithTasks.getTaskByIndex(1).isEmpty());
     }
 
     @Test
