@@ -20,12 +20,12 @@ class AddTaskCommandParserTest {
     void parse_allFieldsPresent_success() throws Exception {
         String userInput = " task/" + VALID_TASK_NAME_1
                 + " desc/" + VALID_TASK_DESCRIPTION_1
-                + " n/" + VALID_NAME_AMY;
+                + " 1";
 
         AddTaskCommand command = parser.parse(userInput);
 
         Task expectedTask = new Task(VALID_TASK_NAME_1, VALID_TASK_DESCRIPTION_1, Task.getOverallIndex());
-        AddTaskCommand expectedCommand = new AddTaskCommand(expectedTask, VALID_NAME_AMY);
+        AddTaskCommand expectedCommand = new AddTaskCommand(expectedTask, 1);
 
         assertEquals(expectedCommand, command);
     }

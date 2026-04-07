@@ -46,7 +46,7 @@ class AddTaskCommandTest {
     @Test
     void execute_employeeExists_taskAddedSuccessfully() {
         Task task = new Task("Finish Homework", "Complete math homework by tomorrow", 0);
-        AddTaskCommand command = new AddTaskCommand(task, "John Doe");
+        AddTaskCommand command = new AddTaskCommand(task, 1);
 
         CommandResult result = command.execute(model);
 
@@ -61,7 +61,7 @@ class AddTaskCommandTest {
     @Test
     void execute_employeeNotFound_returnsErrorMessage() {
         Task task = new Task("Finish Homework", "Complete math homework by tomorrow", 0);
-        AddTaskCommand command = new AddTaskCommand(task, "Nonexistent Person");
+        AddTaskCommand command = new AddTaskCommand(task, 50);
 
         CommandResult result = command.execute(model);
 
@@ -73,7 +73,7 @@ class AddTaskCommandTest {
         Task task = new Task("Finish Homework", "Complete math homework by tomorrow", 0);
         model.addTaskToPerson(testEmployee, task);
 
-        AddTaskCommand command = new AddTaskCommand(task, "John Doe");
+        AddTaskCommand command = new AddTaskCommand(task, 1);
         CommandResult result = command.execute(model);
 
         assertEquals("Task already exists for this user", result.getFeedbackToUser());
@@ -84,10 +84,10 @@ class AddTaskCommandTest {
         Task task1 = new Task("Task1", "Desc1", 0);
         Task task2 = new Task("Task2", "Desc2", 0);
 
-        AddTaskCommand command1 = new AddTaskCommand(task1, "John Doe");
-        AddTaskCommand command2 = new AddTaskCommand(task1, "John Doe");
-        AddTaskCommand command3 = new AddTaskCommand(task2, "John Doe");
-        AddTaskCommand command4 = new AddTaskCommand(task1, "Jane Doe");
+        AddTaskCommand command1 = new AddTaskCommand(task1, 1);
+        AddTaskCommand command2 = new AddTaskCommand(task1, 1);
+        AddTaskCommand command3 = new AddTaskCommand(task2, 1);
+        AddTaskCommand command4 = new AddTaskCommand(task1, 2);
 
         assertTrue(command1.equals(command2));
 

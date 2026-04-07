@@ -1,7 +1,6 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK_NAME;
 
@@ -23,24 +22,22 @@ public class AddTaskCommand extends Command {
                     + "Example:\n"
                     + COMMAND_WORD + " " + PREFIX_TASK_NAME + "Sales Pitch "
                     + PREFIX_TASK_DESCRIPTION + "Complete pitch deck by 02-02-2026 "
-                    + PREFIX_NAME + "John Doe";
+                    + "1";
 
     public static final String MESSAGE_SUCCESS = "New task added: %1$s";
 
     private final Task task;
-    private final String personName;
+    private final int index;
 
     /**
-     * Creates an AddTaskCommand to add the specified task to the person with the given name.
-     *
-     * @param task       the task to be added.
-     * @param personName the name of the person to whom the task will be added.
+     * Constructor for AddTaskCommand.
+     * @param task the task to be added.
+     * @param index the index of the person to whom the task is to be added.
      */
-    public AddTaskCommand(Task task, String personName) {
+    public AddTaskCommand(Task task, int index) {
         requireNonNull(task);
-        requireNonNull(personName);
         this.task = task;
-        this.personName = personName;
+        this.index = index;
 
 
     }
@@ -54,9 +51,9 @@ public class AddTaskCommand extends Command {
     @Override
     public CommandResult execute(Model model) {
 
-
         requireNonNull(model);
-        Employee person = getPerson(personName, model);
+        Employee person = getPerson(index - 1, model);
+
 
         if (person != null) {
 
@@ -95,22 +92,21 @@ public class AddTaskCommand extends Command {
 
         AddTaskCommand otherCommand = (AddTaskCommand) other;
         return task.equals(otherCommand.task)
-                && personName.equals(otherCommand.personName);
+                && index == otherCommand.index;
     }
 
     /**
-     * Retrieves the person with the specified name from the model's address book.
-     *
-     * @param personName the name of the person to retrieve.
-     * @param model      the model containing the address book.
-     * @return the Employee object representing the person, or null if not found.
+     * Returns the employee that is represented by that index.
+     * @param index the index of the employee in the filtered person list.
+     * @param model the model which the command should operate on.
+     * @return the employee that is represented by that index.
      */
-    public Employee getPerson(String personName, Model model) {
-        for (Employee p : model.getAddressBook().getPersonList()) {
-            if (p.getName().toString().equals(personName)) {
-                return p;
-            }
+    public Employee getPerson(int index, Model model) {
+        try {
+            Employee person = model.getFilteredPersonList().get(index);
+            return person;
+        } catch (IndexOutOfBoundsException a) {
+            return null;
         }
-        return null;
     }
 }

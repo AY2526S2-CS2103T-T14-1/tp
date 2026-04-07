@@ -1,7 +1,6 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_TASK_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK_NAME;
 
@@ -24,17 +23,24 @@ public class AddTaskCommandParser implements Parser<AddTaskCommand> {
      */
     public AddTaskCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_TASK_NAME, PREFIX_TASK_DESCRIPTION, PREFIX_NAME);
-
-        if (!arePrefixesPresent(argMultimap, PREFIX_TASK_NAME, PREFIX_TASK_DESCRIPTION, PREFIX_NAME)
+                ArgumentTokenizer.tokenize(args, PREFIX_TASK_NAME, PREFIX_TASK_DESCRIPTION);
+        String trimmedArgs = args.trim();
+        String[] tokens = trimmedArgs.split("\\s+");
+        if (!arePrefixesPresent(argMultimap, PREFIX_TASK_NAME, PREFIX_TASK_DESCRIPTION)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_TASK_COMMAND_FORMAT, AddTaskCommand.MESSAGE_USAGE));
         }
 
-        String taskName = argMultimap.getValue(PREFIX_TASK_NAME).get();
-        String taskDescription = argMultimap.getValue(PREFIX_TASK_DESCRIPTION).get();
-        String personName = argMultimap.getValue(PREFIX_NAME).get();
-        return new AddTaskCommand(new Task(taskName, taskDescription, Task.getOverallIndex()), personName);
+        try {
+            int index = Integer.parseInt(tokens[tokens.length - 1]);
+            String taskName = argMultimap.getValue(PREFIX_TASK_NAME).get();
+            String taskDescriptionWithIndex = argMultimap.getValue(PREFIX_TASK_DESCRIPTION).get().trim();
+            String taskDescription = taskDescriptionWithIndex.substring(0,
+                    taskDescriptionWithIndex.lastIndexOf(" ")).trim();
+            return new AddTaskCommand(new Task(taskName, taskDescription, Task.getOverallIndex()), index);
+        } catch (NumberFormatException e) {
+            throw new ParseException(String.format(MESSAGE_INVALID_TASK_COMMAND_FORMAT, AddTaskCommand.MESSAGE_USAGE));
+        }
     }
 
     private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
