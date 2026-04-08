@@ -25,6 +25,7 @@ public class DeleteCommandParserTest {
     @Test
     public void parse_validArgs_returnsDeleteCommand() {
         assertParseSuccess(parser, "John Doe", new DeleteCommand("John Doe"));
+        assertParseSuccess(parser, "John2 Doe", new DeleteCommand("John2 Doe"));
         assertParseSuccess(parser, "1", new DeleteCommand(1));
         assertParseSuccess(parser, "1 3 5", new DeleteCommand(List.of(
                 Index.fromOneBased(1), Index.fromOneBased(3), Index.fromOneBased(5))));
@@ -32,7 +33,7 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_invalidArgs_throwsParseException() {
-        assertParseFailure(parser, "123abc", DeleteCommand.MESSAGE_INVALID_NAME);
+        assertParseFailure(parser, "John_Doe", DeleteCommand.MESSAGE_INVALID_NAME);
         assertParseFailure(parser, "", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
         assertParseFailure(parser, "0", DeleteCommand.MESSAGE_INVALID_INDEX);
         assertParseFailure(parser, "2 2", DeleteCommand.MESSAGE_DUPLICATE_INDEX);

@@ -14,6 +14,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.employee.Employee;
+import seedu.address.model.employee.Name;
 
 /**
  * Deletes an employee identified using their name or index from the address book.
@@ -30,7 +31,7 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_DELETE_EMPLOYEE_SUCCESS = "Deleted Employee: %1$s";
     public static final String MESSAGE_DELETE_EMPLOYEES_SUCCESS = "Deleted Employees:\n%1$s";
-    public static final String MESSAGE_INVALID_NAME = "Name must contain only alphabets and optional '/'.";
+    public static final String MESSAGE_INVALID_NAME = Name.MESSAGE_CONSTRAINTS;
     public static final String MESSAGE_EMPLOYEE_NOT_FOUND = "Employee with name '%1$s' does not exist.";
     public static final String MESSAGE_DUPLICATE_EMPLOYEE_NAME =
             "Multiple employees named '%1$s' found. Please use the index instead.";
@@ -169,8 +170,7 @@ public class DeleteCommand extends Command {
      * @return true if valid, false otherwise.
      */
     private boolean isValidName(String name) {
-        // Only alphabets, spaces, and '/'
-        return name.matches("[a-zA-Z /]+");
+        return Name.isValidName(name);
     }
 
     /**

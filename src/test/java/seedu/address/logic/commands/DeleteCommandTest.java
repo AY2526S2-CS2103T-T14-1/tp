@@ -45,6 +45,24 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void execute_validAlphanumericNameUnfilteredList_success() {
+        Model alphanumericModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Employee personToDelete = new PersonBuilder().withName("John2 Doe").withPhone("81112222")
+                .withEmail("john2@example.com").build();
+        alphanumericModel.addPerson(personToDelete);
+
+        DeleteCommand deleteCommand = new DeleteCommand(personToDelete.getName().fullName);
+        String expectedMessage = String.format(
+                DeleteCommand.MESSAGE_DELETE_EMPLOYEE_SUCCESS,
+                Messages.format(personToDelete));
+
+        ModelManager expectedModel = new ModelManager(alphanumericModel.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(personToDelete);
+
+        assertCommandSuccess(deleteCommand, alphanumericModel, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void execute_invalidNameUnfilteredList_throwsCommandException() {
         String invalidName = "Nonexistent Employee";
         DeleteCommand deleteCommand = new DeleteCommand(invalidName);
