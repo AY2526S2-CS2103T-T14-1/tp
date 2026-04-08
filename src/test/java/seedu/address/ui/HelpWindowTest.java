@@ -10,7 +10,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javafx.application.Platform;
@@ -19,16 +21,25 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class HelpWindowTest {
+    private static boolean isFxToolkitAvailable = true;
 
     @BeforeAll
     public static void setUpFxToolkit() throws InterruptedException {
         CountDownLatch latch = new CountDownLatch(1);
         try {
             Platform.startup(latch::countDown);
+        } catch (UnsupportedOperationException e) {
+            isFxToolkitAvailable = false;
+            latch.countDown();
         } catch (IllegalStateException e) {
             latch.countDown();
         }
         assertTrue(latch.await(15, TimeUnit.SECONDS));
+    }
+
+    @BeforeEach
+    public void requireFxToolkit() {
+        Assumptions.assumeTrue(isFxToolkitAvailable, "JavaFX toolkit is unavailable in this environment");
     }
 
     @Test
