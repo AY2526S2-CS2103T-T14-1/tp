@@ -56,6 +56,11 @@ public class TaskListStorage {
         return tasks.remove(task);
     }
 
+    /**
+     * Clears all tasks from storage.
+     *
+     * @return the number of tasks cleared
+     */
     public int clearTasks() {
         int clearedCount = tasks.size();
         tasks.clear();

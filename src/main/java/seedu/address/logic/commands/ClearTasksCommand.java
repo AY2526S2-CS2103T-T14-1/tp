@@ -32,11 +32,21 @@ public class ClearTasksCommand extends Command {
     private final Integer targetIndex;
     private final String targetName;
 
+    /**
+     * Creates a ClearTasksCommand using employee index.
+     *
+     * @param targetIndex index of employee whose tasks should be cleared
+     */
     public ClearTasksCommand(int targetIndex) {
         this.targetIndex = targetIndex;
         this.targetName = null;
     }
 
+    /**
+     * Creates a ClearTasksCommand using employee name.
+     *
+     * @param targetName name of employee whose tasks should be cleared
+     */
     public ClearTasksCommand(String targetName) {
         this.targetIndex = null;
         this.targetName = targetName;

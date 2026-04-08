@@ -146,7 +146,7 @@ public class TaskList {
     public int removeTasksForPerson(Employee employee) {
         requireNonNull(employee);
         int originalSize = internalMap.size();
-        internalMap.entrySet().removeIf(entry -> entry.getValue().isSamePerson(employee));
+        internalMap.entrySet().removeIf(entry -> entry.getValue().isSameEmployee(employee));
         return originalSize - internalMap.size();
     }
 
