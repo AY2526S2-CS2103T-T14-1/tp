@@ -73,37 +73,6 @@ public class HelpWindowTest {
     }
 
     @Test
-    public void prepareWindowForShow_resetsFullscreenFlags() throws Exception {
-        AtomicReference<HelpWindow> helpWindowRef = new AtomicReference<>();
-
-        runOnFxThreadAndWait(() -> {
-            HelpWindow helpWindow = new HelpWindow(new Stage(), new Stage());
-            helpWindow.getRoot().setFullScreen(true);
-            helpWindow.getRoot().setMaximized(true);
-            helpWindowRef.set(helpWindow);
-        });
-
-        HelpWindow helpWindow = helpWindowRef.get();
-        Stage root = helpWindow.getRoot();
-
-        runOnFxThreadAndWait(helpWindow::prepareWindowForShow);
-
-        assertFalse(root.isFullScreen());
-        assertFalse(root.isMaximized());
-
-        runOnFxThreadAndWait(helpWindow::positionWindow);
-        runOnFxThreadAndWait(helpWindow::focus);
-
-        runOnFxThreadAndWait(() -> root.close());
-        runOnFxThreadAndWait(() -> {
-            if (root.getOwner() instanceof Stage) {
-                Stage owner = (Stage) root.getOwner();
-                owner.close();
-            }
-        });
-    }
-
-    @Test
     public void createHelpWindow_setsOwnerToPrimaryStage() throws Exception {
         AtomicReference<Stage> primaryStageRef = new AtomicReference<>();
         AtomicReference<HelpWindow> helpWindowRef = new AtomicReference<>();

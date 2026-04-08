@@ -35,8 +35,8 @@ public class HelpWindow extends UiPart<Stage> {
     public HelpWindow(Stage root) {
         super(FXML, root);
         root.initModality(Modality.NONE);
-        HelpWindowLogic.populateContent(helpContent::setText, helpContent::positionCaret,
-                HelpWindowContent.getFormattedHelpText());
+        helpContent.setText(HelpWindowContent.getFormattedHelpText());
+        helpContent.positionCaret(0);
     }
 
     /**
@@ -48,13 +48,6 @@ public class HelpWindow extends UiPart<Stage> {
     public HelpWindow(Stage root, Stage owner) {
         this(root);
         root.initOwner(owner);
-    }
-
-    /**
-     * Creates a new HelpWindow.
-     */
-    public HelpWindow() {
-        this(new Stage());
     }
 
     /**
@@ -76,17 +69,11 @@ public class HelpWindow extends UiPart<Stage> {
      *     </ul>
      */
     public void show() {
-        HelpWindowLogic.showHelpWindow(() -> logger.fine("Showing help page about the application."),
-                getRoot()::setFullScreen, getRoot()::setMaximized, getRoot()::show,
-                getRoot()::centerOnScreen, helpContent::positionCaret);
-    }
-
-    void prepareWindowForShow() {
+        logger.fine("Showing help page about the application.");
         HelpWindowLogic.prepareWindowForShow(getRoot()::setFullScreen, getRoot()::setMaximized);
-    }
-
-    void positionWindow() {
-        HelpWindowLogic.positionWindow(getRoot()::centerOnScreen, helpContent::positionCaret);
+        getRoot().show();
+        getRoot().centerOnScreen();
+        helpContent.positionCaret(0);
     }
 
     /**
