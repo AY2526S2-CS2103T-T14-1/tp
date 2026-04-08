@@ -35,8 +35,8 @@ public class HelpWindow extends UiPart<Stage> {
     public HelpWindow(Stage root) {
         super(FXML, root);
         root.initModality(Modality.NONE);
-        helpContent.setText(HelpWindowContent.getFormattedHelpText());
-        helpContent.positionCaret(0);
+        HelpWindowLogic.populateContent(helpContent::setText, helpContent::positionCaret,
+                HelpWindowContent.getFormattedHelpText());
     }
 
     /**
@@ -76,21 +76,17 @@ public class HelpWindow extends UiPart<Stage> {
      *     </ul>
      */
     public void show() {
-        logger.fine("Showing help page about the application.");
-        prepareWindowForShow();
-        getRoot().show();
-        positionWindow();
+        HelpWindowLogic.showHelpWindow(() -> logger.fine("Showing help page about the application."),
+                getRoot()::setFullScreen, getRoot()::setMaximized, getRoot()::show,
+                getRoot()::centerOnScreen, helpContent::positionCaret);
     }
 
     void prepareWindowForShow() {
-        // Keep help as a lightweight secondary window even if the main app is full screen.
-        getRoot().setFullScreen(false);
-        getRoot().setMaximized(false);
+        HelpWindowLogic.prepareWindowForShow(getRoot()::setFullScreen, getRoot()::setMaximized);
     }
 
     void positionWindow() {
-        getRoot().centerOnScreen();
-        helpContent.positionCaret(0);
+        HelpWindowLogic.positionWindow(getRoot()::centerOnScreen, helpContent::positionCaret);
     }
 
     /**
