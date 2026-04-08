@@ -21,6 +21,7 @@ import seedu.address.model.employee.Phone;
 import seedu.address.model.employee.Position;
 import seedu.address.model.employee.Task;
 import seedu.address.model.employee.TaskListStorage;
+import seedu.address.testutil.PersonBuilder;
 
 class ClearTasksCommandTest {
 
@@ -77,5 +78,46 @@ class ClearTasksCommandTest {
     void execute_invalidIndex_throwsCommandException() {
         ClearTasksCommand command = new ClearTasksCommand(999);
         assertCommandFailure(command, model, ClearTasksCommand.MESSAGE_INVALID_INDEX);
+    }
+
+    @Test
+    void execute_invalidName_throwsCommandException() {
+        ClearTasksCommand command = new ClearTasksCommand("John123");
+        assertCommandFailure(command, model, ClearTasksCommand.MESSAGE_INVALID_NAME);
+    }
+
+    @Test
+    void execute_employeeNotFound_throwsCommandException() {
+        ClearTasksCommand command = new ClearTasksCommand("Unknown Person");
+        assertCommandFailure(command, model,
+                String.format(ClearTasksCommand.MESSAGE_EMPLOYEE_NOT_FOUND, "Unknown Person"));
+    }
+
+    @Test
+    void execute_duplicateName_throwsCommandException() {
+        ModelManager duplicateModel = new ModelManager(new AddressBook(), new UserPrefs());
+        Employee firstDuplicate = new PersonBuilder().withName("Same Name")
+                .withPhone("11111111").withEmail("same1@example.com").build();
+        Employee secondDuplicate = new PersonBuilder().withName("Same Name")
+                .withPhone("22222222").withEmail("same2@example.com").build();
+        duplicateModel.addPerson(firstDuplicate);
+        duplicateModel.addPerson(secondDuplicate);
+
+        ClearTasksCommand command = new ClearTasksCommand("Same Name");
+        assertCommandFailure(command, duplicateModel,
+                String.format(ClearTasksCommand.MESSAGE_DUPLICATE_EMPLOYEE_NAME, "Same Name"));
+    }
+
+    @Test
+    void equals() {
+        ClearTasksCommand clearByIndex = new ClearTasksCommand(1);
+        ClearTasksCommand clearByIndexCopy = new ClearTasksCommand(1);
+        ClearTasksCommand clearByName = new ClearTasksCommand("John Doe");
+
+        assertTrue(clearByIndex.equals(clearByIndex));
+        assertTrue(clearByIndex.equals(clearByIndexCopy));
+        assertTrue(!clearByIndex.equals(clearByName));
+        assertTrue(!clearByIndex.equals(null));
+        assertTrue(!clearByIndex.equals(1));
     }
 }

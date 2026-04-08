@@ -27,5 +27,7 @@ public class ClearTasksCommandParserTest {
                 ClearTasksCommand.MESSAGE_USAGE));
         assertParseFailure(parser, "1 n/John Doe", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 ClearTasksCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "n/John Doe n/Jane Doe", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                ClearTasksCommand.MESSAGE_USAGE));
     }
 }
