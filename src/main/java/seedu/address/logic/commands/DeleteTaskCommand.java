@@ -23,8 +23,9 @@ public class DeleteTaskCommand extends Command {
             + "Parameters: INDEX [MORE_INDICES...] (each must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1 3 5";
 
-    public static final String MESSAGE_SUCCESS = "%d task(s) deleted.";
-    public static final String MESSAGE_INVALID_INDEX = "No task exists with the provided task index.";
+    public static final String MESSAGE_SUCCESS = "%d task(s) deleted successfully.";
+    public static final String MESSAGE_INVALID_INDEX =
+            "Invalid task index. Please enter task indices that are currently shown in ManageUp.";
     public static final String MESSAGE_DUPLICATE_INDEX = "Duplicate task indices are not allowed.";
 
     private final List<Integer> indices;
