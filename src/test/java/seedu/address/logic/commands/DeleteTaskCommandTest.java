@@ -85,6 +85,6 @@ class DeleteTaskCommandTest {
     @Test
     void execute_duplicateIndices_throwsCommandException() {
         DeleteTaskCommand command = new DeleteTaskCommand(List.of(1, 1));
-        assertCommandFailure(command, model, DeleteTaskCommand.MESSAGE_INVALID_INDEX);
+        assertCommandFailure(command, model, DeleteTaskCommand.MESSAGE_DUPLICATE_INDEX);
     }
 }
