@@ -10,6 +10,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +41,13 @@ public class HelpWindowTest {
     @BeforeEach
     public void requireFxToolkit() {
         Assumptions.assumeTrue(isFxToolkitAvailable, "JavaFX toolkit is unavailable in this environment");
+    }
+
+    @AfterAll
+    public static void tearDownFxToolkit() {
+        if (isFxToolkitAvailable) {
+            Platform.exit();
+        }
     }
 
     @Test
@@ -93,6 +101,24 @@ public class HelpWindowTest {
                 owner.close();
             }
         });
+    }
+
+    @Test
+    public void createHelpWindow_setsOwnerToPrimaryStage() throws Exception {
+        AtomicReference<Stage> primaryStageRef = new AtomicReference<>();
+        AtomicReference<HelpWindow> helpWindowRef = new AtomicReference<>();
+
+        runOnFxThreadAndWait(() -> {
+            Stage primaryStage = new Stage();
+            primaryStageRef.set(primaryStage);
+            helpWindowRef.set(MainWindow.createHelpWindow(primaryStage));
+        });
+
+        HelpWindow helpWindow = helpWindowRef.get();
+        assertSame(primaryStageRef.get(), helpWindow.getRoot().getOwner());
+
+        runOnFxThreadAndWait(() -> helpWindow.getRoot().close());
+        runOnFxThreadAndWait(() -> primaryStageRef.get().close());
     }
 
     @Test
