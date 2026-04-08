@@ -17,7 +17,7 @@ import seedu.address.model.employee.Employee;
 import seedu.address.model.employee.Name;
 
 /**
- * Deletes an employee identified using their name or index from the address book.
+ * Deletes an employee identified using their name or index from ManageUp.
  */
 public class DeleteCommand extends Command {
 
@@ -29,14 +29,15 @@ public class DeleteCommand extends Command {
             + "          " + COMMAND_WORD + " 2\n"
             + "          " + COMMAND_WORD + " 1 3 5";
 
-    public static final String MESSAGE_DELETE_EMPLOYEE_SUCCESS = "Deleted Employee: %1$s";
-    public static final String MESSAGE_DELETE_EMPLOYEES_SUCCESS = "Deleted Employees:\n%1$s";
-    public static final String MESSAGE_INVALID_NAME = Name.MESSAGE_CONSTRAINTS;
-    public static final String MESSAGE_EMPLOYEE_NOT_FOUND = "Employee with name '%1$s' does not exist.";
+    public static final String MESSAGE_DELETE_EMPLOYEE_SUCCESS = "Employee deleted successfully:\n%1$s";
+    public static final String MESSAGE_DELETE_EMPLOYEES_SUCCESS = "Employees deleted successfully:\n%1$s";
+    public static final String MESSAGE_INVALID_NAME = "Invalid employee name. " + Name.MESSAGE_CONSTRAINTS;
+    public static final String MESSAGE_EMPLOYEE_NOT_FOUND = "No employee named '%1$s' was found in the current list.";
     public static final String MESSAGE_DUPLICATE_EMPLOYEE_NAME =
-            "Multiple employees named '%1$s' found. Please use the index instead.";
-    public static final String MESSAGE_INVALID_INDEX = "The employee index provided is invalid.";
-    public static final String MESSAGE_DUPLICATE_INDEX = "Duplicate employee indexes are not allowed.";
+            "More than one employee named '%1$s' was found. Please use the employee index instead.";
+    public static final String MESSAGE_INVALID_INDEX =
+            "Invalid employee index. Please enter an index shown in the current employee list.";
+    public static final String MESSAGE_DUPLICATE_INDEX = "Duplicate employee indices are not allowed.";
 
     private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
 

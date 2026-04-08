@@ -33,7 +33,7 @@ import seedu.address.model.tag.Tag;
 
 
 /**
- * Edits the details of an existing person in the address book.
+ * Edits the details of an existing employee in ManageUp.
  */
 public class EditCommand extends Command {
 
@@ -53,8 +53,8 @@ public class EditCommand extends Command {
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
 
-    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Employee:\n%1$s";
-    public static final String MESSAGE_NOT_EDITED = "At least one employee field to edit must be provided.";
+    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Employee updated successfully:\n%1$s";
+    public static final String MESSAGE_NOT_EDITED = "Please provide at least one employee field to update.";
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;

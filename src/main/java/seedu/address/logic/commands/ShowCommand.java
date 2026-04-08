@@ -17,7 +17,8 @@ public class ShowCommand extends Command {
     public static final String COMMAND_WORD = "show";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Shows employees based on filters.\n"
+            + ": Shows employees that match the filters you provide.\n"
+            + "Parameters: [n/NAME] [d/DEPARTMENT] [p/PHONE] [e/EMAIL] [pos/POSITION] [t/TAG] [task/TASK]\n"
             + "Example: show n/Alex d/IT";
 
     private final Predicate<Employee> predicate;

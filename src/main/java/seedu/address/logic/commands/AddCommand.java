@@ -25,7 +25,7 @@ public class AddCommand extends Command {
 
     public static final String COMMAND_WORD = "add";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds an employee to the address book. \n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds an employee to ManageUp.\n"
             + "Parameters: "
             + PREFIX_NAME + "NAME "
             + PREFIX_PHONE + "PHONE "
@@ -42,7 +42,7 @@ public class AddCommand extends Command {
             + PREFIX_TAG + "friends "
             + PREFIX_TAG + "owesMoney";
 
-    public static final String MESSAGE_SUCCESS = "New employee added: %1$s";
+    public static final String MESSAGE_SUCCESS = "Employee added successfully:\n%1$s";
 
     private static final Logger logger = LogsCenter.getLogger(AddCommand.class.getName());
 

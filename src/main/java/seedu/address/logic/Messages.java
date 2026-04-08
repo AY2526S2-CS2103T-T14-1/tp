@@ -12,19 +12,23 @@ import seedu.address.model.employee.Employee;
  */
 public class Messages {
 
-    public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command";
-    public static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format! \n%1$s";
-    public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The employee index provided is invalid";
-    public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d employees listed!";
+    public static final String MESSAGE_UNKNOWN_COMMAND =
+            "Unknown command. Use 'help' to view the list of available commands.";
+    public static final String MESSAGE_INVALID_COMMAND_FORMAT =
+            "Invalid command format. Please use the following format:\n%1$s";
+    public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX =
+            "Invalid employee index. Please enter an index shown in the current employee list.";
+    public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d employee(s) matched your filter.";
     public static final String MESSAGE_DUPLICATE_FIELDS =
-                "Multiple values specified for the following single-valued field(s): ";
-    public static final String MESSAGE_INVALID_TASK_COMMAND_FORMAT = "Invalid task command format! \n%1$s";
+                "Multiple values were provided for these fields, but each field accepts only one value: ";
+    public static final String MESSAGE_INVALID_TASK_COMMAND_FORMAT =
+            "Invalid task command format. Please use the following format:\n%1$s";
     public static final String MESSAGE_DUPLICATE_EMPLOYEE =
-            "This employee already exists in the application.";
+            "This employee already exists in ManageUp.";
     public static final String MESSAGE_DUPLICATE_PHONE =
-            "Phone number is already assigned to another employee:\n%1$s";
+            "This phone number is already assigned to another employee:\n%1$s";
     public static final String MESSAGE_DUPLICATE_EMAIL =
-            "Email is already assigned to another employee:\n%1$s";
+            "This email address is already assigned to another employee:\n%1$s";
 
     /**
      * Returns an error message indicating the duplicate prefixes.
