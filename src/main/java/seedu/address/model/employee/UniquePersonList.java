@@ -3,6 +3,7 @@ package seedu.address.model.employee;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -212,6 +213,27 @@ public class UniquePersonList implements Iterable<Employee> {
         editedPerson.deleteTask(oldTask);
         editedPerson.addTask(newTask);
         setPerson(personToEdit, editedPerson);
+    }
+
+    /**
+     * Clears all tasks for the specified person in the list.
+     *
+     * @param target The person whose tasks should be cleared.
+     * @return the number of tasks cleared.
+     */
+    public int clearTasksForPerson(Employee target) {
+        requireNonNull(target);
+        int index = internalList.indexOf(target);
+        if (index == -1) {
+            throw new PersonNotFoundException();
+        }
+        Employee personToEdit = internalList.get(index);
+        int clearedCount = personToEdit.getTasks().size();
+        Employee editedPerson = new Employee(personToEdit.getName(), personToEdit.getPhone(),
+                personToEdit.getEmail(), personToEdit.getDepartment(), personToEdit.getPosition(),
+                personToEdit.getTags(), new TaskListStorage(new ArrayList<>()));
+        setPerson(personToEdit, editedPerson);
+        return clearedCount;
     }
 
 

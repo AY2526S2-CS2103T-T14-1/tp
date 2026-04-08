@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -145,6 +146,20 @@ public class AddressBook implements ReadOnlyAddressBook {
 
         Employee assignedPerson = tasks.replaceTask(taskIndex, newTask);
         persons.replaceTaskForPerson(assignedPerson, oldTask, newTask);
+    }
+
+    /**
+     * Clears all tasks for the specified employee from both the employee task list
+     * and the overall in-memory task list.
+     *
+     * @param target the employee whose tasks should be cleared
+     * @param tasks the overall task list
+     * @return the number of tasks cleared
+     */
+    public int clearTasksForPerson(Employee target, TaskList tasks) {
+        requireAllNonNull(target, tasks);
+        tasks.removeTasksForPerson(target);
+        return persons.clearTasksForPerson(target);
     }
 
 

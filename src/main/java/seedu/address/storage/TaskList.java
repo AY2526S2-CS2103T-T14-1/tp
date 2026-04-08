@@ -137,6 +137,19 @@ public class TaskList {
         return assignedPerson;
     }
 
+    /**
+     * Removes all tasks belonging to the specified employee from the overall task list.
+     *
+     * @param employee the employee whose tasks should be removed
+     * @return the number of tasks removed
+     */
+    public int removeTasksForPerson(Employee employee) {
+        requireNonNull(employee);
+        int originalSize = internalMap.size();
+        internalMap.entrySet().removeIf(entry -> entry.getValue().isSamePerson(employee));
+        return originalSize - internalMap.size();
+    }
+
     private Entry<Task, Employee> findEntryByTaskIndex(int taskIndex) {
         for (Entry<Task, Employee> entry : internalMap.entrySet()) {
             if (entry.getKey().getCurrentTaskIndex() == taskIndex) {

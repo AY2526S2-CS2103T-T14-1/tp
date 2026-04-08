@@ -113,7 +113,6 @@ public class ModelManager implements Model {
 
     @Override
     public void addTaskToPerson(Employee target, Task task) {
-
         addressBook.addTaskToPerson(target, task);
     }
 
@@ -175,6 +174,8 @@ public class ModelManager implements Model {
     }
 
 
+
+
     public void addTaskOverall(Task task, Employee person) {
         addressBook.addTask(task, person, tasks);
     }
@@ -207,6 +208,11 @@ public class ModelManager implements Model {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public int clearTasksForPerson(Employee person) {
+        return addressBook.clearTasksForPerson(person, tasks);
     }
 
 

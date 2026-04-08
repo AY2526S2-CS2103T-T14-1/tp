@@ -124,4 +124,11 @@ public interface Model {
      * @return Task if it already exists in the employee's record.
      */
     Task getTaskWithSameDescription(Task task, Employee person);
+
+    /**
+     * Clears all tasks for the specified employee.
+     *
+     * @return the number of tasks cleared
+     */
+    int clearTasksForPerson(Employee person);
 }

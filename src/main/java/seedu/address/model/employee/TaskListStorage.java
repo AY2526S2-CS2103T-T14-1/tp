@@ -56,6 +56,12 @@ public class TaskListStorage {
         return tasks.remove(task);
     }
 
+    public int clearTasks() {
+        int clearedCount = tasks.size();
+        tasks.clear();
+        return clearedCount;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {

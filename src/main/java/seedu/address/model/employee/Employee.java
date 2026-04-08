@@ -171,4 +171,13 @@ public class Employee {
     public void deleteTask(Task task) {
         taskListStorage.deleteTask(task);
     }
+
+    /**
+     * Deletes all tasks from the employee's task list.
+     *
+     * @return the number of tasks deleted
+     */
+    public int clearTasks() {
+        return taskListStorage.clearTasks();
+    }
 }
