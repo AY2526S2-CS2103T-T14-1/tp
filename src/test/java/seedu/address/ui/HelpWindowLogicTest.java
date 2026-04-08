@@ -49,13 +49,16 @@ public class HelpWindowLogicTest {
         boolean[] shown = new boolean[1];
         boolean[] centered = new boolean[1];
         int[] caretPosition = new int[] {-1};
+        Runnable logAction = () -> logged[0] = true;
+        Runnable showAction = () -> shown[0] = true;
+        Runnable centerAction = () -> centered[0] = true;
 
         HelpWindowLogic.showHelpWindow(
-                () -> logged[0] = true,
+                logAction,
                 value -> fullScreen[0] = value,
                 value -> maximized[0] = value,
-                () -> shown[0] = true,
-                () -> centered[0] = true,
+                showAction,
+                centerAction,
                 position -> caretPosition[0] = position);
 
         assertTrue(logged[0]);
