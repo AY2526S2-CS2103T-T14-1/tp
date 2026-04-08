@@ -102,6 +102,7 @@ public class ModelManager implements Model {
 
     @Override
     public void deletePerson(Employee target) {
+        tasks.deleteTasksForEmployee(target);
         addressBook.removePerson(target);
     }
 
