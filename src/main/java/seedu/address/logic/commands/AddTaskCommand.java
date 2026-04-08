@@ -20,9 +20,8 @@ public class AddTaskCommand extends Command {
             COMMAND_WORD
                     + ": Adds a task to the task list. "
                     + "Example:\n"
-                    + COMMAND_WORD + " " + PREFIX_TASK_NAME + "Sales Pitch "
-                    + PREFIX_TASK_DESCRIPTION + "Complete pitch deck by 02-02-2026 "
-                    + "1";
+                    + COMMAND_WORD + " 2 " + PREFIX_TASK_NAME + "Sales Pitch "
+                    + PREFIX_TASK_DESCRIPTION + "Complete pitch deck by 02-02-2026 ";
 
     public static final String MESSAGE_SUCCESS = "New task added: %1$s";
 
