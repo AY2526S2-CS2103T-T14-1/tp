@@ -53,4 +53,22 @@ class AddTaskCommandParserTest {
         assertThrows(ParseException.class, () -> parser.parse(invalidTaskDescription));
     }
 
+    @Test
+    void parse_emptyTaskName_throwsParseException() {
+        String emptyTaskName = "1 task/ desc/" + VALID_TASK_DESCRIPTION_1;
+        assertThrows(ParseException.class, () -> parser.parse(emptyTaskName));
+
+        String whitespaceTaskName = "1 task/    desc/" + VALID_TASK_DESCRIPTION_1;
+        assertThrows(ParseException.class, () -> parser.parse(whitespaceTaskName));
+    }
+
+    @Test
+    void parse_emptyTaskDescription_throwsParseException() {
+        String emptyTaskDescription = "1 task/" + VALID_TASK_NAME_1 + " desc/";
+        assertThrows(ParseException.class, () -> parser.parse(emptyTaskDescription));
+
+        String whitespaceTaskDescription = "1 task/" + VALID_TASK_NAME_1 + " desc/    ";
+        assertThrows(ParseException.class, () -> parser.parse(whitespaceTaskDescription));
+    }
+
 }

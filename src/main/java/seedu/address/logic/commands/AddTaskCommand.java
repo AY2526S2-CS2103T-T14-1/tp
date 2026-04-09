@@ -25,9 +25,9 @@ public class AddTaskCommand extends Command {
                     + PREFIX_TASK_DESCRIPTION + "TASK_DESCRIPTION "
                     + "EMPLOYEE_INDEX\n"
                     + "Example: " + COMMAND_WORD + " "
+                    + "1 "
                     + PREFIX_TASK_NAME + "Sales Pitch "
-                    + PREFIX_TASK_DESCRIPTION + "Complete pitch deck by 02-02-2026 "
-                    + "1";
+                    + PREFIX_TASK_DESCRIPTION + "Complete pitch deck by 02-02-2026";
 
     public static final String MESSAGE_SUCCESS = "Task added successfully:\n%1$s";
     public static final String MESSAGE_EMPLOYEE_NOT_FOUND =
