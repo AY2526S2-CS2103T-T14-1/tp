@@ -24,12 +24,94 @@ import seedu.address.model.employee.predicatechecker.TaskContainsKeywordsPredica
 
 public class ShowCommandParserTest {
 
+    private static final String INVALID_SHOW_COMMAND_MESSAGE =
+            String.format(MESSAGE_INVALID_COMMAND_FORMAT, ShowCommand.MESSAGE_USAGE);
+
     private final ShowCommandParser parser = new ShowCommandParser();
 
     @Test
     public void parse_emptyArg_failure() {
-        assertParseFailure(parser, "   ",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ShowCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "   ", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_noValidPrefix_failure() {
+        assertParseFailure(parser, "Alice", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankPrefixOnly_failure() {
+        assertParseFailure(parser, "t/", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankNamePrefix_failure() {
+        assertParseFailure(parser, "n/", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankDepartmentPrefix_failure() {
+        assertParseFailure(parser, "d/", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankPhonePrefix_failure() {
+        assertParseFailure(parser, "p/", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankEmailPrefix_failure() {
+        assertParseFailure(parser, "e/", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankPositionPrefix_failure() {
+        assertParseFailure(parser, "pos/", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankTagPrefix_failure() {
+        assertParseFailure(parser, "t/", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankTaskPrefix_failure() {
+        assertParseFailure(parser, "task/", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankTagWithOtherValidPrefix_failure() {
+        assertParseFailure(parser, "t/ n/Alex", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankTaskWithOtherValidPrefix_failure() {
+        assertParseFailure(parser, "task/ d/IT", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankNameWithOtherValidPrefix_failure() {
+        assertParseFailure(parser, "n/ d/Finance", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankDepartmentWithOtherValidPrefix_failure() {
+        assertParseFailure(parser, "d/ n/Alex", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankEmailWithOtherValidPrefix_failure() {
+        assertParseFailure(parser, "e/ n/Alex", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankPhoneWithOtherValidPrefix_failure() {
+        assertParseFailure(parser, "p/ d/IT", INVALID_SHOW_COMMAND_MESSAGE);
+    }
+
+    @Test
+    public void parse_blankPositionWithOtherValidPrefix_failure() {
+        assertParseFailure(parser, "pos/ t/friend", INVALID_SHOW_COMMAND_MESSAGE);
     }
 
     @Test
@@ -87,6 +169,15 @@ public class ShowCommandParserTest {
     }
 
     @Test
+    public void parse_taskPrefix_success() {
+        Predicate<Employee> predicate =
+                new TaskContainsKeywordsPredicate(Arrays.asList("report"));
+        ShowCommand expectedCommand = new ShowCommand(predicate);
+
+        assertParseSuccess(parser, "task/report", expectedCommand);
+    }
+
+    @Test
     public void parse_multipleFields_success() {
         Predicate<Employee> predicate =
                 new NameContainsKeywordsPredicate(Arrays.asList("Alice"))
@@ -118,6 +209,36 @@ public class ShowCommandParserTest {
     }
 
     @Test
+    public void parse_nameAndTask_success() {
+        Predicate<Employee> predicate =
+                new NameContainsKeywordsPredicate(Arrays.asList("Alex"))
+                        .and(new TaskContainsKeywordsPredicate(Arrays.asList("report")));
+        ShowCommand expectedCommand = new ShowCommand(predicate);
+
+        assertParseSuccess(parser, "n/Alex task/report", expectedCommand);
+    }
+
+    @Test
+    public void parse_taskAndDepartment_success() {
+        Predicate<Employee> predicate =
+                new TaskContainsKeywordsPredicate(Arrays.asList("review"))
+                        .and(new DepartmentContainsKeywordsPredicate(Arrays.asList("Finance")));
+        ShowCommand expectedCommand = new ShowCommand(predicate);
+
+        assertParseSuccess(parser, "task/review d/Finance", expectedCommand);
+    }
+
+    @Test
+    public void parse_taskWithTag_success() {
+        Predicate<Employee> predicate =
+                new TaskContainsKeywordsPredicate(Arrays.asList("meeting"))
+                        .and(new TagContainsKeywordsPredicate(Arrays.asList("urgent")));
+        ShowCommand expectedCommand = new ShowCommand(predicate);
+
+        assertParseSuccess(parser, "task/meeting t/urgent", expectedCommand);
+    }
+
+    @Test
     public void parse_multipleKeywordsInName_success() {
         Predicate<Employee> predicate =
                 new NameContainsKeywordsPredicate(Arrays.asList("Alex", "John"));
@@ -142,6 +263,15 @@ public class ShowCommandParserTest {
         ShowCommand expectedCommand = new ShowCommand(predicate);
 
         assertParseSuccess(parser, "t/friend leader", expectedCommand);
+    }
+
+    @Test
+    public void parse_multipleKeywordsInTask_success() {
+        Predicate<Employee> predicate =
+                new TaskContainsKeywordsPredicate(Arrays.asList("report", "review"));
+        ShowCommand expectedCommand = new ShowCommand(predicate);
+
+        assertParseSuccess(parser, "task/report review", expectedCommand);
     }
 
     @Test
@@ -177,6 +307,16 @@ public class ShowCommandParserTest {
     }
 
     @Test
+    public void parse_taskPrefixInFront_success() {
+        Predicate<Employee> predicate =
+                new TaskContainsKeywordsPredicate(Arrays.asList("meeting", "review"))
+                        .and(new NameContainsKeywordsPredicate(Arrays.asList("Alex")));
+        ShowCommand expectedCommand = new ShowCommand(predicate);
+
+        assertParseSuccess(parser, "task/meeting review n/Alex", expectedCommand);
+    }
+
+    @Test
     public void parse_multiKeywordNameStopsAtNextPrefix_success() {
         Predicate<Employee> predicate =
                 new NameContainsKeywordsPredicate(Arrays.asList("Alex", "John"))
@@ -197,6 +337,16 @@ public class ShowCommandParserTest {
     }
 
     @Test
+    public void parse_multipleKeywordsInTaskStopsAtNextPrefix_success() {
+        Predicate<Employee> predicate =
+                new TaskContainsKeywordsPredicate(Arrays.asList("report", "review"))
+                        .and(new NameContainsKeywordsPredicate(Arrays.asList("Alex")));
+        ShowCommand expectedCommand = new ShowCommand(predicate);
+
+        assertParseSuccess(parser, "task/report review n/Alex", expectedCommand);
+    }
+
+    @Test
     public void parse_allPrefixesTogether_success() {
         Predicate<Employee> predicate =
                 new NameContainsKeywordsPredicate(Arrays.asList("Alice"))
@@ -208,106 +358,6 @@ public class ShowCommandParserTest {
         ShowCommand expectedCommand = new ShowCommand(predicate);
 
         assertParseSuccess(parser, "n/Alice d/IT p/9123 e/gmail pos/Manager t/friend", expectedCommand);
-    }
-
-    @Test
-    public void parse_blankTagWithOtherValidPrefix_success() {
-        Predicate<Employee> predicate =
-                new NameContainsKeywordsPredicate(Arrays.asList("Alex"));
-        ShowCommand expectedCommand = new ShowCommand(predicate);
-
-        assertParseSuccess(parser, "t/ n/Alex", expectedCommand);
-    }
-
-    @Test
-    public void parse_blankPrefixOnly_returnsFalsePredicateCommand() {
-        ShowCommand expectedCommand = new ShowCommand(employee -> false);
-
-        assertParseSuccess(parser, "t/", expectedCommand);
-    }
-
-    @Test
-    public void parse_noValidPrefix_returnsFalsePredicateCommand() {
-        ShowCommand expectedCommand = new ShowCommand(employee -> false);
-
-        assertParseSuccess(parser, "Alice", expectedCommand);
-    }
-
-    @Test
-    public void parse_taskPrefix_success() {
-        Predicate<Employee> predicate =
-                new TaskContainsKeywordsPredicate(Arrays.asList("report"));
-        ShowCommand expectedCommand = new ShowCommand(predicate);
-
-        assertParseSuccess(parser, "task/report", expectedCommand);
-    }
-
-    @Test
-    public void parse_multipleKeywordsInTask_success() {
-        Predicate<Employee> predicate =
-                new TaskContainsKeywordsPredicate(Arrays.asList("report", "review"));
-        ShowCommand expectedCommand = new ShowCommand(predicate);
-
-        assertParseSuccess(parser, "task/report review", expectedCommand);
-    }
-
-    @Test
-    public void parse_nameAndTask_success() {
-        Predicate<Employee> predicate =
-                new NameContainsKeywordsPredicate(Arrays.asList("Alex"))
-                        .and(new TaskContainsKeywordsPredicate(Arrays.asList("report")));
-        ShowCommand expectedCommand = new ShowCommand(predicate);
-
-        assertParseSuccess(parser, "n/Alex task/report", expectedCommand);
-    }
-
-    @Test
-    public void parse_taskAndDepartment_success() {
-        Predicate<Employee> predicate =
-                new TaskContainsKeywordsPredicate(Arrays.asList("review"))
-                        .and(new DepartmentContainsKeywordsPredicate(Arrays.asList("Finance")));
-        ShowCommand expectedCommand = new ShowCommand(predicate);
-
-        assertParseSuccess(parser, "task/review d/Finance", expectedCommand);
-    }
-
-    @Test
-    public void parse_multipleKeywordsInTaskStopsAtNextPrefix_success() {
-        Predicate<Employee> predicate =
-                new TaskContainsKeywordsPredicate(Arrays.asList("report", "review"))
-                        .and(new NameContainsKeywordsPredicate(Arrays.asList("Alex")));
-        ShowCommand expectedCommand = new ShowCommand(predicate);
-
-        assertParseSuccess(parser, "task/report review n/Alex", expectedCommand);
-    }
-
-    @Test
-    public void parse_taskWithTag_success() {
-        Predicate<Employee> predicate =
-                new TaskContainsKeywordsPredicate(Arrays.asList("meeting"))
-                        .and(new TagContainsKeywordsPredicate(Arrays.asList("urgent")));
-        ShowCommand expectedCommand = new ShowCommand(predicate);
-
-        assertParseSuccess(parser, "task/meeting t/urgent", expectedCommand);
-    }
-
-    @Test
-    public void parse_taskPrefixInFront_success() {
-        Predicate<Employee> predicate =
-                new TaskContainsKeywordsPredicate(Arrays.asList("meeting", "review"))
-                        .and(new NameContainsKeywordsPredicate(Arrays.asList("Alex")));
-        ShowCommand expectedCommand = new ShowCommand(predicate);
-
-        assertParseSuccess(parser, "task/meeting review n/Alex", expectedCommand);
-    }
-
-    @Test
-    public void parse_blankTaskWithOtherValidPrefix_success() {
-        Predicate<Employee> predicate =
-                new DepartmentContainsKeywordsPredicate(Arrays.asList("IT"));
-        ShowCommand expectedCommand = new ShowCommand(predicate);
-
-        assertParseSuccess(parser, "task/ d/IT", expectedCommand);
     }
 
     @Test
@@ -328,13 +378,33 @@ public class ShowCommandParserTest {
     }
 
     @Test
+    public void parse_leadingAndTrailingWhitespace_success() {
+        Predicate<Employee> predicate =
+                new NameContainsKeywordsPredicate(Arrays.asList("Alice"));
+        ShowCommand expectedCommand = new ShowCommand(predicate);
+
+        assertParseSuccess(parser, "   n/Alice   ", expectedCommand);
+    }
+
+    @Test
+    public void parse_allPrefixesInDifferentOrderIncludingTask_success() {
+        Predicate<Employee> predicate =
+                new TaskContainsKeywordsPredicate(Arrays.asList("report"))
+                        .and(new EmailContainsKeywordsPredicate(Arrays.asList("gmail")))
+                        .and(new NameContainsKeywordsPredicate(Arrays.asList("Alice")))
+                        .and(new TagContainsKeywordsPredicate(Arrays.asList("friend")));
+        ShowCommand expectedCommand = new ShowCommand(predicate);
+
+        assertParseSuccess(parser, "task/report e/gmail n/Alice t/friend", expectedCommand);
+    }
+
+    @Test
     public void parse_nullArgs_throwsAssertionError() {
         assertThrows(AssertionError.class, () -> parser.parse(null));
     }
 
     @Test
     public void extract_missingPrefix_returnsEmptyString() throws Exception {
-        ShowCommandParser parser = new ShowCommandParser();
         Method method = ShowCommandParser.class.getDeclaredMethod("extract", String.class, String.class);
         method.setAccessible(true);
 
@@ -343,40 +413,20 @@ public class ShowCommandParserTest {
     }
 
     @Test
-    public void parse_validEmailPrefix_success() {
-        Predicate<Employee> predicate =
-                new EmailContainsKeywordsPredicate(Arrays.asList("gmail"));
-        ShowCommand expectedCommand = new ShowCommand(predicate);
+    public void extract_stopsAtNextPrefix_returnsCorrectSubstring() throws Exception {
+        Method method = ShowCommandParser.class.getDeclaredMethod("extract", String.class, String.class);
+        method.setAccessible(true);
 
-        assertParseSuccess(parser, "e/gmail", expectedCommand);
+        String result = (String) method.invoke(parser, "n/Alex John d/IT", "n/");
+        assertEquals("Alex John", result);
     }
 
     @Test
-    public void parse_validPhoneAndEmailPrefixes_success() {
-        Predicate<Employee> predicate =
-                new PhoneContainsKeywordsPredicate(Arrays.asList("9123"))
-                        .and(new EmailContainsKeywordsPredicate(Arrays.asList("gmail")));
-        ShowCommand expectedCommand = new ShowCommand(predicate);
+    public void extract_lastPrefix_returnsRestOfInput() throws Exception {
+        Method method = ShowCommandParser.class.getDeclaredMethod("extract", String.class, String.class);
+        method.setAccessible(true);
 
-        assertParseSuccess(parser, "p/9123 e/gmail", expectedCommand);
+        String result = (String) method.invoke(parser, "d/Finance task/report review", "task/");
+        assertEquals("report review", result);
     }
-
-    @Test
-    public void parse_validTagPrefix_success() {
-        Predicate<Employee> predicate =
-                new TagContainsKeywordsPredicate(Arrays.asList("friend"));
-        ShowCommand expectedCommand = new ShowCommand(predicate);
-
-        assertParseSuccess(parser, "t/friend", expectedCommand);
-    }
-
-    @Test
-    public void parse_validPositionPrefix_success() {
-        Predicate<Employee> predicate =
-                new PositionContainsKeywordsPredicate(Arrays.asList("Manager"));
-        ShowCommand expectedCommand = new ShowCommand(predicate);
-
-        assertParseSuccess(parser, "pos/Manager", expectedCommand);
-    }
-
 }

@@ -8,6 +8,10 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_POSITION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -21,7 +25,7 @@ public class AddCommand extends Command {
 
     public static final String COMMAND_WORD = "add";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds an employee to the address book. \n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds an employee to ManageUp.\n"
             + "Parameters: "
             + PREFIX_NAME + "NAME "
             + PREFIX_PHONE + "PHONE "
@@ -38,7 +42,9 @@ public class AddCommand extends Command {
             + PREFIX_TAG + "friends "
             + PREFIX_TAG + "owesMoney";
 
-    public static final String MESSAGE_SUCCESS = "New employee added: %1$s";
+    public static final String MESSAGE_SUCCESS = "Employee added successfully:\n%1$s";
+
+    private static final Logger logger = LogsCenter.getLogger(AddCommand.class.getName());
 
     private final Employee toAdd;
 
@@ -53,26 +59,42 @@ public class AddCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        logger.log(Level.INFO, "Executing AddCommand for employee: {0}", toAdd.getName());
 
-        if (model.hasPerson(toAdd)) {
+        checkNoDuplicates(toAdd, model);
+        model.addPerson(toAdd);
+
+        logger.log(Level.INFO, "Successfully added employee: {0}", toAdd.getName());
+        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
+    }
+
+    /**
+     * Checks that {@code employee} does not conflict with any existing employee in {@code model},
+     * by name, phone, or email.
+     *
+     * @param employee the employee to validate.
+     * @param model the model to check against.
+     * @throws CommandException if a duplicate name, phone, or email is found.
+     */
+    private static void checkNoDuplicates(Employee employee, Model model) throws CommandException {
+        if (model.hasPerson(employee)) {
+            logger.log(Level.WARNING, Messages.MESSAGE_DUPLICATE_EMPLOYEE);
             throw new CommandException(Messages.MESSAGE_DUPLICATE_EMPLOYEE);
         }
 
-        Employee employeeWithSamePhone = model.getEmployeeWithSamePhone(toAdd);
-        Employee employeeWithSameEmail = model.getEmployeeWithSameEmail(toAdd);
-
+        Employee employeeWithSameEmail = model.getEmployeeWithSameEmail(employee);
         if (employeeWithSameEmail != null) {
+            logger.log(Level.WARNING, "Duplicate email detected for: {0}", employee.getEmail());
             throw new CommandException(String.format(Messages.MESSAGE_DUPLICATE_EMAIL,
-                                       Messages.format(employeeWithSameEmail)));
+                    Messages.format(employeeWithSameEmail)));
         }
 
+        Employee employeeWithSamePhone = model.getEmployeeWithSamePhone(employee);
         if (employeeWithSamePhone != null) {
+            logger.log(Level.WARNING, "Duplicate phone detected for: {0}", employee.getPhone());
             throw new CommandException(String.format(Messages.MESSAGE_DUPLICATE_PHONE,
-                                       Messages.format(employeeWithSamePhone)));
+                    Messages.format(employeeWithSamePhone)));
         }
-
-        model.addPerson(toAdd);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
     }
 
     @Override

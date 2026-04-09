@@ -74,7 +74,7 @@ public class CommandTestUtil {
                                                        + PREFIX_DEPARTMENT; // empty string not allowed for departments
     public static final String INVALID_POSITION_DESC = " " + PREFIX_POSITION; // empty string not allowed for positions
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "hubby*"; // '*' not allowed in tags
-    public static final String INVALID_TASK_NAME = " " + PREFIX_NAME; //empty string not allowed for task name
+    public static final String INVALID_TASK_NAME = " " + PREFIX_TASK_NAME; //empty string not allowed for task name
     //empty string not allowed for task description
     public static final String INVALID_TASK_DESC = " " + PREFIX_TASK_DESCRIPTION;
 

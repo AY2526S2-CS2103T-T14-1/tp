@@ -13,6 +13,9 @@ import seedu.address.logic.parser.exceptions.ParseException;
  */
 public class DeleteTaskCommandParser implements Parser<DeleteTaskCommand> {
 
+    public static final String MESSAGE_NON_POSITIVE_INDEX =
+            "Invalid task index. Please enter only positive task indices.";
+
     @Override
     public DeleteTaskCommand parse(String args) throws ParseException {
         String trimmedArgs = args.trim();
@@ -28,7 +31,7 @@ public class DeleteTaskCommandParser implements Parser<DeleteTaskCommand> {
 
             for (int index : indices) {
                 if (index < 1) {
-                    throw new ParseException(DeleteTaskCommand.MESSAGE_INVALID_INDEX);
+                    throw new ParseException(MESSAGE_NON_POSITIVE_INDEX);
                 }
             }
             return new DeleteTaskCommand(indices);

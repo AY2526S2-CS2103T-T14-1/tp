@@ -216,7 +216,7 @@ Shows employees that match one or more field-based filters.
 **Format:**  
 `show [n/NAME_KEYWORD...] [d/DEPARTMENT_KEYWORD...] [p/PHONE_KEYWORD...] [e/EMAIL_KEYWORD...] [pos/POSITION_KEYWORD...] [t/TAG_KEYWORD...] [task/TASK_KEYWORD...]`
 
-#### How it works
+##### How it works
 
 The `show` command filters the employee list using the prefixes you provide.
 
@@ -231,7 +231,7 @@ A prefix refers to a field of an employee:
 
 You must provide **at least one** filter. If no filter is given, the command is invalid.
 
-#### Matching behaviour
+##### Matching behaviour
 
 `show` uses **case-insensitive substring matching** for all supported fields.
 
@@ -248,7 +248,7 @@ For example:
 - `t/mentor` can match a tag such as `mentor`
 - `task/report` can match a task such as `Prepare report`
 
-#### Different prefixes: AND behaviour
+##### Different prefixes: AND behaviour
 
 When you provide **different prefixes**, they are combined using **AND**.
 
@@ -261,7 +261,7 @@ For example:
 
 So the more different fields you add, the narrower the result becomes.
 
-#### Multiple keywords under the same prefix: OR behaviour
+##### Multiple keywords under the same prefix: OR behaviour
 
 When a single prefix is followed by **multiple keywords**, those keywords are treated as **OR** within that field.
 
@@ -278,7 +278,7 @@ For example:
 - `show n/John Alex d/IT` shows employees whose name contains `John` **or** `Alex`, **and** whose department contains `IT`
 - `show t/mentor fulltime task/report` shows employees who have a tag containing `mentor` **or** `fulltime`, **and** a task containing `report`
 
-#### Order of filters
+##### Order of filters
 
 Filters can be written in **any order**.
 
@@ -286,7 +286,7 @@ For example, the following commands are treated the same:
 - `show n/Alex d/IT`
 - `show d/IT n/Alex`
 
-#### Supported keyword format
+##### Supported keyword format
 
 Each prefix can be followed by **one or more keywords**.
 
@@ -304,7 +304,7 @@ For example:
 - `show task/report` may match `Prepare report`
 - `show t/lead` may match `teamlead`
 
-#### Notes
+##### Notes
 - At least one filter must be provided.
 - Filters are case-insensitive.
 - All matching is based on substring containment.
@@ -313,15 +313,6 @@ For example:
 - Filters can be written in any order.
 
 #### Examples
-
-- `show d/IT`  
-  Shows employees whose department contains `IT`.
-
-- `show n/Alex`  
-  Shows employees whose name contains `Alex`.
-
-- `show n/Al`  
-  Shows employees whose names contain `Al`, such as `Alex`, `Alice`, or `Sally`.
 
 - `show e/gmail`  
   Shows employees whose email contains `gmail`.

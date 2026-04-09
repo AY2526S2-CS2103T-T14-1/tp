@@ -33,7 +33,7 @@ import seedu.address.model.tag.Tag;
 
 
 /**
- * Edits the details of an existing person in the address book.
+ * Edits the details of an existing employee in ManageUp.
  */
 public class EditCommand extends Command {
 
@@ -53,8 +53,8 @@ public class EditCommand extends Command {
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
 
-    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Employee:\n%1$s";
-    public static final String MESSAGE_NOT_EDITED = "At least one employee field to edit must be provided.";
+    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Employee updated successfully:\n%1$s";
+    public static final String MESSAGE_NOT_EDITED = "Please provide at least one employee field to update.";
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -74,35 +74,59 @@ public class EditCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Employee> lastShownList = model.getFilteredPersonList();
 
+        Employee employeeToEdit = getEmployeeToEdit(index, model);
+        Employee editedEmployee = createEditedPerson(employeeToEdit, editPersonDescriptor);
+
+        checkNoDuplicates(employeeToEdit, editedEmployee, model);
+
+        model.setPerson(employeeToEdit, editedEmployee);
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedEmployee)));
+    }
+
+    /**
+     * Returns the employee at {@code index} in the filtered list of {@code model}.
+     *
+     * @param index the index of the employee to retrieve.
+     * @param model the model containing the filtered employee list.
+     * @return the employee at the given index.
+     * @throws CommandException if the index is out of bounds.
+     */
+    private static Employee getEmployeeToEdit(Index index, Model model) throws CommandException {
+        List<Employee> lastShownList = model.getFilteredPersonList();
         if (index.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
+        return lastShownList.get(index.getZeroBased());
+    }
 
-        Employee personToEdit = lastShownList.get(index.getZeroBased());
-        Employee editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
-
+    /**
+     * Checks that {@code editedPerson} does not conflict with any existing employee
+     * in {@code model} by name, phone, or email, ignoring {@code personToEdit}.
+     *
+     * @param personToEdit the original employee being edited.
+     * @param editedPerson the proposed updated employee to validate.
+     * @param model the model to check against.
+     * @throws CommandException if a duplicate name, phone, or email is found.
+     */
+    private static void checkNoDuplicates(
+            Employee personToEdit, Employee editedPerson, Model model) throws CommandException {
         if (!personToEdit.isSameEmployee(editedPerson) && model.hasPerson(editedPerson)) {
             throw new CommandException(Messages.MESSAGE_DUPLICATE_EMPLOYEE);
         }
 
-        Employee employeeWithSamePhone = model.getEmployeeWithSamePhone(editedPerson);
         Employee employeeWithSameEmail = model.getEmployeeWithSameEmail(editedPerson);
-
         if (employeeWithSameEmail != null && !employeeWithSameEmail.equals(personToEdit)) {
             throw new CommandException(String.format(Messages.MESSAGE_DUPLICATE_EMAIL,
-                                       Messages.format(employeeWithSameEmail)));
+                    Messages.format(employeeWithSameEmail)));
         }
 
+        Employee employeeWithSamePhone = model.getEmployeeWithSamePhone(editedPerson);
         if (employeeWithSamePhone != null && !employeeWithSamePhone.equals(personToEdit)) {
             throw new CommandException(String.format(Messages.MESSAGE_DUPLICATE_PHONE,
-                                       Messages.format(employeeWithSamePhone)));
+                    Messages.format(employeeWithSamePhone)));
         }
-
-        model.setPerson(personToEdit, editedPerson);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson)));
     }
 
     /**

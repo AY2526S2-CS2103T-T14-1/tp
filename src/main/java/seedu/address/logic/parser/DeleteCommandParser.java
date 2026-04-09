@@ -8,6 +8,7 @@ import java.util.List;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.employee.Name;
 
 /**
  * Parses input arguments and creates a new DeleteCommand object
@@ -41,7 +42,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         } catch (NumberFormatException e) {
             // Not an integer, treat as name
             String normalizedName = trimmedArgs.replaceAll("^ +", " ").replaceAll(" +", " ").toLowerCase();
-            if (!normalizedName.matches("[a-zA-Z /]+")) {
+            if (!Name.isValidName(normalizedName)) {
                 throw new ParseException(DeleteCommand.MESSAGE_INVALID_NAME);
             }
             return new DeleteCommand(trimmedArgs);

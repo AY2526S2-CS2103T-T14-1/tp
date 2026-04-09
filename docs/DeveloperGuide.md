@@ -107,6 +107,11 @@ How the `Logic` component works:
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
 
+Besides employee commands such as `add`, `edit`, `delete`, and `show`, the `Logic` component also handles
+task-related commands. In particular, `AddressBookParser` routes `addtask`, `edittask`, and `deletetask`
+to `AddTaskCommandParser`, `EditTaskCommandParser`, and `DeleteTaskCommandParser` respectively, which then
+construct `AddTaskCommand`, `EditTaskCommand`, and `DeleteTaskCommand` objects for execution by `LogicManager`.
+
 Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
 
 <puml src="diagrams/ParserClasses.puml" width="600"/>
@@ -126,7 +131,15 @@ The `Model` component,
 * stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
+* stores task data in two levels:
+  * each `Employee` owns an individual `TaskListStorage`, which stores the tasks shown on that employee's card in the UI.
+  * the `ModelManager` also maintains a separate in-memory overall `TaskList`, which maps `Task -> Employee` and is used to locate the employee that owns a task during task editing and deletion.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
+
+Task indices are part of the task model. Each `Task` stores a task index that is displayed beside the task on the
+employee card, and commands such as `edittask` and `deletetask` operate on this task index rather than the employee
+list index. Task indices are assigned when tasks are created. The overall in-memory `TaskList` is rebuilt when the
+model starts, but is not currently persisted as a separate storage file.
 
 <box type="info" seamless>
 
@@ -157,6 +170,85 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 ## **Implementation**
 
 This section describes some noteworthy details on how certain features are implemented.
+
+### Task management
+
+ManageUp supports task assignment and maintenance through three task commands:
+
+* `addtask` adds a task to a specific employee.
+* `edittask` edits the name and/or description of an existing task by task index.
+* `deletetask` deletes a task by task index.
+
+Task management uses both per-employee storage and a global in-memory task structure:
+
+* `Task.java` represents a single task. Each task stores a name, description, and task index. The task index is
+  displayed in the UI and is used by task-editing and task-deletion commands.
+* `TaskListStorage.java` stores the list of tasks assigned to one employee. This is the task list shown on the
+  employee card in the UI.
+* `TaskList.java` stores an overall in-memory mapping of `Task -> Employee`. This mapping is used to locate the
+  employee that owns a task when `edittask` or `deletetask` is executed.
+* `UniquePersonList.java` is responsible for updating the owning employee's individual task list. When a task is
+  added, edited, or deleted, the affected employee is replaced with an updated `Employee` object so that the
+  observable employee list remains in sync with the UI.
+
+#### Task index design
+
+Task indices are shown directly on the employee card beside each task, for example `#3 Prepare Report: Submit by Friday`.
+Unlike employee commands such as `edit 1` or `delete 1`, task commands use the task index instead of the employee index.
+
+When a new task is created, the task is assigned the next available task index. This allows task commands such as
+`edittask 3` and `deletetask 3` to refer to the same task regardless of which employee owns it.
+
+#### Add task implementation
+
+`addtask` is parsed by `AddTaskCommandParser`, which extracts the task name, task description, and employee name from
+the command input before constructing an `AddTaskCommand`.
+
+During execution:
+
+1. The command finds the target employee by name.
+2. A new `Task` is created with an assigned task index.
+3. The task is added to the employee's own `TaskListStorage`.
+4. The same task is also added to the overall in-memory `TaskList`.
+
+This two-level update ensures that the task is both visible on the employee card and discoverable by future task
+commands that operate by task index.
+
+#### Edit task implementation
+
+`edittask` is parsed by `EditTaskCommandParser`, which reads a task index from the preamble and optional updates from
+the `task/` and `desc/` prefixes.
+
+During execution:
+
+1. The model locates the existing task by task index using the overall `TaskList`.
+2. A new replacement `Task` is created using the same task index but updated fields.
+3. The task is replaced in the overall `TaskList`.
+4. The same replacement is propagated to the owning employee through `UniquePersonList`.
+
+This ensures the task remains associated with the same employee while reflecting the updated details in both model
+structures.
+
+#### Delete task implementation
+
+`deletetask` is parsed by `DeleteTaskCommandParser`, which validates the task index before creating a
+`DeleteTaskCommand`.
+
+The sequence diagram below illustrates the interactions within the task-deletion flow for `deletetask 1`.
+
+<puml src="diagrams/DeleteTaskSequenceDiagram.puml" alt="Interactions Inside the Logic and Model Components for the `deletetask 1` Command" />
+
+The deletion flow works as follows:
+
+1. `AddressBookParser` recognises the `deletetask` command and delegates parsing to `DeleteTaskCommandParser`.
+2. `DeleteTaskCommandParser` constructs a `DeleteTaskCommand` with the requested task index.
+3. `DeleteTaskCommand` calls `Model#deleteTask(taskIndex)`.
+4. `ModelManager` forwards the request to `AddressBook`, together with the overall in-memory `TaskList`.
+5. `AddressBook` asks `TaskList` for the employee who owns the task and removes the task from the overall mapping.
+6. `AddressBook` then delegates to `UniquePersonList` to remove the same task from the employee's own `TaskListStorage`.
+
+This design allows `deletetask` to work using a task index alone, without requiring the user to specify the employee
+who owns the task.
 
 ### \[Proposed\] Undo/redo feature
 

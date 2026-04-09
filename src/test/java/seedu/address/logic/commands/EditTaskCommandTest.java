@@ -36,9 +36,7 @@ public class EditTaskCommandTest {
     private static final int TASK_INDEX = 1;
     private static final String ORIGINAL_TASK_NAME = "Finish dry run";
     private static final String ORIGINAL_TASK_DESCRIPTION = "Complete demo dry run by Wednesday";
-
-    private ModelManager model;
-    private Task originalTask;
+    private static final int INVALID_TASK_INDEX = 999;
 
     /**
      * Builds a {@code ModelManager}  with one employee who has one task at {@code TASK_INDEX}.
@@ -61,6 +59,25 @@ public class EditTaskCommandTest {
         return model;
     }
 
+    /**
+     * Retrieves the first task of the first employee in {@code model} and asserts
+     * its name, description and index match the expected values.
+     *
+     * @param model the model to retrieve the task from.
+     * @param expectedName the expected task name.
+     * @param expectedDescription the expected task description.
+     * @param expectedIndex the expected task index.
+     */
+    private void assertTaskEquals(ModelManager model, String expectedName,
+                                  String expectedDescription, int expectedIndex) {
+        Task updatedTask = model.getAddressBook().getPersonList().get(0)
+                .getTaskListStorage().getTasks().get(0);
+        assertEquals(expectedName, updatedTask.getTaskName());
+        assertEquals(expectedDescription, updatedTask.getTaskDescription());
+        assertEquals(expectedIndex, updatedTask.getCurrentTaskIndex());
+    }
+
+
     @Test
     public void execute_nameOnlyEdited_descriptionPreserved() throws Exception {
         ModelManager model = buildModelWithTask();
@@ -73,11 +90,8 @@ public class EditTaskCommandTest {
 
         Task expectedTask = new Task(VALID_TASK_NAME_REPORT, ORIGINAL_TASK_DESCRIPTION, TASK_INDEX);
         assertEquals(String.format(EditTaskCommand.MESSAGE_EDIT_TASK_SUCCESS, expectedTask),
-                     result.getFeedbackToUser());
-        Task updatedTask = model.getAddressBook().getPersonList().get(0).getTaskListStorage().getTasks().get(0);
-        assertEquals(VALID_TASK_NAME_REPORT, updatedTask.getTaskName());
-        assertEquals(ORIGINAL_TASK_DESCRIPTION, updatedTask.getTaskDescription());
-        assertEquals(TASK_INDEX, updatedTask.getCurrentTaskIndex());
+                result.getFeedbackToUser());
+        assertTaskEquals(model, VALID_TASK_NAME_REPORT, ORIGINAL_TASK_DESCRIPTION, TASK_INDEX);
     }
 
     @Test
@@ -93,10 +107,7 @@ public class EditTaskCommandTest {
         Task expectedTask = new Task(ORIGINAL_TASK_NAME, VALID_TASK_DESCRIPTION_REPORT, TASK_INDEX);
         assertEquals(String.format(EditTaskCommand.MESSAGE_EDIT_TASK_SUCCESS, expectedTask),
                 result.getFeedbackToUser());
-        Task updatedTask = model.getAddressBook().getPersonList().get(0).getTaskListStorage().getTasks().get(0);
-        assertEquals(ORIGINAL_TASK_NAME, updatedTask.getTaskName());
-        assertEquals(VALID_TASK_DESCRIPTION_REPORT, updatedTask.getTaskDescription());
-        assertEquals(TASK_INDEX, updatedTask.getCurrentTaskIndex());
+        assertTaskEquals(model, ORIGINAL_TASK_NAME, VALID_TASK_DESCRIPTION_REPORT, TASK_INDEX);
     }
 
     @Test
@@ -113,10 +124,7 @@ public class EditTaskCommandTest {
         Task expectedTask = new Task(VALID_TASK_NAME_REPORT, VALID_TASK_DESCRIPTION_REPORT, TASK_INDEX);
         assertEquals(String.format(EditTaskCommand.MESSAGE_EDIT_TASK_SUCCESS, expectedTask),
                 result.getFeedbackToUser());
-        Task updatedTask = model.getAddressBook().getPersonList().get(0).getTaskListStorage().getTasks().get(0);
-        assertEquals(VALID_TASK_NAME_REPORT, updatedTask.getTaskName());
-        assertEquals(VALID_TASK_DESCRIPTION_REPORT, updatedTask.getTaskDescription());
-        assertEquals(TASK_INDEX, updatedTask.getCurrentTaskIndex());
+        assertTaskEquals(model, VALID_TASK_NAME_REPORT, VALID_TASK_DESCRIPTION_REPORT, TASK_INDEX);
     }
 
     @Test
@@ -127,8 +135,7 @@ public class EditTaskCommandTest {
                 .build();
         new EditTaskCommand(TASK_INDEX, descriptor).execute(model);
 
-        Task updatedTask = model.getAddressBook().getPersonList().get(0).getTaskListStorage().getTasks().get(0);
-        assertEquals(TASK_INDEX, updatedTask.getCurrentTaskIndex());
+        assertTaskEquals(model, VALID_TASK_NAME_REPORT, ORIGINAL_TASK_DESCRIPTION, TASK_INDEX);
     }
 
     @Test
@@ -137,7 +144,7 @@ public class EditTaskCommandTest {
         EditTaskDescriptor descriptor = new EditTaskDescriptorBuilder()
                 .withTaskName(VALID_TASK_NAME_REPORT)
                 .build();
-        EditTaskCommand command = new EditTaskCommand(999, descriptor);
+        EditTaskCommand command = new EditTaskCommand(INVALID_TASK_INDEX, descriptor);
 
         assertCommandFailure(command, model, EditTaskCommand.MESSAGE_INVALID_INDEX);
     }
