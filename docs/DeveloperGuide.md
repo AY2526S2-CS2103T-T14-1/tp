@@ -82,6 +82,16 @@ The `UI` component,
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
 * depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
 
+The Help Window is implemented as a separate UI feature coordinated by `MainWindow`.
+The class diagram below summarises the main classes involved.
+
+<puml src="diagrams/HelpWindowClassDiagram.puml" alt="Structure of the Help Window feature" />
+
+`MainWindow` owns a single `HelpWindow` instance and either shows it or focuses it when the user triggers `help`.
+`HelpWindow` extends `UiPart` and uses `HelpWindowContent` to obtain the formatted command reference displayed in the
+popup. Before the window is shown, `MainWindow` delegates to `HelpWindowLogic` to reset fullscreen and maximized state
+so that the help popup opens consistently even after earlier window-state changes.
+
 ### Logic component
 
 **API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
@@ -170,6 +180,46 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 ## **Implementation**
 
 This section describes some noteworthy details on how certain features are implemented.
+
+### Delete employee
+
+ManageUp supports three variants of the `delete` command:
+
+* single employee deletion by employee index
+* single employee deletion by unique employee name
+* batch employee deletion by multiple employee indices
+
+The activity diagram below shows how `DeleteCommandParser` decides which deletion mode to construct.
+
+<puml src="diagrams/DeleteEmployeeActivityDiagram.puml" alt="Activity diagram for parsing and executing the delete employee command" />
+
+The parser behaves as follows:
+
+1. If the trimmed input is empty, parsing fails with the standard command-usage message.
+2. If the input contains multiple whitespace-separated tokens and every token is a positive integer, the parser treats
+   the command as batch deletion by indices.
+3. If the input contains a single positive integer token, the parser treats the command as single-index deletion.
+4. Otherwise, the parser treats the full input as a name-based deletion request and validates the employee name format.
+
+The sequence diagram below illustrates the runtime interactions for the representative single-index flow `delete 1`.
+
+<puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions inside the Logic and Model components for the `delete 1` command" />
+
+During execution:
+
+1. `LogicManager` asks `AddressBookParser` to parse the command.
+2. `AddressBookParser` creates `DeleteCommandParser`, which constructs a `DeleteCommand`.
+3. `DeleteCommand` calls `Model#deletePerson(employee)`.
+4. `ModelManager` first removes all tasks belonging to that employee from the overall in-memory `TaskList`.
+5. `ModelManager` then delegates to `AddressBook` to remove the employee from the address book.
+6. `AddressBook` removes the employee through `UniquePersonList`.
+7. A `CommandResult` is created and returned to `LogicManager`.
+
+Batch deletion follows the same deletion logic after validation, except that all requested indices are first checked,
+then deleted in descending order to avoid index-shifting issues in the filtered employee list.
+
+For name-based deletion, `DeleteCommand` normalizes the requested name, matches it against the currently displayed
+employee list, and rejects cases where there are zero matches or more than one match.
 
 ### Task management
 
