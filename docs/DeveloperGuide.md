@@ -13,7 +13,9 @@
 
 ## **Acknowledgements**
 
-_{ list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well }_
+ManageUp is adapted from [AddressBook-Level3](https://se-education.org/addressbook-level3/).
+The documentation site is built with [MarkBind](https://markbind.org/), and the UML diagrams are rendered using
+[PlantUML](https://plantuml.com/).
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -80,7 +82,7 @@ The `UI` component,
 * executes user commands using the `Logic` component.
 * listens for changes to `Model` data so that the UI can be updated with the modified data.
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
-* depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
+* depends on some classes in the `Model` component, as it displays `Employee` objects residing in the `Model`.
 
 ### Logic component
 
@@ -128,8 +130,10 @@ How the parsing works:
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
-* stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
+* stores the address book data i.e., all `Employee` objects (which are contained in a `UniquePersonList` object).
+* stores the currently 'selected' `Employee` objects (e.g., results of a search query) as a separate _filtered_ list
+  which is exposed to outsiders as an unmodifiable `ObservableList<Employee>` that can be observed so that the UI
+  automatically updates when the data in the list changes.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * stores task data in two levels:
   * each `Employee` owns an individual `TaskListStorage`, which stores the tasks shown on that employee's card in the UI.
@@ -143,7 +147,9 @@ model starts, but is not currently persisted as a separate storage file.
 
 <box type="info" seamless>
 
-**Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
+**Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`,
+which `Employee` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of
+each `Employee` needing their own `Tag` objects.<br>
 
 <puml src="diagrams/BetterModelClassDiagram.puml" width="450" />
 
@@ -198,6 +204,22 @@ Unlike employee commands such as `edit 1` or `delete 1`, task commands use the t
 
 When a new task is created, the task is assigned the next available task index. This allows task commands such as
 `edittask 3` and `deletetask 3` to refer to the same task regardless of which employee owns it.
+
+Task indices are intentionally not renumbered after deletions. This is a deliberate design choice to keep task
+references stable once they have been shown to the user. If task indices were reassigned whenever some other task was
+deleted, a command such as `edittask 8` could end up referring to a different task from the one the user previously
+saw, which would make task operations harder to reason about and easier to misuse.
+
+This design trades compact numbering for consistency. Over time, task indices can become sparse and larger than the
+current number of tasks, but for ManageUp's expected usage scale, stable task references are more valuable than
+perfectly consecutive numbering. If the application is extended to support substantially larger long-term task volumes,
+the team can revisit this design and consider alternative identifier schemes that preserve both uniqueness and
+usability.
+
+If ManageUp is extended to support substantially larger long-term task volumes, a more scalable refinement would be to
+separate internal task identity from user-facing display order. Each task can keep a stable internal identifier for
+storage and updates, while the UI presents a smaller context-specific display number to the user. This preserves
+reliable task tracking internally while avoiding unwieldy visible task numbers in long-running usage.
 
 #### Add task implementation
 
@@ -259,17 +281,24 @@ who owns the task.
 
 #### Proposed Implementation
 
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
+Undo/redo is not currently implemented in ManageUp, but it is a plausible future enhancement because the app already
+supports several data-mutating commands such as `add`, `edit`, `delete`, `addtask`, `edittask`, and `deletetask`.
+
+One possible implementation is to introduce a `VersionedAddressBook` that extends `AddressBook` with an undo/redo
+history stored internally as an `addressBookStateList` and a `currentStatePointer`. The proposed class would support
+the following operations:
 
 * `VersionedAddressBook#commit()` — Saves the current address book state in its history.
 * `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
 * `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
 
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
+If this feature is implemented, the corresponding operations can be exposed through the `Model` interface as
+`Model#commitAddressBook()`, `Model#undoAddressBook()`, and `Model#redoAddressBook()`.
 
 Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
 
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
+Step 1. The user launches the application for the first time. The proposed `VersionedAddressBook` is initialized with
+the initial address book state, and the `currentStatePointer` points to that single address book state.
 
 <puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
 
@@ -287,7 +316,7 @@ Step 3. The user executes `add n/David …​` to add a new employee. The `add` 
 
 </box>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `delete` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+Step 4. The user now decides that adding the employee was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
 
 <puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
 
@@ -343,14 +372,11 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
+  * Pros: Will use less memory (e.g. for `delete`, just save the employee being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
 
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
+This proposal prioritizes implementation simplicity. If the team decides to build undo/redo in future, the main tradeoff
+to revisit is whether full-state snapshots remain acceptable as the amount of employee and task data grows.
 
 
 --------------------------------------------------------------------------------------------------------------------
@@ -420,7 +446,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `*` | frequent user | see command autocomplete suggestions | execute commands more quickly |
 | `*` | frequent user | see autocomplete suggestions with existing names or job titles | avoid duplicate or inconsistent entries |
 | `*` | frequent user | use shortcuts for commands | save time typing full commands |
-| `*` | first-time user | see sample contacts when opening the app | understand how the application works |
+| `*` | first-time user | see sample employees when opening the app | understand how the application works |
 | `*` | user | undo my last action | correct mistakes quickly |
 
 
@@ -428,30 +454,50 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 (For all use cases below, the **System** is the `ManageUp` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use case: Delete an employee**
+**Use case: Add an employee**
 
 **MSS**
 
-1.  User requests to list employees
-2.  ManageUp shows the list of employees
-3.  User requests to delete a specific employee in the list
-4.  ManageUp deletes the employee
+1. User enters an add command with the required employee details.
+2. ManageUp validates the input fields.
+3. ManageUp adds the new employee to the address book.
+4. ManageUp shows a confirmation message.
 
-    Use case ends.
+Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 2a. One or more required fields are missing or invalid.
+
+  * 2a1. ManageUp shows an error message.
 
   Use case ends.
 
-* 3a. The given index is invalid.
+* 2b. The phone number or email address already belongs to another employee.
 
-    * 3a1. ManageUp shows an error message.
+  * 2b1. ManageUp shows an error message.
 
-      Use case resumes at step 2.
+  Use case ends.
 
-### Use case: Assign a task to an employee
+**Use case: Search for employees by department**
+
+**MSS**
+
+1. User enters a command to filter employees by department.
+2. ManageUp processes the request.
+3. ManageUp displays a list of employees belonging to that department.
+
+Use case ends.
+
+**Extensions**
+
+* 1a. No employees belong to the specified department.
+
+  * 1a1. ManageUp displays an empty result message.
+
+  Use case ends.
+
+**Use case: Assign a task to an employee**
 
 **MSS**
 
@@ -477,21 +523,138 @@ Use case ends.
 
   Use case ends.
 
-### Use case: Search for employees by department
+**Use case: Edit an employee**
 
 **MSS**
 
-1. User enters a command to filter employees by department.
-2. ManageUp processes the request.
-3. ManageUp displays a list of employees belonging to that department.
+1. User requests to list employees.
+2. ManageUp shows the list of employees.
+3. User enters an edit command for a specific employee together with one or more updated fields.
+4. ManageUp validates the edited values.
+5. ManageUp updates the employee record.
+6. ManageUp shows a confirmation message.
 
 Use case ends.
 
 **Extensions**
 
-* 1a. No employees belong to the specified department.
+* 3a. The given employee index is invalid.
 
-    * 1a1. ManageUp displays an empty result message.
+  * 3a1. ManageUp shows an error message.
+
+  Use case resumes at step 2.
+
+* 4a. All edited fields are invalid or missing.
+
+  * 4a1. ManageUp shows an error message.
+
+  Use case resumes at step 2.
+
+* 4b. The edited phone number or email address duplicates another employee's value.
+
+  * 4b1. ManageUp shows an error message.
+
+  Use case resumes at step 2.
+
+**Use case: Delete a task**
+
+**MSS**
+
+1. User requests to view employees with their assigned tasks.
+2. ManageUp shows the employee list with tasks.
+3. User enters a delete-task command using a task index.
+4. ManageUp removes the task from the overall in-memory task list.
+5. ManageUp removes the same task from the owning employee's task list.
+6. ManageUp shows a confirmation message.
+
+Use case ends.
+
+**Extensions**
+
+* 3a. The given task index is invalid.
+
+  * 3a1. ManageUp shows an error message.
+
+  Use case resumes at step 2.
+
+**Use case: Delete an employee**
+
+**MSS**
+
+1. User requests to list employees.
+2. ManageUp shows the list of employees.
+3. User enters a delete command using an employee index or unique employee name.
+4. ManageUp deletes the specified employee and any tasks associated with that employee.
+5. ManageUp shows a confirmation message.
+
+Use case ends.
+
+**Extensions**
+
+* 2a. The employee list is empty.
+
+  Use case ends.
+
+* 3a. The given index is invalid.
+
+  * 3a1. ManageUp shows an error message.
+
+  Use case resumes at step 2.
+
+* 3b. No employee matches the given name.
+
+  * 3b1. ManageUp shows an error message.
+
+  Use case resumes at step 2.
+
+* 3c. More than one employee matches the given name.
+
+  * 3c1. ManageUp shows an error message asking the user to use an employee index instead.
+
+  Use case resumes at step 2.
+
+**Use case: Delete multiple employees**
+
+**MSS**
+
+1. User requests to list employees.
+2. ManageUp shows the list of employees.
+3. User enters a delete command with multiple employee indices.
+4. ManageUp validates all requested indices.
+5. ManageUp deletes all specified employees and any tasks associated with them.
+6. ManageUp shows a confirmation message listing the deleted employees.
+
+Use case ends.
+
+**Extensions**
+
+* 3a. One or more indices are duplicated.
+
+  * 3a1. ManageUp shows an error message.
+
+  Use case resumes at step 2.
+
+* 4a. One or more indices are invalid.
+
+  * 4a1. ManageUp shows an error message.
+
+  Use case resumes at step 2.
+
+**Use case: View help window**
+
+**MSS**
+
+1. User enters the `help` command.
+2. ManageUp opens the Help Window.
+3. ManageUp displays supported commands, allowed input formats, and examples.
+
+Use case ends.
+
+**Extensions**
+
+* 2a. The Help Window is already open.
+
+  * 2a1. ManageUp focuses the existing Help Window.
 
   Use case ends.
 
@@ -512,7 +675,7 @@ Use case ends.
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: Employee details that are not meant to be shared with others
+* **Private employee detail**: Employee details that are not meant to be shared with others
 * **Employee**: A staff member stored in the system whose details and tasks are managed by the application.
 * **Task**: A piece of work assigned to an employee that may include a description and deadline.
 * **Department**: A category used to group employees within an organisation.
@@ -535,7 +698,8 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   1. Double-click the jar file.<br>
+      Expected: Shows the GUI with a set of sample employees. The window size may not be optimum.
 
 1. Saving window preferences
 
@@ -544,35 +708,41 @@ testers are expected to do more *exploratory* testing.
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
+### Deleting an employee
 
-### Deleting a person
+1. Deleting an employee while all employees are being shown
 
-1. Deleting a person while all persons are being shown
-
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+   1. Prerequisites: List all employees using the `list` command. Multiple employees in the list.
 
    1. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+      Expected: First employee is deleted from the list. Details of the deleted employee shown in the status message. Timestamp in the status bar is updated.
+
+   1. Test case: `delete Alex Yeoh`<br>
+      Expected: The employee named Alex Yeoh is deleted from the current list. Details of the deleted employee are shown in the status message. Timestamp in the status bar is updated.
 
    1. Test case: `delete 1 3`<br>
-      Expected: Both contacts are deleted from the list in a single command. Details of the deleted contacts shown in the status message. Timestamp in the status bar is updated.
+      Expected: Both employees are deleted from the list in a single command. Details of the deleted employees shown in the status message. Timestamp in the status bar is updated.
 
    1. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+      Expected: No employee is deleted. Error details shown in the status message. Status bar remains the same.
 
    1. Test case: `delete 2 2`<br>
-      Expected: No person is deleted. Error details shown in the status message because duplicate indexes are not allowed.
+      Expected: No employee is deleted. Error details shown in the status message because duplicate indexes are not allowed.
 
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
-
-1. _{ more test cases …​ }_
 
 ### Saving data
 
 1. Dealing with missing/corrupted data files
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+   1. Open the data file at `data/addressbook.json` and edit it manually.
 
-1. _{ more test cases …​ }_
+   1. Invalid JSON example:
+      delete a closing brace from the file and launch the app.<br>
+      Expected: The app starts with an empty address book, and an error is reported in the logs indicating that the
+      data file could not be loaded correctly.
+
+   1. Invalid value example:
+      change a phone number to an invalid value such as `abc` and launch the app.<br>
+      Expected: The app starts with an empty address book, and an error is reported in the logs.
