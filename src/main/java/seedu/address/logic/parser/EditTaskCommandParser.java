@@ -8,6 +8,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TASK_NAME;
 import seedu.address.logic.commands.EditTaskCommand;
 import seedu.address.logic.commands.EditTaskCommand.EditTaskDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.employee.Task;
 
 /**
  * Parses input arguments and creates a new EditTaskCommand object.
@@ -35,8 +36,7 @@ public class EditTaskCommandParser implements Parser<EditTaskCommand> {
         if (argMultimap.getValue(PREFIX_TASK_NAME).isPresent()) {
             String taskName = argMultimap.getValue(PREFIX_TASK_NAME).get().trim();
             if (taskName.isEmpty()) {
-                throw new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditTaskCommand.MESSAGE_USAGE));
+                throw new ParseException(Task.MESSAGE_CONSTRAINTS_TASK_NAME);
             }
             editTaskDescriptor.setTaskName(taskName);
         }
@@ -44,8 +44,7 @@ public class EditTaskCommandParser implements Parser<EditTaskCommand> {
         if (argMultimap.getValue(PREFIX_TASK_DESCRIPTION).isPresent()) {
             String taskDescription = argMultimap.getValue(PREFIX_TASK_DESCRIPTION).get().trim();
             if (taskDescription.isEmpty()) {
-                throw new ParseException(
-                        String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditTaskCommand.MESSAGE_USAGE));
+                throw new ParseException(Task.MESSAGE_CONSTRAINTS_TASK_DESCRIPTION);
             }
             editTaskDescriptor.setTaskDescription(taskDescription);
         }
