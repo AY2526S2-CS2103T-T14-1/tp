@@ -23,8 +23,10 @@ public class DeleteTaskCommand extends Command {
             + "Parameters: INDEX [MORE_INDICES...] (each must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1 3 5";
 
-    public static final String MESSAGE_SUCCESS = "%d task(s) deleted.";
-    public static final String MESSAGE_INVALID_INDEX = "The task index provided is invalid.";
+    public static final String MESSAGE_SUCCESS = "%d task(s) deleted successfully.";
+    public static final String MESSAGE_INVALID_INDEX =
+            "Invalid task index. Please enter task indices that are currently shown in ManageUp.";
+    public static final String MESSAGE_DUPLICATE_INDEX = "Duplicate task indices are not allowed.";
 
     private final List<Integer> indices;
 
@@ -35,7 +37,11 @@ public class DeleteTaskCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        if (!allIndicesExist(model) || hasDuplicateIndices()) {
+        if (hasDuplicateIndices()) {
+            throw new CommandException(MESSAGE_DUPLICATE_INDEX);
+        }
+
+        if (!allIndicesExist(model)) {
             throw new CommandException(MESSAGE_INVALID_INDEX);
         }
 

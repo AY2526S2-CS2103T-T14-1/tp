@@ -102,6 +102,7 @@ public class ModelManager implements Model {
 
     @Override
     public void deletePerson(Employee target) {
+        tasks.deleteTasksForEmployee(target);
         addressBook.removePerson(target);
     }
 
@@ -186,6 +187,12 @@ public class ModelManager implements Model {
     @Override
     public void deleteTask(int taskIndex) {
         addressBook.deleteTask(taskIndex, tasks);
+    }
+
+    @Override
+    public int clearTasksForPerson(Employee employee) {
+        requireNonNull(employee);
+        return addressBook.clearTasksForPerson(employee, tasks);
     }
 
     @Override

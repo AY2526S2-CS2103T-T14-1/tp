@@ -106,6 +106,14 @@ public interface Model {
     void deleteTask(int taskIndex);
 
     /**
+     * Clears all tasks assigned to the specified employee.
+     *
+     * @param employee the employee whose tasks should be cleared
+     * @return the number of tasks removed
+     */
+    int clearTasksForPerson(Employee employee);
+
+    /**
      * Returns the task with the given {@code taskIndex}, or {@code Optional#empty()}
      * if no such task exists
      */

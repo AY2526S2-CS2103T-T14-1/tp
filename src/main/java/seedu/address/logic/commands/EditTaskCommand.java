@@ -31,9 +31,10 @@ public class EditTaskCommand extends Command {
             + PREFIX_TASK_NAME + "Close deal "
             + PREFIX_TASK_DESCRIPTION + "Follow through with clients ";
 
-    public static final String MESSAGE_EDIT_TASK_SUCCESS = "Edited Task: %1$s";
-    public static final String MESSAGE_NOT_EDITED = "At least one task field to edit must be provided.";
-    public static final String MESSAGE_INVALID_INDEX = "The task index provided is invalid.";
+    public static final String MESSAGE_EDIT_TASK_SUCCESS = "Task updated successfully:\n%1$s";
+    public static final String MESSAGE_NOT_EDITED = "Please provide at least one task field to update.";
+    public static final String MESSAGE_INVALID_INDEX =
+            "Invalid task index. Please enter a task index that is currently shown in ManageUp.";
 
     private final int taskIndex;
     private final EditTaskDescriptor editTaskDescriptor;

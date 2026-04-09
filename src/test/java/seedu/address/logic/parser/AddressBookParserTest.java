@@ -9,12 +9,12 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.ClearTasksCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
@@ -46,6 +46,13 @@ public class AddressBookParserTest {
     public void parseCommand_clear() throws Exception {
         assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD) instanceof ClearCommand);
         assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD + " 3") instanceof ClearCommand);
+    }
+
+    @Test
+    public void parseCommand_clearTasks() throws Exception {
+        ClearTasksCommand command = (ClearTasksCommand) parser.parseCommand(
+                ClearTasksCommand.COMMAND_WORD + " n/John Doe");
+        assertEquals(new ClearTasksCommand("John Doe"), command);
     }
 
     @Test
@@ -85,7 +92,7 @@ public class AddressBookParserTest {
     public void parseCommand_show() throws Exception {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
         ShowCommand command = (ShowCommand) parser.parseCommand(
-                ShowCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
+                ShowCommand.COMMAND_WORD + " n/" + String.join(" ", keywords));
         assertEquals(new ShowCommand(new NameContainsKeywordsPredicate(keywords)), command);
     }
 
@@ -104,7 +111,7 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {
         assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE), ()
-            -> parser.parseCommand(""));
+                -> parser.parseCommand(""));
     }
 
     @Test

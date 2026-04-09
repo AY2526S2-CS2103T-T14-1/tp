@@ -29,13 +29,14 @@ public class EditPersonDescriptorBuilder {
     }
 
     /**
-     * Returns an {@code EditPersonDescriptor} with fields containing {@code person}'s details
+     * Returns an {@code EditPersonDescriptor} with fields containing {@code employee}'s details
      */
     public EditPersonDescriptorBuilder(Employee person) {
         descriptor = new EditPersonDescriptor();
         descriptor.setName(person.getName());
         descriptor.setPhone(person.getPhone());
         descriptor.setEmail(person.getEmail());
+        descriptor.setDepartment(person.getDepartment());
         descriptor.setPosition(person.getPosition());
         descriptor.setTags(person.getTags());
     }

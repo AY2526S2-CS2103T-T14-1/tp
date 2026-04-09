@@ -9,22 +9,29 @@ import seedu.address.model.employee.Employee;
 import seedu.address.model.employee.Task;
 
 /**
- * Adds a task to a person's task list in the address book.
+ * Adds a task to an employee's task list in ManageUp.
  */
 public class AddTaskCommand extends Command {
     public static final String COMMAND_WORD = "addtask";
 
-    public static final String MESSAGE_DUPLICATE_TASK = "Task already exists for this user";
+    public static final String MESSAGE_DUPLICATE_TASK =
+            "This employee already has a task with the same description.";
 
     public static final String MESSAGE_USAGE =
             COMMAND_WORD
-                    + ": Adds a task to the task list. "
-                    + "Example:\n"
-                    + COMMAND_WORD + " " + PREFIX_TASK_NAME + "Sales Pitch "
+                    + ": Adds a task to an employee.\n"
+                    + "Parameters: "
+                    + PREFIX_TASK_NAME + "TASK_NAME "
+                    + PREFIX_TASK_DESCRIPTION + "TASK_DESCRIPTION "
+                    + "EMPLOYEE_INDEX\n"
+                    + "Example: " + COMMAND_WORD + " "
+                    + PREFIX_TASK_NAME + "Sales Pitch "
                     + PREFIX_TASK_DESCRIPTION + "Complete pitch deck by 02-02-2026 "
                     + "1";
 
-    public static final String MESSAGE_SUCCESS = "New task added: %1$s";
+    public static final String MESSAGE_SUCCESS = "Task added successfully:\n%1$s";
+    public static final String MESSAGE_EMPLOYEE_NOT_FOUND =
+            "Could not add the task because the employee index is not in the current employee list.";
 
     private final Task task;
     private final int index;
@@ -70,7 +77,7 @@ public class AddTaskCommand extends Command {
 
             return new CommandResult(String.format(MESSAGE_SUCCESS, task));
         } else {
-            return new CommandResult("Person not found in the address book.");
+            return new CommandResult(MESSAGE_EMPLOYEE_NOT_FOUND);
         }
     }
 

@@ -56,6 +56,17 @@ public class TaskListStorage {
         return tasks.remove(task);
     }
 
+    /**
+     * Removes all tasks from the list of stored tasks.
+     *
+     * @return the number of tasks removed
+     */
+    public int clearTasks() {
+        int numberOfTasks = tasks.size();
+        tasks.clear();
+        return numberOfTasks;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {

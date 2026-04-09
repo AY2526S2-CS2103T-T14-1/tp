@@ -18,9 +18,8 @@ class AddTaskCommandParserTest {
 
     @Test
     void parse_allFieldsPresent_success() throws Exception {
-        String userInput = " task/" + VALID_TASK_NAME_1
-                + " desc/" + VALID_TASK_DESCRIPTION_1
-                + " 1";
+        String userInput = "1 task/" + VALID_TASK_NAME_1
+                + " desc/" + VALID_TASK_DESCRIPTION_1;
 
         AddTaskCommand command = parser.parse(userInput);
 

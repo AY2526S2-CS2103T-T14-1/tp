@@ -29,7 +29,7 @@ To support more efficient employee management, ManageUp:
 * Provides a clear overview of employee details through a simple employee list using the `list` command
 * Supports efficient employee management with commands to `add`, `edit`, and `delete` employee records
 * Supports precise filtering of employees using flexible search criteria via the `show` command
-* Enables efficient task tracking and updates with commands such as `addtask` and `deletetask`
+* Enables efficient task tracking and updates with commands such as `addtask`, `deletetask`, and `cleartasks`
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -47,6 +47,7 @@ To support more efficient employee management, ManageUp:
     * [Adding a task to an employee: `addtask`](#adding-a-task-to-an-employee)
     * [Editing a task: `edittask`](#editing-a-task)
     * [Deleting a task: `deletetask`](#deleting-a-task)
+    * [Clearing all tasks for an employee: `cleartasks`](#clearing-all-tasks-for-an-employee)
   * General features
     * [Viewing help: `help`](#viewing-help)
     * [Showing filtered employees: `show`](#showing-filtered-employees)
@@ -89,6 +90,8 @@ To support more efficient employee management, ManageUp:
    * `addtask task/Prepare Report desc/Submit by Friday n/John Doe` : Adds a task to employee `John Doe`.
 
    * `deletetask 1 3` : Deletes the tasks with task indices `1` and `3`.
+
+   * `cleartasks 1` : Deletes all tasks assigned to the 1st employee in the current list.
 
    * `show d/IT` : Shows employees whose department contains `IT`.
 
@@ -213,7 +216,7 @@ Shows employees that match one or more field-based filters.
 **Format:**  
 `show [n/NAME_KEYWORD...] [d/DEPARTMENT_KEYWORD...] [p/PHONE_KEYWORD...] [e/EMAIL_KEYWORD...] [pos/POSITION_KEYWORD...] [t/TAG_KEYWORD...] [task/TASK_KEYWORD...]`
 
-#### How it works
+##### How it works
 
 The `show` command filters the employee list using the prefixes you provide.
 
@@ -228,7 +231,7 @@ A prefix refers to a field of an employee:
 
 You must provide **at least one** filter. If no filter is given, the command is invalid.
 
-#### Matching behaviour
+##### Matching behaviour
 
 `show` uses **case-insensitive substring matching** for all supported fields.
 
@@ -245,7 +248,7 @@ For example:
 - `t/mentor` can match a tag such as `mentor`
 - `task/report` can match a task such as `Prepare report`
 
-#### Different prefixes: AND behaviour
+##### Different prefixes: AND behaviour
 
 When you provide **different prefixes**, they are combined using **AND**.
 
@@ -258,7 +261,7 @@ For example:
 
 So the more different fields you add, the narrower the result becomes.
 
-#### Multiple keywords under the same prefix: OR behaviour
+##### Multiple keywords under the same prefix: OR behaviour
 
 When a single prefix is followed by **multiple keywords**, those keywords are treated as **OR** within that field.
 
@@ -275,7 +278,7 @@ For example:
 - `show n/John Alex d/IT` shows employees whose name contains `John` **or** `Alex`, **and** whose department contains `IT`
 - `show t/mentor fulltime task/report` shows employees who have a tag containing `mentor` **or** `fulltime`, **and** a task containing `report`
 
-#### Order of filters
+##### Order of filters
 
 Filters can be written in **any order**.
 
@@ -283,7 +286,7 @@ For example, the following commands are treated the same:
 - `show n/Alex d/IT`
 - `show d/IT n/Alex`
 
-#### Supported keyword format
+##### Supported keyword format
 
 Each prefix can be followed by **one or more keywords**.
 
@@ -301,7 +304,7 @@ For example:
 - `show task/report` may match `Prepare report`
 - `show t/lead` may match `teamlead`
 
-#### Notes
+##### Notes
 - At least one filter must be provided.
 - Filters are case-insensitive.
 - All matching is based on substring containment.
@@ -310,15 +313,6 @@ For example:
 - Filters can be written in any order.
 
 #### Examples
-
-- `show d/IT`  
-  Shows employees whose department contains `IT`.
-
-- `show n/Alex`  
-  Shows employees whose name contains `Alex`.
-
-- `show n/Al`  
-  Shows employees whose names contain `Al`, such as `Alex`, `Alice`, or `Sally`.
 
 - `show e/gmail`  
   Shows employees whose email contains `gmail`.
@@ -549,6 +543,25 @@ Examples:
 * `deletetask 2 4` deletes the tasks with task indices `2` and `4`.
 * `deletetask 0` is not valid because task indices must start from `1`.
 
+<a id="clearing-all-tasks-for-an-employee"></a>
+### Clearing all tasks for an employee : `cleartasks`
+
+Clears every task assigned to one employee.
+
+Format: `cleartasks INDEX` or `cleartasks n/EMPLOYEE_NAME`
+
+* `INDEX` refers to the employee index shown in the currently displayed employee list.
+* `n/EMPLOYEE_NAME` clears tasks for the uniquely matching employee name in the currently displayed employee list.
+* `cleartasks` removes all tasks from both the employee's personal task list and the overall task list used internally by ManageUp.
+* If the employee index is invalid, no tasks will be cleared.
+* If the provided employee name does not match any displayed employee, the command will fail.
+* If more than one displayed employee has the same name, the command will fail and you should use `cleartasks INDEX` instead.
+
+Examples:
+* `cleartasks 1` clears all tasks assigned to the 1st displayed employee.
+* `cleartasks n/John Doe` clears all tasks assigned to employee `John Doe`.
+* `cleartasks 0` is not valid because employee indices must start from `1`.
+
 <a id="clearing-all-entries"></a>
 ### Clearing all entries : `clear`
 
@@ -612,4 +625,5 @@ _More features coming soon ..._
 | Add tasks to an employee              | **Add Task**    | `addtask task/TASK_NAME desc/TASK_DESCRIPTION n/EMPLOYEE_NAME`<br> e.g., `addtask task/Prepare Slides desc/Send by Friday n/James Ho`                              |
 | Edit a task                           | **Edit Task**   | `edittask TASK_INDEX task/TASK_NAME desc/TASK_DESCRIPTION `<br> e.g., `edittask 6 task/Close deal desc/Finalise by Wednesday `                                     |
 | Delete a task                         | **Delete Task** | `deletetask TASK_INDEX`<br> e.g., `deletetask 1`                                                                                                                   |
+| Clear all tasks for one employee      | **Clear Tasks** | `cleartasks INDEX` or `cleartasks n/EMPLOYEE_NAME`<br> e.g., `cleartasks 1`, `cleartasks n/James Ho`                                                               |
 | Display help message                  | **Help**        | `help`                                                                                                                                                             |

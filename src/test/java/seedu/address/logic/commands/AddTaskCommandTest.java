@@ -65,7 +65,7 @@ class AddTaskCommandTest {
 
         CommandResult result = command.execute(model);
 
-        assertEquals("Person not found in the address book.", result.getFeedbackToUser());
+        assertEquals(AddTaskCommand.MESSAGE_EMPLOYEE_NOT_FOUND, result.getFeedbackToUser());
     }
 
     @Test
@@ -76,7 +76,7 @@ class AddTaskCommandTest {
         AddTaskCommand command = new AddTaskCommand(task, 1);
         CommandResult result = command.execute(model);
 
-        assertEquals("Task already exists for this user", result.getFeedbackToUser());
+        assertEquals(AddTaskCommand.MESSAGE_DUPLICATE_TASK, result.getFeedbackToUser());
     }
 
     @Test
