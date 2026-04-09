@@ -123,6 +123,7 @@
         "adding-a-task-to-an-employee-addtask": "Adding a task to an employee : addtask",
         "editing-a-task-edittask": "Editing a task: edittask",
         "deleting-a-task-deletetask": "Deleting a task : deletetask",
+        "clearing-all-tasks-for-an-employee-cleartasks": "Clearing all tasks for an employee : cleartasks",
         "clearing-all-entries-clear": "Clearing all entries : clear",
         "exiting-the-program-exit": "Exiting the program : exit",
         "saving-the-data": "Saving the data",
