@@ -150,6 +150,13 @@ public class TaskList {
         return originalSize - internalMap.size();
     }
 
+    /**
+     * Finds the task entry with the specified task index.
+     *
+     * @param taskIndex the displayed task index
+     * @return the task entry matching the given index
+     * @throws NoSuchElementException if no task with the given index exists
+     */
     private Entry<Task, Employee> findEntryByTaskIndex(int taskIndex) {
         for (Entry<Task, Employee> entry : internalMap.entrySet()) {
             if (entry.getKey().getCurrentTaskIndex() == taskIndex) {
