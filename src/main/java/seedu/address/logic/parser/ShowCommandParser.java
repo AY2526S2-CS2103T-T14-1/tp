@@ -28,14 +28,14 @@ public class ShowCommandParser implements Parser<ShowCommand> {
      *
      * @throws ParseException if the user input does not conform the expected format
      */
+    @Override
     public ShowCommand parse(String args) throws ParseException {
         assert args != null : "Show command arguments should not be null";
 
         String input = args.trim();
 
         if (input.isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, ShowCommand.MESSAGE_USAGE));
+            throw createInvalidShowCommandException();
         }
 
         Predicate<Employee> predicate = employee -> true;
@@ -44,85 +44,91 @@ public class ShowCommandParser implements Parser<ShowCommand> {
         // Name
         if (input.contains("n/")) {
             String value = extract(input, "n/");
-            if (!value.isEmpty()) {
-                predicate = predicate.and(
-                        new NameContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
-                );
-                hasFilter = true;
+            if (value.isEmpty()) {
+                throw createInvalidShowCommandException();
             }
+            predicate = predicate.and(
+                    new NameContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
+            );
+            hasFilter = true;
         }
 
         // Department
         if (input.contains("d/")) {
             String value = extract(input, "d/");
-            if (!value.isEmpty()) {
-                predicate = predicate.and(
-                        new DepartmentContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
-                );
-                hasFilter = true;
+            if (value.isEmpty()) {
+                throw createInvalidShowCommandException();
             }
+            predicate = predicate.and(
+                    new DepartmentContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
+            );
+            hasFilter = true;
         }
 
         // Phone
         if (input.contains("p/")) {
             String value = extract(input, "p/");
-            if (!value.isEmpty()) {
-                predicate = predicate.and(
-                        new PhoneContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
-                );
-                hasFilter = true;
+            if (value.isEmpty()) {
+                throw createInvalidShowCommandException();
             }
+            predicate = predicate.and(
+                    new PhoneContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
+            );
+            hasFilter = true;
         }
 
         // Position
         if (input.contains("pos/")) {
             String value = extract(input, "pos/");
-            if (!value.isEmpty()) {
-                predicate = predicate.and(
-                        new PositionContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
-                );
-                hasFilter = true;
+            if (value.isEmpty()) {
+                throw createInvalidShowCommandException();
             }
+            predicate = predicate.and(
+                    new PositionContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
+            );
+            hasFilter = true;
         }
 
         // Email
         if (input.contains("e/")) {
             String value = extract(input, "e/");
-            if (!value.isEmpty()) {
-                predicate = predicate.and(
-                        new EmailContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
-                );
-                hasFilter = true;
+            if (value.isEmpty()) {
+                throw createInvalidShowCommandException();
             }
+            predicate = predicate.and(
+                    new EmailContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
+            );
+            hasFilter = true;
         }
 
         // Tag
         if (input.contains("t/")) {
             String value = extract(input, "t/");
-            if (!value.isEmpty()) {
-                predicate = predicate.and(
-                        new TagContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
-                );
-                hasFilter = true;
+            if (value.isEmpty()) {
+                throw createInvalidShowCommandException();
             }
+            predicate = predicate.and(
+                    new TagContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
+            );
+            hasFilter = true;
         }
 
         // Task
         if (input.contains("task/")) {
             String value = extract(input, "task/");
-            if (!value.isEmpty()) {
-                predicate = predicate.and(
-                        new TaskContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
-                );
-                hasFilter = true;
+            if (value.isEmpty()) {
+                throw createInvalidShowCommandException();
             }
+            predicate = predicate.and(
+                    new TaskContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
+            );
+            hasFilter = true;
         }
 
         assert predicate != null : "Predicate should always be initialised";
 
-        // If no valid filters → show nothing
         if (!hasFilter) {
-            predicate = employee -> false;
+            throw createInvalidShowCommandException();
         }
 
         return new ShowCommand(predicate);
@@ -158,5 +164,13 @@ public class ShowCommandParser implements Parser<ShowCommand> {
 
         assert start <= end : "Extraction start index should not exceed end index";
         return input.substring(start, end).trim();
+    }
+
+    /**
+     * Creates the parse exception for invalid show command format.
+     */
+    private ParseException createInvalidShowCommandException() {
+        return new ParseException(
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ShowCommand.MESSAGE_USAGE));
     }
 }
