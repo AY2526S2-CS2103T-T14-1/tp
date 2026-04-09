@@ -7,8 +7,10 @@ import java.util.Objects;
  * A class to represent a Task.
  */
 public class Task {
-    public static final String MESSAGE_CONSTRAINTS_TASK_NAME = "Enter a valid task name.";
-    public static final String MESSAGE_CONSTRAINTS_TASK_DESCRIPTION = "Enter a valid task description.";
+    public static final String MESSAGE_CONSTRAINTS_TASK_NAME = "Task name should not be empty and "
+            + "should be between 1 and 50 characters.";
+    public static final String MESSAGE_CONSTRAINTS_TASK_DESCRIPTION = "Task description should not be empty and "
+            + "should be between 1 and 200 characters.";
 
     private static int taskIndex = 1;
 
@@ -102,8 +104,6 @@ public class Task {
     public static void setTaskIndex(int index) {
         taskIndex = index;
     }
-
-
 
 
 }

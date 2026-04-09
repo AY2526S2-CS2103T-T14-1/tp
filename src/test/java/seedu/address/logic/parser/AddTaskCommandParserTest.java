@@ -41,4 +41,16 @@ class AddTaskCommandParserTest {
         assertThrows(ParseException.class, () -> parser.parse(missingPersonName));
     }
 
+    @Test
+    void parse_invalidTaskName_throwsParseException() {
+        String invalidTaskName = "1 task/" + "A".repeat(51) + " desc/" + VALID_TASK_DESCRIPTION_1;
+        assertThrows(ParseException.class, () -> parser.parse(invalidTaskName));
+    }
+
+    @Test
+    void parse_invalidTaskDescription_throwsParseException() {
+        String invalidTaskDescription = "1 task/" + VALID_TASK_NAME_1 + " desc/" + "A".repeat(201);
+        assertThrows(ParseException.class, () -> parser.parse(invalidTaskDescription));
+    }
+
 }
