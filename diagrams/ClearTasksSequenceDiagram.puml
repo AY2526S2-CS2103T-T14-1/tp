@@ -1,0 +1,88 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":ClearTasksCommandParser" as ClearTasksCommandParser LOGIC_COLOR
+participant "c:ClearTasksCommand" as ClearTasksCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+participant ":AddressBook" as AddressBook MODEL_COLOR
+participant ":TaskList" as TaskList STORAGE_COLOR
+participant ":UniquePersonList" as UniquePersonList MODEL_COLOR
+end box
+
+[-> LogicManager : execute("cleartasks 1")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("cleartasks 1")
+activate AddressBookParser
+
+create ClearTasksCommandParser
+AddressBookParser -> ClearTasksCommandParser
+activate ClearTasksCommandParser
+
+ClearTasksCommandParser --> AddressBookParser
+deactivate ClearTasksCommandParser
+
+AddressBookParser -> ClearTasksCommandParser : parse("1")
+activate ClearTasksCommandParser
+
+create ClearTasksCommand
+ClearTasksCommandParser -> ClearTasksCommand
+activate ClearTasksCommand
+
+ClearTasksCommand --> ClearTasksCommandParser
+deactivate ClearTasksCommand
+
+ClearTasksCommandParser --> AddressBookParser : c
+deactivate ClearTasksCommandParser
+ClearTasksCommandParser -[hidden]-> AddressBookParser
+destroy ClearTasksCommandParser
+
+AddressBookParser --> LogicManager : c
+deactivate AddressBookParser
+
+LogicManager -> ClearTasksCommand : execute(m)
+activate ClearTasksCommand
+
+ClearTasksCommand -> Model : clearTasksForPerson(employee)
+activate Model
+
+Model -> AddressBook : clearTasksForPerson(employee, tasks)
+activate AddressBook
+
+AddressBook -> TaskList : deleteTasksForEmployee(employee)
+activate TaskList
+TaskList --> AddressBook
+deactivate TaskList
+
+AddressBook -> UniquePersonList : clearTasksForPerson(employee)
+activate UniquePersonList
+UniquePersonList --> AddressBook : clearedCount
+deactivate UniquePersonList
+
+AddressBook --> Model : clearedCount
+deactivate AddressBook
+
+Model --> ClearTasksCommand : clearedCount
+deactivate Model
+
+create CommandResult
+ClearTasksCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> ClearTasksCommand
+deactivate CommandResult
+
+ClearTasksCommand --> LogicManager : r
+deactivate ClearTasksCommand
+
+[<-- LogicManager
+deactivate LogicManager
+@enduml
