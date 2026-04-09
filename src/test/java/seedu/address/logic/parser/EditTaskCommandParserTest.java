@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditTaskCommand;
 import seedu.address.logic.commands.EditTaskCommand.EditTaskDescriptor;
+import seedu.address.model.employee.Task;
 import seedu.address.testutil.EditTaskDescriptorBuilder;
 
 public class EditTaskCommandParserTest {
@@ -105,12 +106,14 @@ public class EditTaskCommandParserTest {
 
     @Test
     public void parse_blankTaskName_failure() {
-        assertParseFailure(parser, "1" + INVALID_TASK_NAME, MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, "1" + INVALID_TASK_NAME,
+                           Task.MESSAGE_CONSTRAINTS_TASK_NAME);
     }
 
     @Test
     public void parse_blankTaskDescription_failure() {
-        assertParseFailure(parser, "1" + INVALID_TASK_DESC, MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, "1" + INVALID_TASK_DESC,
+                           Task.MESSAGE_CONSTRAINTS_TASK_DESCRIPTION);
     }
 
     @Test
