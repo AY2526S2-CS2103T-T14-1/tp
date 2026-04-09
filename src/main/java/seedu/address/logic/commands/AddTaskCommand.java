@@ -20,10 +20,11 @@ public class AddTaskCommand extends Command {
     public static final String MESSAGE_USAGE =
             COMMAND_WORD
                     + ": Adds a task to an employee.\n"
-                    + "Parameters: "
+                    + "Parameters: \n"
+                    + "EMPLOYEE_INDEX "
                     + PREFIX_TASK_NAME + "TASK_NAME "
                     + PREFIX_TASK_DESCRIPTION + "TASK_DESCRIPTION "
-                    + "EMPLOYEE_INDEX\n"
+
                     + "Example: " + COMMAND_WORD + " "
                     + "1 "
                     + PREFIX_TASK_NAME + "Sales Pitch "

@@ -530,21 +530,20 @@ For example, entering `delete john doe` fails because multiple displayed employe
 
 Adds a task to a specific employee.
 
-Format: `addtask task/TASK_NAME desc/TASK_DESCRIPTION n/EMPLOYEE_NAME`
+Format: `addtask EMPLOYEE_INDEX task/TASK_NAME desc/TASK_DESCRIPTION`
 
-* `EMPLOYEE_NAME` refers to the name of the employee to whom the task will be added.
-* `EMPLOYEE_NAME` must match an existing employee name exactly as stored in ManageUp and is case-sensitive.
+* `EMPLOYEE_INDEX` refers to the employee index shown in the currently displayed employee list.
 * The task will be added to that employee's personal task list and shown on the employee card.
 * The task will have an index number attached to it, to indicate task number.
 * The format and order of tags should be followed exactly as stated and no field should be left out.
 * `addtask` provides a warning message to the user with the specified format to remind users of the correct format if the command is invalid.
-* `addtask task/Prepare Report n/John Doe` is not valid because the description field is missing.
+* `addtask 1 task/Prepare Report` is not valid because the description field is missing.
 
 Examples:
-* `addtask task/Prepare Report desc/Submit by Friday n/John Doe` 
-   adds a task named `Prepare Report` with description `Submit by Friday` to employee `John Doe`.
-* `addtask task/Client Followup desc/Call client before Monday n/Amy Bee` 
-   adds a task named `Client Followup` with description `Call client before Monday` to employee `Amy Bee`.
+* `addtask 2 task/Prepare Report desc/Submit by Friday` 
+   adds a task named `Prepare Report` with description `Submit by Friday` to employee at index 2.
+* `addtask 2 task/Client Followup desc/Call client before Monday` 
+   adds a task named `Client Followup` with description `Call client before Monday` to employee at index 2.
 
   ![addTask message](images/addtaskmessage.png)
 * `addtask`
