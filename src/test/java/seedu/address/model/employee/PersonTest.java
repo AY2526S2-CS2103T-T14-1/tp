@@ -105,4 +105,10 @@ public class PersonTest {
                 + ", department=" + ALICE.getDepartment() + ", tags=" + ALICE.getTags() + ", Tasks Assigned:=}";
         assertEquals(expected, ALICE.toString());
     }
+
+    @Test
+    public void hashCode_sameValues_equalHashCodes() {
+        Employee aliceCopy = new PersonBuilder(ALICE).build();
+        assertEquals(ALICE.hashCode(), aliceCopy.hashCode());
+    }
 }
