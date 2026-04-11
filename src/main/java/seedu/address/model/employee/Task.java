@@ -8,9 +8,9 @@ import java.util.Objects;
  */
 public class Task {
     public static final String MESSAGE_CONSTRAINTS_TASK_NAME = "Task name should not be empty and "
-            + "should be between 1 and 50 characters.";
+            + "should be between 1 and 40 characters.";
     public static final String MESSAGE_CONSTRAINTS_TASK_DESCRIPTION = "Task description should not be empty and "
-            + "should be between 1 and 200 characters.";
+            + "should be between 1 and 120 characters.";
 
     private static int taskIndex = 1;
 

@@ -749,7 +749,7 @@ Use case ends.
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
 * **Private employee detail**: Employee details that are not meant to be shared with others
 * **Employee**: A staff member stored in the system whose details and tasks are managed by the application.
-* **Task**: A piece of work assigned to an employee that may include a description and deadline.
+* **Task**: A piece of work assigned to an employee, identified by a name and a description.
 * **Department**: A category used to group employees within an organisation.
 --------------------------------------------------------------------------------------------------------------------
 

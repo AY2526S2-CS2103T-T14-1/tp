@@ -32,12 +32,12 @@ public class AddTaskCommandParser implements Parser<AddTaskCommand> {
         try {
             int index = Integer.parseInt(argMultimap.getPreamble().trim());
             String taskName = argMultimap.getValue(PREFIX_TASK_NAME).get();
-            if (taskName.isEmpty() || taskName.length() > 50) {
+            if (taskName.isEmpty() || taskName.length() > 40) {
                 throw new ParseException(Task.MESSAGE_CONSTRAINTS_TASK_NAME);
             }
 
             String taskDescription = argMultimap.getValue(PREFIX_TASK_DESCRIPTION).get().trim();
-            if (taskDescription.isEmpty() || taskDescription.length() > 200) {
+            if (taskDescription.isEmpty() || taskDescription.length() > 120) {
                 throw new ParseException(Task.MESSAGE_CONSTRAINTS_TASK_DESCRIPTION);
             }
             return new AddTaskCommand(new Task(taskName, taskDescription, Task.getOverallIndex()), index);
