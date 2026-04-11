@@ -118,7 +118,9 @@ To support more efficient employee management, ManageUp:
 * Items with `…`​ after them can be used multiple times including zero times.<br>
   e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
 
-* Parameters can be in any order.<br>
+* All commands and parameters are case-sensitive. For example, `add` is a valid command but `ADD` is not. Similarly, `n/NAME` is valid but `N/NAME` is not.
+
+* Parameters can be in any order unless specified.<br>
   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 
 * If you type extra text after commands like `help`, `list`, `exit`, or `clear`, ManageUp will ignore it.<br>
@@ -168,11 +170,6 @@ After entering `help`, ManageUp opens the Help Window shown below.
 
 * The help window is intended as a quick reference. The full User Guide still contains more detailed explanations and examples.
 
-<box type="warning" seamless>
-
-**Warning:** If the Help Window has been minimized earlier, running `help` again will not open a second Help Window.
-You need to restore the minimized Help Window manually.
-</box>
 
 #### Examples
 
@@ -535,6 +532,8 @@ Format: `addtask EMPLOYEE_INDEX task/TASK_NAME desc/TASK_DESCRIPTION`
 * `EMPLOYEE_INDEX` refers to the employee index shown in the currently displayed employee list.
 * The task will be added to that employee's personal task list and shown on the employee card.
 * The task will have an index number attached to it, to indicate task number.
+* A task name between 1 and 40 characters and a task description between 1 and 120 characters must be provided.
+* Only 1 `task/` and 1 `desc/` are allowed in the command. Duplicate prefixes are not allowed.
 * The format and order of `task/` and `desc/` should be followed exactly as stated in the format and no field should be left out.
 * `addtask` provides a warning message to the user with the specified format to remind users of the correct format if the command is invalid.
 * `addtask 1 task/Prepare Report` is not valid because the description field is missing.
@@ -549,6 +548,12 @@ Examples:
 * `addtask`
    shows the warning message with the correct format for `addtask` because the command is invalid.
   ![addTaskHelp message](images/addtaskhelp.png)
+* `addtask 1 task/TASK_NAME_MORE_THAN_40_CHARACTERS desc/Submit by Friday`
+   shows the warning message because the task name exceeds the character limit.
+  ![addTaskNameTooLong message](images/addtasknametoolong.png)
+* `addtask 1 task/Prepare Report desc/TASK_DESCRIPTION_MORE_THAN_120_CHARACTERS`
+   shows the warning message because the task description exceeds the character limit.
+  ![addTaskDescTooLong message](images/addtaskdesctoolong.png)
 
 <a id="editing-a-task"></a>
 ### Editing a task: `edittask`
@@ -700,7 +705,7 @@ _More features coming soon ..._
 | Delete an employee from contacts      | **Delete**      | `delete NAME` or `delete INDEX [MORE_INDEXES]...`<br> e.g., `delete James Ho`, `delete 3`, `delete 1 3 5`                                                          |
 | Edit an employee's details            | **Edit**        | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`                           |
 | List all employees in contacts        | **List**        | `list`                                                                                                                                                             |
-| Show filtered employees from contacts | **Show**        | `show [n/NAME] [d/DEPARTMENT] [p/PHONE] [e/EMAIL] [pos/POSITION] [t/TAG] [task/TASK]...` <br> e.g., `show n/Ja d/Finance pos/Develepor HR Management t/Nightshift` |
+| Show filtered employees from contacts | **Show**        | `show [n/NAME] [d/DEPARTMENT] [p/PHONE] [e/EMAIL] [pos/POSITION] [t/TAG] [task/TASK]...` <br> e.g., `show n/Ja d/Finance pos/Developer HR Management t/Nightshift` |
 | Delete ALL employees from contacts    | **Clear**       | `clear`                                                                                                                                                            |
 | Add tasks to an employee              | **Add Task**    | `addtask EMPLOYEE_INDEX task/TASK_NAME desc/TASK_DESCRIPTION`<br> e.g., `addtask 1 task/Prepare Slides desc/Send by Friday`                                        |
 | Edit a task                           | **Edit Task**   | `edittask TASK_INDEX task/TASK_NAME desc/TASK_DESCRIPTION `<br> e.g., `edittask 6 task/Close deal desc/Finalise by Wednesday `                                     |
