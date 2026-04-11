@@ -35,7 +35,7 @@ public class EditTaskCommandParser implements Parser<EditTaskCommand> {
 
         if (argMultimap.getValue(PREFIX_TASK_NAME).isPresent()) {
             String taskName = argMultimap.getValue(PREFIX_TASK_NAME).get().trim();
-            if (taskName.isEmpty() || taskName.length() > 50) {
+            if (!Task.isValidTaskName(taskName)) {
                 throw new ParseException(Task.MESSAGE_CONSTRAINTS_TASK_NAME);
             }
             editTaskDescriptor.setTaskName(taskName);
@@ -43,7 +43,7 @@ public class EditTaskCommandParser implements Parser<EditTaskCommand> {
 
         if (argMultimap.getValue(PREFIX_TASK_DESCRIPTION).isPresent()) {
             String taskDescription = argMultimap.getValue(PREFIX_TASK_DESCRIPTION).get().trim();
-            if (taskDescription.isEmpty() || taskDescription.length() > 200) {
+            if (!Task.isValidTaskDescription(taskDescription)) {
                 throw new ParseException(Task.MESSAGE_CONSTRAINTS_TASK_DESCRIPTION);
             }
             editTaskDescriptor.setTaskDescription(taskDescription);

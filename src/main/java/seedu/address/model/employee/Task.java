@@ -12,6 +12,9 @@ public class Task {
     public static final String MESSAGE_CONSTRAINTS_TASK_DESCRIPTION = "Task description should not be empty and "
             + "should be between 1 and 120 characters.";
 
+    public static final int MAX_TASK_NAME_LENGTH = 40;
+    public static final int MAX_TASK_DESCRIPTION_LENGTH = 120;
+
     private static int taskIndex = 1;
 
     private String taskName;
@@ -32,12 +35,28 @@ public class Task {
     }
 
 
+    /**
+     * Returns true if a given string is a valid task name.
+     *
+     * @param taskName the task name to validate.
+     * @return true if {@code taskName} is non-null, non-blank, and does not exceed
+     *         {@value MAX_TASK_NAME_LENGTH} characters.
+     */
     public static boolean isValidTaskName(String taskName) {
-        return taskName != null && !taskName.trim().isEmpty();
+        return taskName != null && !taskName.trim().isEmpty()
+                                && taskName.trim().length() <= MAX_TASK_NAME_LENGTH;
     }
 
+    /**
+     * Returns true if a given string is a valid task description.
+     *
+     * @param taskDescription the task description to validate.
+     * @return true if {@code taskDescription} is non-null, non-blank, and does not exceed
+     *         {@value MAX_TASK_DESCRIPTION_LENGTH} characters.
+     */
     public static boolean isValidTaskDescription(String taskDescription) {
-        return taskDescription != null && !taskDescription.trim().isEmpty();
+        return taskDescription != null && !taskDescription.trim().isEmpty()
+                && taskDescription.trim().length() <= MAX_TASK_DESCRIPTION_LENGTH;
     }
 
     /**

@@ -134,13 +134,15 @@ public class EditTaskCommandParserTest {
 
     @Test
     void parse_invalidTaskName_throwsParseException() {
-        String invalidTaskName = "1 task/" + "A".repeat(51) + " desc/" + VALID_TASK_DESCRIPTION_REPORT;
+        String invalidTaskName = "1 task/" + "A".repeat(Task.MAX_TASK_NAME_LENGTH + 1)
+                                 + " desc/" + VALID_TASK_DESCRIPTION_REPORT;
         assertThrows(ParseException.class, () -> parser.parse(invalidTaskName));
     }
 
     @Test
     void parse_invalidTaskDescription_throwsParseException() {
-        String invalidTaskDescription = "1 task/" + VALID_TASK_NAME_PRESENTATION + " desc/" + "A".repeat(201);
+        String invalidTaskDescription = "1 task/" + VALID_TASK_NAME_PRESENTATION + " desc/"
+                                        + "A".repeat(Task.MAX_TASK_DESCRIPTION_LENGTH + 1);
         assertThrows(ParseException.class, () -> parser.parse(invalidTaskDescription));
     }
 

@@ -23,9 +23,11 @@ class TaskTest {
     void isValidTaskName_validAndInvalidCases() {
         assertTrue(Task.isValidTaskName("Task 1"));
         assertTrue(Task.isValidTaskName("Do homework"));
+        assertTrue(Task.isValidTaskName("a".repeat(Task.MAX_TASK_NAME_LENGTH))); //max task name length
         assertFalse(Task.isValidTaskName(null));
         assertFalse(Task.isValidTaskName(""));
         assertFalse(Task.isValidTaskName("   "));
+        assertFalse(Task.isValidTaskName("a".repeat(Task.MAX_TASK_NAME_LENGTH + 1))); //exceeds max length
     }
 
     @Test
