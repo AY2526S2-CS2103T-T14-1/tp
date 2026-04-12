@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,7 +24,8 @@ public class DeleteTaskCommand extends Command {
             + "Parameters: INDEX [MORE_INDICES...] (each must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1 3 5";
 
-    public static final String MESSAGE_SUCCESS = "%d task(s) deleted successfully.";
+    public static final String MESSAGE_DELETE_TASK_SUCCESS = "Deleted Task: %1$s";
+    public static final String MESSAGE_DELETE_TASKS_SUCCESS = "Deleted Tasks:\n%1$s";
     public static final String MESSAGE_INVALID_INDEX =
             "Invalid task index. Please enter task indices that are currently shown in ManageUp.";
     public static final String MESSAGE_DUPLICATE_INDEX = "Duplicate task indices are not allowed.";
@@ -45,10 +47,25 @@ public class DeleteTaskCommand extends Command {
             throw new CommandException(MESSAGE_INVALID_INDEX);
         }
 
+        List<Task> tasksToDelete = new ArrayList<>();
+        for (int index : indices) {
+            tasksToDelete.add(model.getTaskByIndex(index)
+                    .orElseThrow(() -> new CommandException(MESSAGE_INVALID_INDEX)));
+        }
+
         for (int index : indices) {
             model.deleteTask(index);
         }
-        return new CommandResult(String.format(MESSAGE_SUCCESS, indices.size()));
+
+        if (tasksToDelete.size() == 1) {
+            return new CommandResult(String.format(MESSAGE_DELETE_TASK_SUCCESS, tasksToDelete.get(0)));
+        }
+
+        String deletedTasks = tasksToDelete.stream()
+                .map(Task::toString)
+                .reduce((first, second) -> first + "\n" + second)
+                .orElse("");
+        return new CommandResult(String.format(MESSAGE_DELETE_TASKS_SUCCESS, deletedTasks));
     }
 
     @Override

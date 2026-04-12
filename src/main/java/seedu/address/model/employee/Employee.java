@@ -129,7 +129,7 @@ public class Employee {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, position, tags, taskListStorage);
+        return Objects.hash(name, phone, email, department, position, tags, taskListStorage);
     }
 
     @Override
@@ -170,5 +170,14 @@ public class Employee {
      */
     public void deleteTask(Task task) {
         taskListStorage.deleteTask(task);
+    }
+
+    /**
+     * Clears all tasks from the employee's task list.
+     *
+     * @return the number of tasks removed
+     */
+    public int clearTasks() {
+        return taskListStorage.clearTasks();
     }
 }

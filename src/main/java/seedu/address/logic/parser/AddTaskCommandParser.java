@@ -24,19 +24,22 @@ public class AddTaskCommandParser implements Parser<AddTaskCommand> {
     public AddTaskCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_TASK_NAME, PREFIX_TASK_DESCRIPTION);
-        String trimmedArgs = args.trim();
-        String[] tokens = trimmedArgs.split("\\s+");
         if (!arePrefixesPresent(argMultimap, PREFIX_TASK_NAME, PREFIX_TASK_DESCRIPTION)
-                || !argMultimap.getPreamble().isEmpty()) {
+                || argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_TASK_COMMAND_FORMAT, AddTaskCommand.MESSAGE_USAGE));
         }
 
         try {
-            int index = Integer.parseInt(tokens[tokens.length - 1]);
+            int index = Integer.parseInt(argMultimap.getPreamble().trim());
             String taskName = argMultimap.getValue(PREFIX_TASK_NAME).get();
-            String taskDescriptionWithIndex = argMultimap.getValue(PREFIX_TASK_DESCRIPTION).get().trim();
-            String taskDescription = taskDescriptionWithIndex.substring(0,
-                    taskDescriptionWithIndex.lastIndexOf(" ")).trim();
+            if (taskName.isEmpty() || taskName.length() > 40) {
+                throw new ParseException(Task.MESSAGE_CONSTRAINTS_TASK_NAME);
+            }
+
+            String taskDescription = argMultimap.getValue(PREFIX_TASK_DESCRIPTION).get().trim();
+            if (taskDescription.isEmpty() || taskDescription.length() > 120) {
+                throw new ParseException(Task.MESSAGE_CONSTRAINTS_TASK_DESCRIPTION);
+            }
             return new AddTaskCommand(new Task(taskName, taskDescription, Task.getOverallIndex()), index);
         } catch (NumberFormatException e) {
             throw new ParseException(String.format(MESSAGE_INVALID_TASK_COMMAND_FORMAT, AddTaskCommand.MESSAGE_USAGE));

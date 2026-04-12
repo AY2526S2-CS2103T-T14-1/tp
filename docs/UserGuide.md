@@ -29,7 +29,7 @@ To support more efficient employee management, ManageUp:
 * Provides a clear overview of employee details through a simple employee list using the `list` command
 * Supports efficient employee management with commands to `add`, `edit`, and `delete` employee records
 * Supports precise filtering of employees using flexible search criteria via the `show` command
-* Enables efficient task tracking and updates with commands such as `addtask` and `deletetask`
+* Enables efficient task tracking and updates with commands such as `addtask`, `deletetask`, and `cleartasks`
 
 <!-- * Table of Contents -->
 <page-nav-print />
@@ -47,6 +47,7 @@ To support more efficient employee management, ManageUp:
     * [Adding a task to an employee: `addtask`](#adding-a-task-to-an-employee)
     * [Editing a task: `edittask`](#editing-a-task)
     * [Deleting a task: `deletetask`](#deleting-a-task)
+    * [Clearing all tasks for an employee: `cleartasks`](#clearing-all-tasks-for-an-employee)
   * General features
     * [Viewing help: `help`](#viewing-help)
     * [Showing filtered employees: `show`](#showing-filtered-employees)
@@ -86,9 +87,11 @@ To support more efficient employee management, ManageUp:
 
    * `delete 1 3 5` : Deletes the 1st, 3rd, and 5th employees in the currently displayed list.
 
-   * `addtask task/Prepare Report desc/Submit by Friday n/John Doe` : Adds a task to employee `John Doe`.
+   * `addtask 1 task/Prepare Report desc/Submit by Friday` : Adds a task to employee at index 1 in current list.
 
    * `deletetask 1 3` : Deletes the tasks with task indices `1` and `3`.
+
+   * `cleartasks 1` : Deletes all tasks assigned to the 1st employee in the current list.
 
    * `show d/IT` : Shows employees whose department contains `IT`.
 
@@ -115,7 +118,9 @@ To support more efficient employee management, ManageUp:
 * Items with `…`​ after them can be used multiple times including zero times.<br>
   e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
 
-* Parameters can be in any order.<br>
+* All commands and parameters are case-sensitive. For example, `add` is a valid command but `ADD` is not. Similarly, `n/NAME` is valid but `N/NAME` is not.
+
+* Parameters can be in any order unless specified.<br>
   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 
 * If you type extra text after commands like `help`, `list`, `exit`, or `clear`, ManageUp will ignore it.<br>
@@ -165,11 +170,6 @@ After entering `help`, ManageUp opens the Help Window shown below.
 
 * The help window is intended as a quick reference. The full User Guide still contains more detailed explanations and examples.
 
-<box type="warning" seamless>
-
-**Warning:** If the Help Window has been minimized earlier, running `help` again will not open a second Help Window.
-You need to restore the minimized Help Window manually.
-</box>
 
 #### Examples
 
@@ -180,7 +180,7 @@ You need to restore the minimized Help Window manually.
 <a id="adding-an-employee"></a>
 ### Adding an employee: `add`
 
-Adds an employee to the address book.
+Adds a new employee to ManageUp.
 
 Format: `add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...`
 
@@ -189,17 +189,38 @@ Format: `add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...`
 **Tip:** An employee can have any number of tags (including 0).
 </box>
 
-* Phone numbers must contain only digits and be at least 3 digits long.
-* Names, departments, and positions must be non-empty and use only alphanumeric characters and spaces.
-* Emails must be valid email addresses.
-* Phone numbers and email addresses must be unique across employees.
+#### Field constraints
 
-Examples:
+* **Name** – alphanumeric characters and spaces only; must not be blank; maximum 40 characters.
+* **Phone** – digits only; must be 3 to 15 digits long.
+* **Email** – must follow the format `local-part@domain`; maximum 100 characters.
+* **Department** – alphanumeric characters and spaces only; must not be blank; maximum 100 characters.
+* **Position** – alphanumeric characters and spaces only; must not be blank; maximum 100 characters.
+* **Tag** – optional; multiple tags can be added by repeating `t/TAG`.
+
+#### Important notes
+
+* **Phone numbers** must be unique across all employees. Adding a duplicate phone number will fail and show which existing employee owns it.
+* **Email addresses** must be unique across all employees. Adding a duplicate email will fail and show which existing employee owns it.
+* Duplicate prefixes for `n/`, `p/`, `e/`, `d/`, and `pos/` are not allowed.
+* After a successful `add`, the new employee appears at the bottom of the full employee list.
+
+<box type="warning" seamless>
+
+**Warning:** Names, departments, and positions cannot contain special characters (e.g. hyphens, apostrophes).
+For example, `n/John O'Brien` and `n/Mary-Jane` are not valid.
+</box>
+
+#### Examples
+
 * `add n/John Doe p/98765432 e/johnd@example.com d/IT pos/Software Engineer`
 * `add n/Betsy Crowe p/91234567 e/betsycrowe@example.com d/HR pos/Recruiter t/fulltime`
 * `add n/Jacob Smith p/87763456 e/jacob@example.com d/Finance pos/Marketer t/intern t/partTime`
 
-<a id="listing-all-employees"></a>
+After entering a valid `add` command, ManageUp confirms the new employee was added.
+
+![Add employee success](images/AddEmployee_Successful.png)
+
 ### Listing all employees : `list`
 
 Shows a list of all employees in the address book.
@@ -344,26 +365,52 @@ For example:
 - `show t/intern task/report`  
   Shows employees with a tag containing `intern` **and** a task containing `report`.
 
-### Editing an employee : `edit` 
-Edits an existing employee in the address book.
+<a id="editing-an-employee"></a>
+### Editing an employee: `edit`
+
+Edits an existing employee's details in ManageUp.
 
 Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...`
 
-* Edits the employee at the specified `INDEX`.
-* The index refers to the index number shown in the displayed employee list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* Edits the employee at the specified `INDEX` in the **currently displayed** employee list.
 * At least one of the optional fields must be provided.
-* Existing values will be updated to the input values.
-* When editing tags, the existing tags of the employee will be removed; adding of tags is not cumulative.
-* You can remove all the employee's tags by typing `t/` without
-    specifying any tags after it.
-* After a successful edit, ManageUp returns to showing the full employee list.
+* Fields not provided remain unchanged.
+* Existing values are overwritten by the new input values.
+* After a successful edit, ManageUp returns to showing the **full** employee list.
 
-Examples:
-* `edit 1 p/91234567 e/johndoe@example.com` edits the phone number and email of the 1st employee.
-* `edit 2 pos/Team Lead` edits the position of the 2nd employee.
-* `edit 3 n/Betsy Crower t/` edits the name of the 3rd employee and clears all existing tags.
-* `edit 4 d/Finance t/likesCats t/golfs` edits the department of the 4th employee and replaces all existing tags. 
+#### Field constraints
+
+The same constraints as `add` apply:
+* **Name** – alphanumeric characters and spaces only; maximum 40 characters.
+* **Phone** – digits only; 3 to 15 digits.
+* **Email** – valid email format; maximum 100 characters.
+* **Department** – alphanumeric characters and spaces only; maximum 100 characters.
+* **Position** – alphanumeric characters and spaces only; maximum 100 characters.
+
+#### Tag behaviour
+
+* When editing tags, all existing tags are **replaced** by the newly provided ones. Tag editing is not cumulative.
+
+<box type="tip" seamless>
+
+**Tip:** To remove all tags from an employee, use `t/` without any value after it.
+</box>
+
+#### Important notes
+
+* Editing a phone or email to one already owned by another employee will fail, and ManageUp will show which employee already has it.
+* Duplicate prefixes for `n/`, `p/`, `e/`, `d/`, and `pos/` are not allowed.
+
+#### Examples
+
+* `edit 1 p/91234567 e/johndoe@example.com` – edits the phone number and email of the 1st employee.
+* `edit 2 pos/Team Lead` – edits the position of the 2nd employee.
+* `edit 3 n/Betsy Crower t/` – edits the name of the 3rd employee and clears all existing tags.
+* `edit 4 d/Finance t/likesCats t/golfs` – edits the department of the 4th employee and replaces all existing tags.
+
+After entering a valid `edit` command, ManageUp confirms the update and shows the full employee list.
+
+![Edit employee success](images/EditTask_Successful.png)
 
 <a id="deleting-an-employee"></a>
 ### Deleting an employee : `delete`
@@ -480,44 +527,79 @@ For example, entering `delete john doe` fails because multiple displayed employe
 
 Adds a task to a specific employee.
 
-Format: `addtask task/TASK_NAME desc/TASK_DESCRIPTION n/EMPLOYEE_NAME`
+Format: `addtask EMPLOYEE_INDEX task/TASK_NAME desc/TASK_DESCRIPTION`
 
-* `EMPLOYEE_NAME` refers to the name of the employee to whom the task will be added.
-* `EMPLOYEE_NAME` must match an existing employee name exactly as stored in ManageUp and is case-sensitive.
+* `EMPLOYEE_INDEX` refers to the employee index shown in the currently displayed employee list.
 * The task will be added to that employee's personal task list and shown on the employee card.
 * The task will have an index number attached to it, to indicate task number.
-* The format and order of tags should be followed exactly as stated and no field should be left out.
+* A task name between 1 and 40 characters and a task description between 1 and 120 characters must be provided.
+* Only 1 `task/` and 1 `desc/` are allowed in the command. Duplicate prefixes are not allowed.
+* The format and order of `task/` and `desc/` should be followed exactly as stated in the format and no field should be left out.
 * `addtask` provides a warning message to the user with the specified format to remind users of the correct format if the command is invalid.
-* `addtask task/Prepare Report n/John Doe` is not valid because the description field is missing.
+* `addtask 1 task/Prepare Report` is not valid because the description field is missing.
 
 Examples:
-* `addtask task/Prepare Report desc/Submit by Friday n/John Doe` 
-   adds a task named `Prepare Report` with description `Submit by Friday` to employee `John Doe`.
-* `addtask task/Client Followup desc/Call client before Monday n/Amy Bee` 
-   adds a task named `Client Followup` with description `Call client before Monday` to employee `Amy Bee`.
+* `addtask 2 task/Prepare Report desc/Submit by Friday` 
+   adds a task named `Prepare Report` with description `Submit by Friday` to employee at index 2.
+* `addtask 2 task/Client Followup desc/Call client before Monday` 
+   adds a task named `Client Followup` with description `Call client before Monday` to employee at index 2.
 
   ![addTask message](images/addtaskmessage.png)
 * `addtask`
    shows the warning message with the correct format for `addtask` because the command is invalid.
   ![addTaskHelp message](images/addtaskhelp.png)
+* `addtask 1 task/TASK_NAME_MORE_THAN_40_CHARACTERS desc/Submit by Friday`
+   shows the warning message because the task name exceeds the character limit.
+  ![addTaskNameTooLong message](images/addtasknametoolong.png)
+* `addtask 1 task/Prepare Report desc/TASK_DESCRIPTION_MORE_THAN_120_CHARACTERS`
+   shows the warning message because the task description exceeds the character limit.
+  ![addTaskDescTooLong message](images/addtaskdesctoolong.png)
+* `addtask INVLAID_EMPLOYEE_INDEX task/Prepare Report desc/Submit by Friday`
+   shows the warning message because the employee index is invalid.
+  ![addTaskInvalidEmployeeIndex message](images/addtaskinvalidemployeeindex.png)
 
 <a id="editing-a-task"></a>
 ### Editing a task: `edittask`
 
-
 Edits the name and/or description of an existing task identified by its task index.
 
-Format:  `edittask TASK_INDEX [task/TASK_NAME] [desc/TASK_DESCRIPTION]`
+Format: `edittask TASK_INDEX [task/TASK_NAME] [desc/TASK_DESCRIPTION]`
 
-* `TASK_INDEX` refers to the task index shown beside the task on the employee card, for example `#1`.
-* At least one of the optional fields (`task/` or `desc/`) must be provided.
-* Fields not specified will remain unchanged.
-* Duplicate prefixes are not allowed (e.g. multiple `task/`).
+* `TASK_INDEX` refers to the task index shown beside the task on the employee card (e.g. `#1`, `#2`).
+* `TASK_INDEX` **must be a positive integer** that exists in the current task list.
+* At least one of `task/` or `desc/` must be provided.
+* Fields not provided remain unchanged.
+* Providing `task/` or `desc/` with an **empty value** (e.g. `edittask 2 task/`) is not allowed.
+* Duplicate prefixes are not allowed (e.g. two `task/` in one command).
 
-Examples:
-* `edittask 1 task/Prepare Report desc/Submit by Friday` edits both the task name and task description
-* `edittask 2 task/Client Followup` edits only the task name
-* `edittask 3 desc/Submit by Friday` edits only the task description
+#### Important notes
+
+<box type="tip" seamless>
+
+**Tip:** You can find a task's index by looking at the `#` number shown on the employee card in the task list.
+
+</box>
+
+<box type="warning" seamless>
+
+**Warning:** `edittask 2 task/` (prefix provided but no value) will fail with the message
+"Enter a valid task name." Similarly, `edittask 2 desc/` will fail with "Enter a valid task description."
+
+</box>
+
+#### Examples
+
+* `edittask 1 task/Prepare Report desc/Submit by Friday` – edits both the name and description of task `#1`.
+* `edittask 2 task/Client Followup` – edits only the name of task `#2`.
+* `edittask 3 desc/Submit by Friday` – edits only the description of task `#3`.
+
+After entering a valid `edittask` command, ManageUp confirms the update and shows the edited task.
+
+![Edit task success](images/EditTask_Successful.png)
+
+If an invalid task index is provided, ManageUp will show an error.
+
+![Edit task invalid index](images/EditTask_Error_InvalidIndex.png)
 
 <a id="deleting-a-task"></a>
 ### Deleting a task : `deletetask`
@@ -539,8 +621,36 @@ Format: `deletetask INDEX [MORE_INDICES]...`
 
 Examples:
 * `deletetask 1` deletes the task with task index `1`.
+
+![Delete task success](images/DeleteTask.png)
+
 * `deletetask 2 4` deletes the tasks with task indices `2` and `4`.
+
+![Batch delete task success](images/BatchDeleteTask.png)
+
 * `deletetask 0` is not valid because task indices must start from `1`.
+
+<a id="clearing-all-tasks-for-an-employee"></a>
+### Clearing all tasks for an employee : `cleartasks`
+
+Clears every task assigned to one employee.
+
+Format: `cleartasks INDEX` or `cleartasks n/EMPLOYEE_NAME`
+
+* `INDEX` refers to the employee index shown in the currently displayed employee list.
+* `n/EMPLOYEE_NAME` clears tasks for the uniquely matching employee name in the currently displayed employee list.
+* `cleartasks` removes all tasks from both the employee's personal task list and the overall task list used internally by ManageUp.
+* If the employee index is invalid, no tasks will be cleared.
+* If the provided employee name does not match any displayed employee, the command will fail.
+* If more than one displayed employee has the same name, the command will fail and you should use `cleartasks INDEX` instead.
+
+Examples:
+* `cleartasks 1` clears all tasks assigned to the 1st displayed employee.
+* `cleartasks n/John Doe` clears all tasks assigned to employee `John Doe`.
+
+![Clear tasks success](images/ClearTask.png)
+
+* `cleartasks 0` is not valid because employee indices must start from `1`.
 
 <a id="clearing-all-entries"></a>
 ### Clearing all entries : `clear`
@@ -600,9 +710,10 @@ _More features coming soon ..._
 | Delete an employee from contacts      | **Delete**      | `delete NAME` or `delete INDEX [MORE_INDEXES]...`<br> e.g., `delete James Ho`, `delete 3`, `delete 1 3 5`                                                          |
 | Edit an employee's details            | **Edit**        | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...`<br> e.g., `edit 2 n/James Lee e/jameslee@example.com`                           |
 | List all employees in contacts        | **List**        | `list`                                                                                                                                                             |
-| Show filtered employees from contacts | **Show**        | `show [n/NAME] [d/DEPARTMENT] [p/PHONE] [e/EMAIL] [pos/POSITION] [t/TAG] [task/TASK]...` <br> e.g., `show n/Ja d/Finance pos/Develepor HR Management t/Nightshift` |
+| Show filtered employees from contacts | **Show**        | `show [n/NAME] [d/DEPARTMENT] [p/PHONE] [e/EMAIL] [pos/POSITION] [t/TAG] [task/TASK]...` <br> e.g., `show n/Ja d/Finance pos/Developer HR Management t/Nightshift` |
 | Delete ALL employees from contacts    | **Clear**       | `clear`                                                                                                                                                            |
-| Add tasks to an employee              | **Add Task**    | `addtask task/TASK_NAME desc/TASK_DESCRIPTION n/EMPLOYEE_NAME`<br> e.g., `addtask task/Prepare Slides desc/Send by Friday n/James Ho`                              |
+| Add tasks to an employee              | **Add Task**    | `addtask EMPLOYEE_INDEX task/TASK_NAME desc/TASK_DESCRIPTION`<br> e.g., `addtask 1 task/Prepare Slides desc/Send by Friday`                                        |
 | Edit a task                           | **Edit Task**   | `edittask TASK_INDEX task/TASK_NAME desc/TASK_DESCRIPTION `<br> e.g., `edittask 6 task/Close deal desc/Finalise by Wednesday `                                     |
-| Delete a task                         | **Delete Task** | `deletetask TASK_INDEX [MORE_TASK_INDEXES]...`<br> e.g., `deletetask 1`, `deletetask 1 3`                                                                         |
+| Delete a task                         | **Delete Task** | `deletetask TASK_INDEX`<br> e.g., `deletetask 1`                                                                                                                   |
+| Clear all tasks for one employee      | **Clear Tasks** | `cleartasks INDEX` or `cleartasks n/EMPLOYEE_NAME`<br> e.g., `cleartasks 1`, `cleartasks n/James Ho`                                                               |
 | Display help message                  | **Help**        | `help`                                                                                                                                                             |

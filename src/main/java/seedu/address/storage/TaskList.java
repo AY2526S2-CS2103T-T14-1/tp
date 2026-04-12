@@ -139,6 +139,25 @@ public class TaskList {
     }
 
     /**
+     * Updates all tasks from {@code oldEmployee} to {@code newEmployee}.
+     *
+     * @param oldEmployee the employee to be replaced
+     * @param newEmployee the employee to be added
+     */
+    public void updateEmployee(Employee oldEmployee, Employee newEmployee) {
+        requireNonNull(oldEmployee);
+        requireNonNull(newEmployee);
+
+        Map<Task, Employee> updates = new HashMap<>();
+        for (Entry<Task, Employee> entry : internalMap.entrySet()) {
+            if (oldEmployee.isSameEmployee(entry.getValue())) {
+                updates.put(entry.getKey(), newEmployee);
+            }
+        }
+        internalMap.putAll(updates);
+    }
+
+    /**
      * Deletes all tasks assigned to the specified employee from the overall task list.
      *
      * @param employee the employee whose tasks should be removed

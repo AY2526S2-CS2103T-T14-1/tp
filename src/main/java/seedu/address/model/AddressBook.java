@@ -114,6 +114,22 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons.deleteTaskFromPerson(assignedPerson, deletedTask);
     }
 
+    /**
+     * Clears all tasks belonging to the specified employee from both the overall task list
+     * and the employee's individual task list.
+     *
+     * @param employee the employee whose tasks should be cleared
+     * @param tasks the overall task list
+     * @return the number of tasks removed
+     */
+    public int clearTasksForPerson(Employee employee, TaskList tasks) {
+        requireNonNull(employee);
+        requireNonNull(tasks);
+
+        tasks.deleteTasksForEmployee(employee);
+        return persons.clearTasksForPerson(employee);
+    }
+
 
 
 

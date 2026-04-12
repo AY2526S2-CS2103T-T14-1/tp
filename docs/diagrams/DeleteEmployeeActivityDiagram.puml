@@ -1,0 +1,82 @@
+@startuml
+skin rose
+skinparam ActivityFontSize 15
+skinparam ArrowFontSize 12
+
+start
+:User enters `delete ...`;
+:DeleteCommandParser trims input;
+
+if () then ([input empty])
+  :Throw parse error using\n`DeleteCommand.MESSAGE_USAGE`;
+  stop
+else ([input present])
+endif
+
+:Split input into tokens;
+
+if () then ([multiple tokens])
+  if () then ([all tokens are positive integers])
+    :Parse all indices;
+    if () then ([duplicate indices found])
+      :Throw parse error for duplicate indices;
+      stop
+    else ([all indices unique])
+      :Create batch `DeleteCommand`;
+      :Validate every index against\nfiltered employee list;
+      if () then ([any index invalid])
+        :Throw command error for invalid index;
+        stop
+      else ([all indices valid])
+        :Delete employees in descending index order;
+        :Remove each deleted employee's tasks\nfrom overall task list;
+        stop
+      endif
+    endif
+  else ([contains non-index token])
+    :Treat full input as employee name;
+    :Validate employee name format;
+    if () then ([name invalid])
+      :Throw parse error for invalid name;
+      stop
+    else ([name valid])
+    endif
+  endif
+else ([single token])
+  if () then ([token is a positive integer])
+    :Create single-index `DeleteCommand`;
+    :Validate index against\nfiltered employee list;
+    if () then ([index invalid])
+      :Throw command error for invalid index;
+      stop
+    else ([index valid])
+      :Delete employee;
+      :Remove deleted employee's tasks\nfrom overall task list;
+      stop
+    endif
+  else ([token is not an index])
+    :Treat full input as employee name;
+    :Validate employee name format;
+    if () then ([name invalid])
+      :Throw parse error for invalid name;
+      stop
+    else ([name valid])
+    endif
+  endif
+endif
+
+:Find employees with matching normalized name;
+if () then ([no matches])
+  :Throw command error for employee not found;
+  stop
+else ([at least one match])
+  if () then ([multiple matches])
+    :Throw command error for duplicate employee name;
+    stop
+  else ([exactly one match])
+    :Delete employee;
+    :Remove deleted employee's tasks\nfrom overall task list;
+    stop
+  endif
+endif
+@enduml

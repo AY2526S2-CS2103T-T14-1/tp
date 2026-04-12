@@ -214,5 +214,27 @@ public class UniquePersonList implements Iterable<Employee> {
         setPerson(personToEdit, editedPerson);
     }
 
+    /**
+     * Clears all tasks from the specified employee in the list.
+     *
+     * @param employee the employee whose tasks should be cleared
+     * @return the number of tasks removed
+     * @throws PersonNotFoundException if {@code employee} does not exist in the list.
+     */
+    public int clearTasksForPerson(Employee employee) {
+        requireNonNull(employee);
+        int index = internalList.indexOf(employee);
+        if (index == -1) {
+            throw new PersonNotFoundException();
+        }
+        Employee personToEdit = internalList.get(index);
+        Employee editedPerson = new Employee(personToEdit.getName(), personToEdit.getPhone(),
+                personToEdit.getEmail(), personToEdit.getDepartment(), personToEdit.getPosition(),
+                personToEdit.getTags(), personToEdit.getTaskListStorage());
+        int numberOfTasksRemoved = editedPerson.clearTasks();
+        setPerson(personToEdit, editedPerson);
+        return numberOfTasksRemoved;
+    }
+
 
 }

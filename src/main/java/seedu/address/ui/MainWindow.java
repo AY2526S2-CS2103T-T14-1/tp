@@ -65,7 +65,8 @@ public class MainWindow extends UiPart<Stage> {
 
         setAccelerators();
 
-        helpWindow = new HelpWindow();
+        helpWindow = new HelpWindow(new Stage());
+        helpWindow.getRoot().initOwner(primaryStage);
     }
 
     public Stage getPrimaryStage() {
@@ -141,6 +142,8 @@ public class MainWindow extends UiPart<Stage> {
     @FXML
     public void handleHelp() {
         if (!helpWindow.isShowing()) {
+            HelpWindowLogic.prepareWindowForShow(helpWindow.getRoot()::setFullScreen,
+                    helpWindow.getRoot()::setMaximized);
             helpWindow.show();
         } else {
             helpWindow.focus();

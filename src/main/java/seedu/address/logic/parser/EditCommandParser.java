@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -41,7 +42,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE), pe);
+            throw resolveIndexParseException(argMultimap.getPreamble(), pe);
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
@@ -87,6 +88,20 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
         Collection<String> tagSet = tags.size() == 1 && tags.contains("") ? Collections.emptySet() : tags;
         return Optional.of(ParserUtil.parseTags(tagSet));
+    }
+
+    /**
+     * Returns the appropriate {@code ParseException} based on whether the preamble
+     * was a recognisable integer (but invalid) or not a number at all.
+     */
+    private ParseException resolveIndexParseException(String preamble, ParseException cause) {
+        try {
+            Integer.parseInt(preamble.trim());
+            return new ParseException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, cause);
+        } catch (NumberFormatException nfe) {
+            return new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE), cause);
+        }
     }
 
 }

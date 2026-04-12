@@ -56,6 +56,8 @@ public class EmployeeCard extends UiPart<Region> {
         this.person = employee;
         id.setText(displayedIndex + ". ");
         name.setText(employee.getName().fullName);
+        name.setWrapText(true);
+        name.setMaxWidth(800);
         phone.setText(formatPhone(employee.getPhone().value));
         email.setText(formatEmail(employee.getEmail().value));
         department.setText(formatDepartment(employee.getDepartment().value));

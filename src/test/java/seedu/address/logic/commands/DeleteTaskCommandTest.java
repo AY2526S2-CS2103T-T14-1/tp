@@ -60,7 +60,8 @@ class DeleteTaskCommandTest {
 
         CommandResult result = command.execute(model);
 
-        assertEquals(String.format(DeleteTaskCommand.MESSAGE_SUCCESS, 1), result.getFeedbackToUser());
+        assertEquals(String.format(DeleteTaskCommand.MESSAGE_DELETE_TASK_SUCCESS, firstTask),
+                result.getFeedbackToUser());
         Employee updatedEmployee = model.getAddressBook().getPersonList().get(0);
         assertEquals(1, updatedEmployee.getTaskListStorage().getTasks().size());
     }
@@ -71,7 +72,8 @@ class DeleteTaskCommandTest {
 
         CommandResult result = command.execute(model);
 
-        assertEquals(String.format(DeleteTaskCommand.MESSAGE_SUCCESS, 2), result.getFeedbackToUser());
+        assertEquals(String.format(DeleteTaskCommand.MESSAGE_DELETE_TASKS_SUCCESS,
+                firstTask + "\n" + secondTask), result.getFeedbackToUser());
         Employee updatedEmployee = model.getAddressBook().getPersonList().get(0);
         assertTrue(updatedEmployee.getTaskListStorage().getTasks().isEmpty());
     }

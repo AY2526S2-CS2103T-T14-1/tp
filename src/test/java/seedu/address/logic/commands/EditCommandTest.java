@@ -1,5 +1,6 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,13 +21,16 @@ import org.junit.jupiter.api.Test;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.employee.Employee;
+import seedu.address.model.employee.Task;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
+
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for EditCommand.
@@ -207,6 +211,30 @@ public class EditCommandTest {
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_editEmployeeWithTasks_taskListStaysInSync() throws CommandException {
+        Employee employee = new PersonBuilder().build();
+        AddressBook freshAddressBook = new AddressBook();
+        freshAddressBook.addPerson(employee);
+        Model freshModel = new ModelManager(freshAddressBook, new UserPrefs());
+
+        int taskIndex = Task.getOverallIndex();
+        Task originalTask = new Task("Original task", "Some description", taskIndex);
+        Employee employeeInModel = freshModel.getFilteredPersonList().get(0);
+        freshModel.addTaskToPerson(employeeInModel, originalTask);
+        freshModel.addTaskOverall(originalTask, employeeInModel);
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withName(VALID_NAME_BOB)
+                .withPhone(VALID_PHONE_BOB)
+                .build();
+        new EditCommand(INDEX_FIRST_PERSON, descriptor).execute(freshModel);
+
+        Task updatedTask = new Task("Updated task", "New description", taskIndex);
+        assertDoesNotThrow(() -> freshModel.setTask(taskIndex, updatedTask));
+        assertEquals(updatedTask, freshModel.getTaskByIndex(taskIndex).orElseThrow());
     }
 
     @Test

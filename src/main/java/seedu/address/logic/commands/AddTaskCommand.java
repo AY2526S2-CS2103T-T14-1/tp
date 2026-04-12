@@ -15,23 +15,24 @@ public class AddTaskCommand extends Command {
     public static final String COMMAND_WORD = "addtask";
 
     public static final String MESSAGE_DUPLICATE_TASK =
-            "This employee already has a task with the same description.";
+            "This employee already has a task with the same name and same description.";
 
     public static final String MESSAGE_USAGE =
             COMMAND_WORD
                     + ": Adds a task to an employee.\n"
-                    + "Parameters: "
+                    + "Parameters: \n"
+                    + "EMPLOYEE_INDEX "
                     + PREFIX_TASK_NAME + "TASK_NAME "
                     + PREFIX_TASK_DESCRIPTION + "TASK_DESCRIPTION "
-                    + "EMPLOYEE_INDEX\n"
+
                     + "Example: " + COMMAND_WORD + " "
+                    + "1 "
                     + PREFIX_TASK_NAME + "Sales Pitch "
-                    + PREFIX_TASK_DESCRIPTION + "Complete pitch deck by 02-02-2026 "
-                    + "1";
+                    + PREFIX_TASK_DESCRIPTION + "Complete pitch deck by 02-02-2026";
 
     public static final String MESSAGE_SUCCESS = "Task added successfully:\n%1$s";
     public static final String MESSAGE_EMPLOYEE_NOT_FOUND =
-            "Could not add the task because the employee index is not in the current employee list.";
+            "Invalid employee index. Please enter an index shown in the current employee list.";
 
     private final Task task;
     private final int index;

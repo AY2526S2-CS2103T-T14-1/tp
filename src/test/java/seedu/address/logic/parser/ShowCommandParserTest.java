@@ -26,6 +26,20 @@ public class ShowCommandParserTest {
 
     private static final String INVALID_SHOW_COMMAND_MESSAGE =
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, ShowCommand.MESSAGE_USAGE);
+    private static final String EMPTY_NAME_FIELD_MESSAGE =
+            "Name field should not be empty.\n" + ShowCommand.MESSAGE_USAGE;
+    private static final String EMPTY_DEPARTMENT_FIELD_MESSAGE =
+            "Department field should not be empty.\n" + ShowCommand.MESSAGE_USAGE;
+    private static final String EMPTY_PHONE_FIELD_MESSAGE =
+            "Phone field should not be empty.\n" + ShowCommand.MESSAGE_USAGE;
+    private static final String EMPTY_EMAIL_FIELD_MESSAGE =
+            "Email field should not be empty.\n" + ShowCommand.MESSAGE_USAGE;
+    private static final String EMPTY_POSITION_FIELD_MESSAGE =
+            "Position field should not be empty.\n" + ShowCommand.MESSAGE_USAGE;
+    private static final String EMPTY_TAG_FIELD_MESSAGE =
+            "Tag field should not be empty.\n" + ShowCommand.MESSAGE_USAGE;
+    private static final String EMPTY_TASK_FIELD_MESSAGE =
+            "Task field should not be empty.\n" + ShowCommand.MESSAGE_USAGE;
 
     private final ShowCommandParser parser = new ShowCommandParser();
 
@@ -41,77 +55,77 @@ public class ShowCommandParserTest {
 
     @Test
     public void parse_blankPrefixOnly_failure() {
-        assertParseFailure(parser, "t/", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "t/", EMPTY_TAG_FIELD_MESSAGE);
     }
 
     @Test
     public void parse_blankNamePrefix_failure() {
-        assertParseFailure(parser, "n/", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "n/", EMPTY_NAME_FIELD_MESSAGE);
     }
 
     @Test
     public void parse_blankDepartmentPrefix_failure() {
-        assertParseFailure(parser, "d/", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "d/", EMPTY_DEPARTMENT_FIELD_MESSAGE);
     }
 
     @Test
     public void parse_blankPhonePrefix_failure() {
-        assertParseFailure(parser, "p/", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "p/", EMPTY_PHONE_FIELD_MESSAGE);
     }
 
     @Test
     public void parse_blankEmailPrefix_failure() {
-        assertParseFailure(parser, "e/", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "e/", EMPTY_EMAIL_FIELD_MESSAGE);
     }
 
     @Test
     public void parse_blankPositionPrefix_failure() {
-        assertParseFailure(parser, "pos/", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "pos/", EMPTY_POSITION_FIELD_MESSAGE);
     }
 
     @Test
     public void parse_blankTagPrefix_failure() {
-        assertParseFailure(parser, "t/", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "t/", EMPTY_TAG_FIELD_MESSAGE);
     }
 
     @Test
     public void parse_blankTaskPrefix_failure() {
-        assertParseFailure(parser, "task/", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "task/", EMPTY_TASK_FIELD_MESSAGE);
     }
 
     @Test
     public void parse_blankTagWithOtherValidPrefix_failure() {
-        assertParseFailure(parser, "t/ n/Alex", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "t/ n/Alex", EMPTY_TAG_FIELD_MESSAGE);
     }
 
     @Test
     public void parse_blankTaskWithOtherValidPrefix_failure() {
-        assertParseFailure(parser, "task/ d/IT", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "task/ d/IT", EMPTY_TASK_FIELD_MESSAGE);
     }
 
     @Test
     public void parse_blankNameWithOtherValidPrefix_failure() {
-        assertParseFailure(parser, "n/ d/Finance", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "n/ d/Finance", EMPTY_NAME_FIELD_MESSAGE);
     }
 
     @Test
     public void parse_blankDepartmentWithOtherValidPrefix_failure() {
-        assertParseFailure(parser, "d/ n/Alex", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "d/ n/Alex", EMPTY_DEPARTMENT_FIELD_MESSAGE);
     }
 
     @Test
     public void parse_blankEmailWithOtherValidPrefix_failure() {
-        assertParseFailure(parser, "e/ n/Alex", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "e/ n/Alex", EMPTY_EMAIL_FIELD_MESSAGE);
     }
 
     @Test
     public void parse_blankPhoneWithOtherValidPrefix_failure() {
-        assertParseFailure(parser, "p/ d/IT", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "p/ d/IT", EMPTY_PHONE_FIELD_MESSAGE);
     }
 
     @Test
     public void parse_blankPositionWithOtherValidPrefix_failure() {
-        assertParseFailure(parser, "pos/ t/friend", INVALID_SHOW_COMMAND_MESSAGE);
+        assertParseFailure(parser, "pos/ t/friend", EMPTY_POSITION_FIELD_MESSAGE);
     }
 
     @Test
@@ -429,4 +443,25 @@ public class ShowCommandParserTest {
         String result = (String) method.invoke(parser, "d/Finance task/report review", "task/");
         assertEquals("report review", result);
     }
+
+    @Test
+    public void parse_emptyNameField_failure() {
+        assertParseFailure(parser, "n/", EMPTY_NAME_FIELD_MESSAGE);
+    }
+
+    @Test
+    public void parse_emptyDepartmentField_failure() {
+        assertParseFailure(parser, "d/", EMPTY_DEPARTMENT_FIELD_MESSAGE);
+    }
+
+    @Test
+    public void parse_emptyTaskField_failure() {
+        assertParseFailure(parser, "task/", EMPTY_TASK_FIELD_MESSAGE);
+    }
+
+    @Test
+    public void parse_emptyNameFieldWithOtherPrefix_failure() {
+        assertParseFailure(parser, "n/ d/Finance", EMPTY_NAME_FIELD_MESSAGE);
+    }
+
 }

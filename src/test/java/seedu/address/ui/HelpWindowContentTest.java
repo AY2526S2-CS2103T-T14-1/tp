@@ -18,7 +18,7 @@ public class HelpWindowContentTest {
     public void getHelpSections_returnsExpectedCommandSections() {
         List<HelpSection> helpSections = HelpWindowContent.getHelpSections();
 
-        assertEquals(11, helpSections.size());
+        assertEquals(12, helpSections.size());
         assertEquals("help", helpSections.get(0).commandWord());
         assertEquals("Shows this in-app help window.", helpSections.get(0).description());
         assertEquals("No additional parameters.", helpSections.get(0).allowedInput());
@@ -45,6 +45,12 @@ public class HelpWindowContentTest {
         assertIterableEquals(List.of("deletetask 1", "deletetask 1 3 5"),
                 helpSections.get(8).examples());
 
+        assertEquals("cleartasks", helpSections.get(9).commandWord());
+        assertEquals("Clears all tasks assigned to one employee.", helpSections.get(9).description());
+        assertEquals("INDEX or n/NAME", helpSections.get(9).allowedInput());
+        assertIterableEquals(List.of("cleartasks 1", "cleartasks n/John Doe"),
+                helpSections.get(9).examples());
+
         assertEquals("exit", helpSections.get(helpSections.size() - 1).commandWord());
         assertEquals("No additional parameters.", helpSections.get(helpSections.size() - 1).allowedInput());
     }
@@ -53,7 +59,7 @@ public class HelpWindowContentTest {
     public void getDisplaySections_returnsFormattedDisplaySections() {
         List<HelpSectionDisplay> displaySections = HelpWindowContent.getDisplaySections();
 
-        assertEquals(11, displaySections.size());
+        assertEquals(12, displaySections.size());
         assertIterableEquals(List.of(
                 new DisplayLine("help", "help-command-title"),
                 new DisplayLine("Shows this in-app help window.", "help-command-description"),
@@ -77,6 +83,11 @@ public class HelpWindowContentTest {
                 new DisplayLine("Example: deletetask 1", "help-command-example"),
                 new DisplayLine("Example: deletetask 1 3 5", "help-command-example")),
                 displaySections.get(8).exampleLines());
+
+        assertIterableEquals(List.of(
+                new DisplayLine("Example: cleartasks 1", "help-command-example"),
+                new DisplayLine("Example: cleartasks n/John Doe", "help-command-example")),
+                displaySections.get(9).exampleLines());
     }
 
     @Test
@@ -103,6 +114,8 @@ public class HelpWindowContentTest {
         assertTrue(formattedHelpText.contains("edittask"));
         assertTrue(formattedHelpText.contains("Example: edittask 1 task/Close deal"));
         assertTrue(formattedHelpText.contains("Example: deletetask 1 3 5"));
+        assertTrue(formattedHelpText.contains("cleartasks"));
+        assertTrue(formattedHelpText.contains("Example: cleartasks 1"));
         assertTrue(formattedHelpText.contains("exit"));
     }
 }

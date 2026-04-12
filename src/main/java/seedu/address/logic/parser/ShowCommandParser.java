@@ -45,7 +45,7 @@ public class ShowCommandParser implements Parser<ShowCommand> {
         if (input.contains("n/")) {
             String value = extract(input, "n/");
             if (value.isEmpty()) {
-                throw createInvalidShowCommandException();
+                throw createEmptyFieldException("Name");
             }
             predicate = predicate.and(
                     new NameContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
@@ -57,7 +57,7 @@ public class ShowCommandParser implements Parser<ShowCommand> {
         if (input.contains("d/")) {
             String value = extract(input, "d/");
             if (value.isEmpty()) {
-                throw createInvalidShowCommandException();
+                throw createEmptyFieldException("Department");
             }
             predicate = predicate.and(
                     new DepartmentContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
@@ -69,7 +69,7 @@ public class ShowCommandParser implements Parser<ShowCommand> {
         if (input.contains("p/")) {
             String value = extract(input, "p/");
             if (value.isEmpty()) {
-                throw createInvalidShowCommandException();
+                throw createEmptyFieldException("Phone");
             }
             predicate = predicate.and(
                     new PhoneContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
@@ -81,7 +81,7 @@ public class ShowCommandParser implements Parser<ShowCommand> {
         if (input.contains("pos/")) {
             String value = extract(input, "pos/");
             if (value.isEmpty()) {
-                throw createInvalidShowCommandException();
+                throw createEmptyFieldException("Position");
             }
             predicate = predicate.and(
                     new PositionContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
@@ -93,7 +93,7 @@ public class ShowCommandParser implements Parser<ShowCommand> {
         if (input.contains("e/")) {
             String value = extract(input, "e/");
             if (value.isEmpty()) {
-                throw createInvalidShowCommandException();
+                throw createEmptyFieldException("Email");
             }
             predicate = predicate.and(
                     new EmailContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
@@ -105,7 +105,7 @@ public class ShowCommandParser implements Parser<ShowCommand> {
         if (input.contains("t/")) {
             String value = extract(input, "t/");
             if (value.isEmpty()) {
-                throw createInvalidShowCommandException();
+                throw createEmptyFieldException("Tag");
             }
             predicate = predicate.and(
                     new TagContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
@@ -117,7 +117,7 @@ public class ShowCommandParser implements Parser<ShowCommand> {
         if (input.contains("task/")) {
             String value = extract(input, "task/");
             if (value.isEmpty()) {
-                throw createInvalidShowCommandException();
+                throw createEmptyFieldException("Task");
             }
             predicate = predicate.and(
                     new TaskContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
@@ -172,5 +172,13 @@ public class ShowCommandParser implements Parser<ShowCommand> {
     private ParseException createInvalidShowCommandException() {
         return new ParseException(
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, ShowCommand.MESSAGE_USAGE));
+    }
+
+    /**
+     * Creates the parse exception for an empty field value.
+     */
+    private ParseException createEmptyFieldException(String fieldName) {
+        return new ParseException(fieldName + " field should not be empty.\n"
+                + ShowCommand.MESSAGE_USAGE);
     }
 }

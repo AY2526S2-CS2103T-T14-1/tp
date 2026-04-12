@@ -18,9 +18,8 @@ class AddTaskCommandParserTest {
 
     @Test
     void parse_allFieldsPresent_success() throws Exception {
-        String userInput = " task/" + VALID_TASK_NAME_1
-                + " desc/" + VALID_TASK_DESCRIPTION_1
-                + " 1";
+        String userInput = "1 task/" + VALID_TASK_NAME_1
+                + " desc/" + VALID_TASK_DESCRIPTION_1;
 
         AddTaskCommand command = parser.parse(userInput);
 
@@ -40,6 +39,36 @@ class AddTaskCommandParserTest {
 
         String missingPersonName = " task/" + VALID_TASK_NAME_1 + " desc/" + VALID_TASK_DESCRIPTION_1;
         assertThrows(ParseException.class, () -> parser.parse(missingPersonName));
+    }
+
+    @Test
+    void parse_invalidTaskName_throwsParseException() {
+        String invalidTaskName = "1 task/" + "A".repeat(51) + " desc/" + VALID_TASK_DESCRIPTION_1;
+        assertThrows(ParseException.class, () -> parser.parse(invalidTaskName));
+    }
+
+    @Test
+    void parse_invalidTaskDescription_throwsParseException() {
+        String invalidTaskDescription = "1 task/" + VALID_TASK_NAME_1 + " desc/" + "A".repeat(201);
+        assertThrows(ParseException.class, () -> parser.parse(invalidTaskDescription));
+    }
+
+    @Test
+    void parse_emptyTaskName_throwsParseException() {
+        String emptyTaskName = "1 task/ desc/" + VALID_TASK_DESCRIPTION_1;
+        assertThrows(ParseException.class, () -> parser.parse(emptyTaskName));
+
+        String whitespaceTaskName = "1 task/    desc/" + VALID_TASK_DESCRIPTION_1;
+        assertThrows(ParseException.class, () -> parser.parse(whitespaceTaskName));
+    }
+
+    @Test
+    void parse_emptyTaskDescription_throwsParseException() {
+        String emptyTaskDescription = "1 task/" + VALID_TASK_NAME_1 + " desc/";
+        assertThrows(ParseException.class, () -> parser.parse(emptyTaskDescription));
+
+        String whitespaceTaskDescription = "1 task/" + VALID_TASK_NAME_1 + " desc/    ";
+        assertThrows(ParseException.class, () -> parser.parse(whitespaceTaskDescription));
     }
 
 }

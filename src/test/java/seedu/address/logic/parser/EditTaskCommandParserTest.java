@@ -1,5 +1,6 @@
 package seedu.address.logic.parser;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TASK_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_TASK_NAME;
@@ -21,6 +22,8 @@ import org.junit.jupiter.api.Test;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditTaskCommand;
 import seedu.address.logic.commands.EditTaskCommand.EditTaskDescriptor;
+import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.employee.Task;
 import seedu.address.testutil.EditTaskDescriptorBuilder;
 
 public class EditTaskCommandParserTest {
@@ -80,12 +83,14 @@ public class EditTaskCommandParserTest {
 
     @Test
     public void parse_zeroIndex_failure() {
-        assertParseFailure(parser, "0" + TASK_NAME_PRESENTATION, MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, "0" + TASK_NAME_PRESENTATION,
+                           EditTaskCommand.MESSAGE_INVALID_INDEX);
     }
 
     @Test
     public void parse_negativeIndex_failure() {
-        assertParseFailure(parser, "-1" + TASK_NAME_PRESENTATION, MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, "-1" + TASK_NAME_PRESENTATION,
+                           EditTaskCommand.MESSAGE_INVALID_INDEX);
     }
 
     @Test
@@ -105,12 +110,14 @@ public class EditTaskCommandParserTest {
 
     @Test
     public void parse_blankTaskName_failure() {
-        assertParseFailure(parser, "1" + INVALID_TASK_NAME, MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, "1" + INVALID_TASK_NAME,
+                           Task.MESSAGE_CONSTRAINTS_TASK_NAME);
     }
 
     @Test
     public void parse_blankTaskDescription_failure() {
-        assertParseFailure(parser, "1" + INVALID_TASK_DESC, MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, "1" + INVALID_TASK_DESC,
+                           Task.MESSAGE_CONSTRAINTS_TASK_DESCRIPTION);
     }
 
     @Test
@@ -123,6 +130,20 @@ public class EditTaskCommandParserTest {
     public void parse_duplicateDescriptionPrefix_failure() {
         assertParseFailure(parser, "1" + TASK_DESC_PRESENTATION + TASK_DESC_REPORT,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_TASK_DESCRIPTION));
+    }
+
+    @Test
+    void parse_invalidTaskName_throwsParseException() {
+        String invalidTaskName = "1 task/" + "A".repeat(Task.MAX_TASK_NAME_LENGTH + 1)
+                                 + " desc/" + VALID_TASK_DESCRIPTION_REPORT;
+        assertThrows(ParseException.class, () -> parser.parse(invalidTaskName));
+    }
+
+    @Test
+    void parse_invalidTaskDescription_throwsParseException() {
+        String invalidTaskDescription = "1 task/" + VALID_TASK_NAME_PRESENTATION + " desc/"
+                                        + "A".repeat(Task.MAX_TASK_DESCRIPTION_LENGTH + 1);
+        assertThrows(ParseException.class, () -> parser.parse(invalidTaskDescription));
     }
 
 
