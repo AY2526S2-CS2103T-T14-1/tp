@@ -109,11 +109,13 @@
       "title": "User Guide",
       "headings": {
         "manageup-user-guide": "ManageUp User Guide",
-        "contents": "Contents",
+        "who-is-this-guide-for": "Who is this guide for?",
+        "table-of-contents": "Table of Contents",
         "quick-start": "Quick start",
         "features": "Features",
         "viewing-help-help": "Viewing help : help",
         "adding-an-employee-add": "Adding an employee: add",
+        "errors": "Errors",
         "listing-all-employees-list": "Listing all employees : list",
         "showing-filtered-employees-show": "Showing filtered employees: show",
         "editing-an-employee-edit": "Editing an employee: edit",
@@ -129,7 +131,16 @@
         "more-features-coming-in-v2-0": "More features [coming in v2.0]",
         "faq": "FAQ",
         "known-issues": "Known issues",
-        "command-summary": "Command summary"
+        "command-summary": "Command summary",
+        "troubleshooting": "Troubleshooting",
+        "troubleshooting-add": "Troubleshooting add",
+        "troubleshooting-edit": "Troubleshooting edit",
+        "troubleshooting-show": "Troubleshooting show",
+        "troubleshooting-delete": "Troubleshooting delete",
+        "troubleshooting-addtask": "Troubleshooting addtask",
+        "troubleshooting-edittask": "Troubleshooting edittask",
+        "troubleshooting-deletetask": "Troubleshooting deletetask",
+        "troubleshooting-cleartasks": "Troubleshooting cleartasks"
       },
       "headingKeywords": {}
     },
