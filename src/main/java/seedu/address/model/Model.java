@@ -132,4 +132,9 @@ public interface Model {
      * @return Task if it already exists in the employee's record.
      */
     Task getTaskWithSameDescription(Task task, Employee person);
+
+    /**
+     * Clears all tasks from the overall task list and from each employee's individual task list.
+     */
+    void clearTask();
 }

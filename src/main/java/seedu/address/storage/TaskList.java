@@ -183,4 +183,11 @@ public class TaskList {
         throw new NoSuchElementException();
     }
 
+    /**
+     * Clears all tasks from the task list.
+     */
+    public void clear() {
+        internalMap.clear();
+    }
+
 }

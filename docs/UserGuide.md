@@ -49,7 +49,7 @@ New to ManageUp? Start with [Quick Start](#quick-start). Already installed? Jump
     * [Editing an employee: `edit`](#editing-an-employee)
     * [Deleting an employee: `delete`](#deleting-an-employee)
   * Task management
-    * [Adding a task to an employee: `addtask`](#adding-a-task-to-an-employee)
+    * [Adding a task: `addtask`](#adding-a-task-to-an-employee)
     * [Editing a task: `edittask`](#editing-a-task)
     * [Deleting a task: `deletetask`](#deleting-a-task)
     * [Clearing all tasks for an employee: `cleartasks`](#clearing-all-tasks-for-an-employee)
@@ -149,6 +149,20 @@ New to ManageUp? Start with [Quick Start](#quick-start). Already installed? Jump
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
 
+<a id="email-format"></a>
+<box type="info" seamless>
+
+**Valid email format:**
+
+An email must follow the format `local-part@domain` and adhere to these rules:
+- The local-part may contain alphanumeric characters and `+`, `_`, `.`, `-`, but cannot start or end with these special characters.
+- The domain must be at least 2 characters long.
+- Each domain label must start and end with alphanumeric characters, and may only contain hyphens in between (e.g. `my-domain.com`).
+- The total length must not exceed 100 characters.
+- Emails are compared case-insensitively.
+
+</box>
+
 <a id="viewing-help"></a>
 ### Viewing help : `help`
 
@@ -202,37 +216,51 @@ After entering `help`, ManageUp opens the Help Window shown below.
 
 Adds a new employee to ManageUp.
 
-Format: 
-```add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...```
+Format:
+```
+add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...
+```
 
+* Only `TAG` is optional. All other parameters must be provided.
 * Duplicate prefixes for `n/`, `p/`, `e/`, `d/`, and `pos/` are not allowed.
+
+<box type="info" seamless>
+
+**Note:** If you provide duplicate tags in the same command (e.g. `t/intern t/intern`), ManageUp will treat them as one — only a single tag will be saved.
+
+</box>
 
 <box type="info" seamless>
 
 **Parameter constraints for this command:**
 
-| Parameter | Constraints                                               |
-|-----------|-----------------------------------------------------------|
-| `INDEX` | Positive integer from the **currently displayed** list    |
-| `NAME` | Alphanumeric, spaces, `-`, `'`;  1-100 characters long    |
-| `PHONE` | Numbers, 3–15 digits long                                 |
-| `EMAIL` | Follows format `local-part@domain`; 1-100 characters long |
-| `DEPARTMENT` | 1 - 100 alphanumeric characters long                      |
-| `POSITION` | 1 - 100 alphanumeric characters long                      |
-| `TAG` | 0 - 50 alphanumeric characters long                       |
-</box>
-
-
-<box type="warning" seamless>
-
-**Warning:** Phone numbers must be unique across all employees. Adding a duplicate phone number will fail and show which existing employee owns it.
+| Parameter | Length         | Allowed Characters                                                    |
+|-----------|----------------|-----------------------------------------------------------------------|
+| `NAME`    | 1–100 characters  | Alphanumeric characters, hyphens (`-`), apostrophes (`'`), and spaces |
+| `PHONE`   | 3–15 digits    | Numbers only                                                          |
+| `EMAIL`   | 1–100 characters  | Follows [valid email format](#email-format)                           |
+| `DEPARTMENT` | 1–100 characters | Alphanumeric characters and spaces only                            |
+| `POSITION`  | 1–100 characters | Alphanumeric characters and spaces only                             |
+| `TAG`     | 1–50 characters   | Alphanumeric characters only                                          |
 
 </box>
 
 
 <box type="warning" seamless>
 
-**Warning:** Email addresses are compared case-insensitively and must be unique across all employees. Adding a duplicate email will fail and show which existing employee owns it.
+**Warning:** Duplicate employees are not allowed. An employee is considered a duplicate if they share the same name as an existing employee, and also share the same phone number or the same email address (or both). Any attempt to add a duplicate employee will be rejected.
+
+</box>
+
+<box type="warning" seamless>
+
+**Warning:** Phone numbers must be unique across all employees. Adding a duplicate phone number will be rejected and will show which existing employee owns it.
+
+</box>
+
+<box type="warning" seamless>
+
+**Warning:** Email addresses must be unique across all employees and are compared case-insensitively. Adding a duplicate email will be rejected and will show which existing employee owns it.
 
 </box>
 
@@ -245,15 +273,20 @@ Format:
 
 #### Examples
 
-* `add n/John Doe p/98765432 e/johnd@example.com d/IT pos/Software Engineer`
-* `add n/Betsy Crowe p/91234567 e/betsycrowe@example.com d/HR pos/Recruiter t/fulltime`
-* `add n/Jacob Smith p/87763456 e/jacob@example.com d/Finance pos/Marketer t/intern t/partTime`
+* `add n/John Doe p/98765432 e/johnd@example.com d/IT pos/Software Engineer` – adds an employee with no tags.
+* `add n/Betsy Crowe p/91234567 e/betsycrowe@example.com d/HR pos/Recruiter t/fulltime` – adds an employee with one tag.
+* `add n/Jacob Smith p/87763456 e/jacob@example.com d/Finance pos/Marketer t/intern t/partTime` – adds an employee with multiple tags.
 
 After entering a valid `add` command, ManageUp confirms the new employee was added. The new employee appears at the bottom of the full employee list.
 
+<box type="info" seamless>
+
+**Expected output:**
 ![Add employee success](images/AddEmployee_Successful.png)
 
-### Errors
+</box>
+
+#### Errors
 Facing errors? See [Troubleshooting `add`](#troubleshooting-add).
 
 ### Listing all employees : `list`
@@ -416,23 +449,47 @@ edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...
 
 <box type="info" seamless>
 
-**Parameter constraints for this command:**
+**Note:** If you provide duplicate tags in the same command (e.g. `t/intern t/intern`), ManageUp will treat them as one — only a single tag will be saved.
 
-| Parameter | Constraints                                               |
-|-----------|-----------------------------------------------------------|
-| `INDEX` | Positive integer from the **currently displayed** list    |
-| `NAME` | Alphanumeric, spaces, `-`, `'`;  1-100 characters long    |
-| `PHONE` | Numbers, 3–15 digits long                                 |
-| `EMAIL` | Follows format `local-part@domain`; 1-100 characters long |
-| `DEPARTMENT` | 1 - 100 alphanumeric characters long                      |
-| `POSITION` | 1 - 100 alphanumeric characters long                      |
-| `TAG` | 0 - 50 alphanumeric characters long                       |
 </box>
 
+<box type="info" seamless>
+
+**Parameter constraints for this command:**
+
+| Parameter    | Length           | Allowed Characters                                                    |
+|--------------|------------------|-----------------------------------------------------------------------|
+| `INDEX`       | – | Positive integer that exists in the current employee list             |
+| `NAME`       | 1–100 characters | Alphanumeric characters, hyphens (`-`), apostrophes (`'`), and spaces |
+| `PHONE`      | 3–15 digits      | Numbers only                                                          |
+| `EMAIL`      | 1–100 characters | Follows [valid email format](#email-format)                           |
+| `DEPARTMENT` | 1–100 characters | Alphanumeric characters and spaces only                               |
+| `POSITION`   | 1–100 characters | Alphanumeric characters and spaces only                               |
+| `TAG`        | 1–50 characters  | Alphanumeric characters only                                          |
+
+</box>
 
 <box type="warning" seamless>
 
-**Warning:** When editing tags, **all** existing tags are **replaced** by the newly provided ones. 
+**Warning:** When editing tags, **all** existing tags are **replaced** by the newly provided ones.
+
+</box>
+
+<box type="warning" seamless>
+
+**Warning:** Editing an employee to have the same name and the same phone number or email address as an existing employee is not allowed and will be rejected. 
+
+</box>
+
+<box type="warning" seamless>
+
+**Warning:** Phone numbers must be unique across all employees. Editing an employee's phone number to one already belonging to another employee will be rejected.
+
+</box>
+
+<box type="warning" seamless>
+
+**Warning:** Email addresses must be unique across all employees and are compared case-insensitively. Editing an employee's email to one already belonging to another employee will be rejected.
 
 </box>
 
@@ -578,40 +635,57 @@ For example, entering `delete john doe` fails because multiple displayed employe
   Deletes the employee named `John Doe` if exactly one displayed employee matches that name.
 
 <a id="adding-a-task-to-an-employee"></a>
-### Adding a task to an employee : `addtask`
+### Adding a task: `addtask`
 
-Adds a task to a specific employee.
+Adds a task to a specific employee identified by employee index.
 
-Format: `addtask EMPLOYEE_INDEX task/TASK_NAME desc/TASK_DESCRIPTION`
+Format: 
+```
+addtask EMPLOYEE_INDEX task/TASK_NAME desc/TASK_DESCRIPTION
+```
 
 * `EMPLOYEE_INDEX` refers to the employee index shown in the currently displayed employee list.
 * The task will be added to that employee's personal task list and shown on the employee card.
 * The task will have an index number attached to it, to indicate task number.
-* A task name between 1 and 40 characters and a task description between 1 and 120 characters must be provided.
 * Only 1 `task/` and 1 `desc/` are allowed in the command. Duplicate prefixes are not allowed.
+* Both `task/` and `desc/` must be provided.
 * The format and order of `task/` and `desc/` should be followed exactly as stated in the format and no field should be left out.
-* `addtask` provides a warning message to the user with the specified format to remind users of the correct format if the command is invalid.
-* `addtask 1 task/Prepare Report` is not valid because the description field is missing.
 
-Examples:
+<box type="info" seamless>
+
+**Note:** This task index number does not follow a sequence and is merely a way to identify the task on the employee card. For example, if an employee has 2 tasks, and you delete the first one, the second task will still have the index `#2` on the employee card. If you add another task after that, it will be indexed as `#3` on the employee card.
+
+</box>
+
+
+<box type="info" seamless>
+
+**Parameter constraints for this command:**
+
+| Parameter          | Length                                                | Allowed Characters                                        |
+|--------------------|-------------------------------------------------------|-----------------------------------------------------------|
+| `EMPLOYEE_INDEX`   | – | Positive integer that exists in the current employee list |
+| `TASK_NAME`        | 1–40 characters                                       | Any characters                                            |
+| `TASK_DESCRIPTION` | 1–120 characters                                      | Any characters                                            |
+
+</box>
+
+
+#### Examples
 * `addtask 2 task/Prepare Report desc/Submit by Friday` 
    adds a task named `Prepare Report` with description `Submit by Friday` to employee at index 2.
 * `addtask 2 task/Client Followup desc/Call client before Monday` 
    adds a task named `Client Followup` with description `Call client before Monday` to employee at index 2.
 
-  ![addTask message](images/addtaskmessage.png)
-* `addtask`
-   shows the warning message with the correct format for `addtask` because the command is invalid.
-  ![addTaskHelp message](images/addtaskhelp.png)
-* `addtask 1 task/TASK_NAME_MORE_THAN_40_CHARACTERS desc/Submit by Friday`
-   shows the warning message because the task name exceeds the character limit.
-  ![addTaskNameTooLong message](images/addtasknametoolong.png)
-* `addtask 1 task/Prepare Report desc/TASK_DESCRIPTION_MORE_THAN_120_CHARACTERS`
-   shows the warning message because the task description exceeds the character limit.
-  ![addTaskDescTooLong message](images/addtaskdesctoolong.png)
-* `addtask INVLAID_EMPLOYEE_INDEX task/Prepare Report desc/Submit by Friday`
-   shows the warning message because the employee index is invalid.
-  ![addTaskInvalidEmployeeIndex message](images/addtaskinvalidemployeeindex.png)
+<box type="info" seamless>
+
+**Expected output:**
+![addTask message](images/addtaskmessage.png)
+
+</box>
+
+#### Errors
+Facing errors? See [Troubleshooting `addtask`](#troubleshooting-addtask).
 
 <a id="editing-a-task"></a>
 ### Editing a task: `edittask`
@@ -630,13 +704,19 @@ edittask TASK_INDEX [task/TASK_NAME] [desc/TASK_DESCRIPTION]
 
 <box type="info" seamless>
 
+**Note:** You can edit any task using its `TASK_INDEX` index, even if the employee it belongs to is not currently shown on screen. For example, if you have used `show` to filter the list, tasks belonging to hidden employees can still be edited using their task index.
+
+</box>
+
+<box type="info" seamless>
+
 **Parameter constraints for this command:**
 
-| Parameter | Constraints                                           |
-|-----------|-------------------------------------------------------|
-| `TASK_INDEX` | Positive integer that exists in the current task list |
-| `TASK_NAME` | 1–40 characters long                                  |
-| `TASK_DESCRIPTION` | 1–120 characters long                                 |
+| Parameter          | Length                                                | Allowed Characters                                    |
+|--------------------|-------------------------------------------------------|-------------------------------------------------------|
+| `TASK_INDEX`       | – | Positive integer that exists in the current task list |
+| `TASK_NAME`        | 1–40 characters                                       | Any characters                                        |
+| `TASK_DESCRIPTION` | 1–120 characters                                      | Any characters                                        |
 
 </box>
 
@@ -832,15 +912,15 @@ _More features coming soon ..._
 | Show filtered employees from contacts | **Show**        | `show [n/NAME] [d/DEPARTMENT] [p/PHONE] [e/EMAIL] [pos/POSITION] [t/TAG] [task/TASK]...` <br> e.g., `show n/Ja d/Finance pos/Developer HR Management t/Nightshift` |
 | Delete ALL employees from contacts    | **Clear**       | `clear`                                                                                                                                                            |
 | Add tasks to an employee              | **Add Task**    | `addtask EMPLOYEE_INDEX task/TASK_NAME desc/TASK_DESCRIPTION`<br> e.g., `addtask 1 task/Prepare Slides desc/Send by Friday`                                        |
-| Edit a task                           | **Edit Task**   | `edittask TASK_INDEX task/TASK_NAME desc/TASK_DESCRIPTION `<br> e.g., `edittask 6 task/Close deal desc/Finalise by Wednesday `                                     |
-| Delete a task                         | **Delete Task** | `deletetask TASK_INDEX [MORE_TASK_INDEXES]...`<br> e.g., `deletetask 1`, `deletetask 1 3`                                                                         |
+| Edit a task                           | **Edit Task**   | `edittask TASK_INDEX [task/TASK_NAME] [desc/TASK_DESCRIPTION]`<br> e.g., `edittask 6 task/Close deal desc/Finalise by Wednesday`                                   |
+| Delete a task                         | **Delete Task** | `deletetask TASK_INDEX [MORE_TASK_INDEXES]...`<br> e.g., `deletetask 1`, `deletetask 1 3`                                                                          |
 | Clear all tasks for one employee      | **Clear Tasks** | `cleartasks INDEX` or `cleartasks n/EMPLOYEE_NAME`<br> e.g., `cleartasks 1`, `cleartasks n/James Ho`                                                               |
 | Display help message                  | **Help**        | `help`                                                                                                                                                             |
 
 
 ## Troubleshooting
 
-If a command you entered did not produce the expected result and ManageUp displayed an error message, come to this section. Each subsection covers one command — find the error message you see, and follow the **Fix** column to resolve it.
+If a command you entered did not produce the expected result and ManageUp displayed an error message, come to this section. Each subsection covers one command — find your scenario in the **Scenario** column, and follow the **How to fix** column to resolve it.
 
 
 <div style="height: 10px;"></div>
@@ -849,19 +929,21 @@ If a command you entered did not produce the expected result and ManageUp displa
 
 ### Troubleshooting `add`
 
-| Error message | Reason | Fix |
-|---------------|--------|-----|
-| `Invalid command format. Please use the following format: [usage]` | Required fields missing or wrong syntax | Include all required fields: `n/`, `p/`, `e/`, `d/`, `pos/` |
-| `Names should only contain alphanumeric characters, spaces, hyphens or apostrophes, and it should not be blank or exceed 100 characters` | Invalid name | Letters, digits, spaces, `-`, `'` only; starts with alphanumeric; max 100 chars |
-| `Phone numbers should only contain numbers, and it should be 3 to 15 digits long` | Invalid phone | Digits only; 3–15 digits |
-| `Emails should be of the format local-part@domain and adhere to the following constraints: [details]` | Invalid email | Use a valid format, e.g. `johnd@example.com` |
-| `Department should only contain alphanumeric characters and spaces, and it should not be blank or exceed 100 characters` | Invalid department | Letters, digits, spaces only; max 100 chars |
-| `Positions should only contain alphanumeric characters and spaces, and it should not be blank or exceed 100 characters` | Invalid position | Letters, digits, spaces only; max 100 chars |
-| `Tag names should be alphanumeric and at most 50 characters long` | Invalid tag | Letters and digits only; no spaces or hyphens; max 50 chars |
-| `Multiple values were provided for these fields, but each field accepts only one value: [field(s)]` | Duplicate prefix in one command | Use each prefix (`n/`, `p/`, etc.) only once |
-| `This employee already exists in ManageUp.` | Duplicate employee | An employee with identical details already exists |
-| `This phone number is already assigned to another employee: [details]` | Duplicate phone number | Each employee must have a unique phone number |
-| `This email address is already assigned to another employee: [details]` | Duplicate email address | Each employee must have a unique email address |
+Use this section when `add` fails.
+
+| Scenario | Message shown | How to fix                                                                                                               |
+|----------|---------------|--------------------------------------------------------------------------------------------------------------------------|
+| Missing required fields or wrong syntax | `Invalid command format. Please use the following format: ...` | Use the format: `add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...`                                        |
+| Name contains invalid characters or is too long | `Names should only contain alphanumeric characters, spaces, hyphens or apostrophes, and it should not be blank or exceed 100 characters` | Use only letters, digits, spaces, `-` or `'` — name must start with a letter or digit and be at most 100 characters long |
+| Phone contains non-digits or wrong length | `Phone numbers should only contain numbers, and it should be 3 to 15 digits long` | Use digits only, between 3 and 15 digits long                                                                            |
+| Email format is invalid | `Emails should be of the format local-part@domain and adhere to the following constraints: ...` | Re-enter a valid email, e.g. `johnd@example.com` (see [valid email format](#email-format))                               |
+| Department contains invalid characters or is too long | `Department should only contain alphanumeric characters and spaces, and it should not be blank or exceed 100 characters` | Use only letters, digits, and spaces — at most 100 characters long                                                       |
+| Position contains invalid characters or is too long | `Positions should only contain alphanumeric characters and spaces, and it should not be blank or exceed 100 characters` | Use only letters, digits, and spaces — at most 100 characters long                                                       |
+| Tag contains invalid characters, is empty, or is too long | `Tag names should be alphanumeric and between 1 and 50 characters long` | Use only letters and digits (no spaces or special characters) — between 1 and 50 characters long |
+| Same prefix used more than once | `Multiple values were provided for these fields, but each field accepts only one value: [field(s)]` | Remove the extra prefix — each of `n/`, `p/`, `e/`, `d/`, `pos/` may only appear once                                    |
+| Employee with same name and phone or email already exists | `This employee already exists in ManageUp.` | Change the name, phone number, or email to differ from any existing employee                                             |
+| Phone number already belongs to another employee | `This phone number is already assigned to another employee: ...` | Use a phone number not already assigned to another employee                                                              |
+| Email already belongs to another employee | `This email address is already assigned to another employee: ...` | Use an email address not already assigned to another employee                                                            |
 
 <div style="height: 20px;"></div>
 
@@ -869,20 +951,23 @@ If a command you entered did not produce the expected result and ManageUp displa
 
 ### Troubleshooting `edit`
 
-| Error message | Reason | Fix |
-|---------------|--------|-----|
-| `Invalid command format. Please use the following format: [usage]` | Wrong syntax or missing index | Format: `edit INDEX [n/NAME] [p/PHONE] ...` |
-| `Invalid employee index. Please enter an index shown in the current employee list.` | Index out of range | Run `list` to see valid indexes |
-| `Please provide at least one employee field to update.` | No fields given | Include at least one of `n/`, `p/`, `e/`, `d/`, `pos/`, or `t/` |
-| `This phone number is already assigned to another employee: [details]` | New phone already in use | Each employee must have a unique phone number |
-| `This email address is already assigned to another employee: [details]` | New email already in use | Each employee must have a unique email address |
-| `Multiple values were provided for these fields, but each field accepts only one value: [field(s)]` | Duplicate prefix in one command | Use each prefix only once |
-| `Names should only contain alphanumeric characters, spaces, hyphens or apostrophes, and it should not be blank or exceed 100 characters` | Invalid name value | Letters, digits, spaces, `-`, `'` only; max 100 chars |
-| `Phone numbers should only contain numbers, and it should be 3 to 15 digits long` | Invalid phone value | Digits only; 3–15 digits |
-| `Emails should be of the format local-part@domain and adhere to the following constraints: [details]` | Invalid email value | Use a valid format, e.g. `johnd@example.com` |
-| `Department should only contain alphanumeric characters and spaces, and it should not be blank or exceed 100 characters` | Invalid department value | Letters, digits, spaces only; max 100 chars |
-| `Positions should only contain alphanumeric characters and spaces, and it should not be blank or exceed 100 characters` | Invalid position value | Letters, digits, spaces only; max 100 chars |
-| `Tag names should be alphanumeric and at most 50 characters long` | Invalid tag value | Letters and digits only; max 50 chars |
+Use this section when `edit` fails.
+
+| Scenario | Message shown | How to fix                                                                                                               |
+|----------|---------------|--------------------------------------------------------------------------------------------------------------------------|
+| Index is missing or non-numeric | `Invalid command format. Please use the following format: ...` | Use the format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...`                       |
+| Index is out of range | `Invalid employee index. Please enter an index shown in the current employee list.` | Run `list` to see valid indexes and use one from the displayed list                                                      |
+| No fields provided to update | `Please provide at least one employee field to update.` | Include at least one of `n/`, `p/`, `e/`, `d/`, `pos/`, or `t/`                                                          |
+| Edited details match an existing employee | `This employee already exists in ManageUp.` | Change the name, phone number, or email to differ from any existing employee                                             |
+| New phone number already belongs to another employee | `This phone number is already assigned to another employee: ...` | Use a phone number not already assigned to another employee                                                              |
+| New email already belongs to another employee | `This email address is already assigned to another employee: ...` | Use an email address not already assigned to another employee                                                            |
+| Same prefix used more than once | `Multiple values were provided for these fields, but each field accepts only one value: [field(s)]` | Remove the extra prefix — each of `n/`, `p/`, `e/`, `d/`, `pos/` may only appear once                                    |
+| Name contains invalid characters or is too long | `Names should only contain alphanumeric characters, spaces, hyphens or apostrophes, and it should not be blank or exceed 100 characters` | Use only letters, digits, spaces, `-` or `'` — name must start with a letter or digit and be at most 100 characters long |
+| Phone contains non-digits or wrong length | `Phone numbers should only contain numbers, and it should be 3 to 15 digits long` | Use digits only, between 3 and 15 digits long                                                                            |
+| Email format is invalid | `Emails should be of the format local-part@domain and adhere to the following constraints: ...` | Re-enter a valid email, e.g. `johnd@example.com` (see [valid email format](#email-format))                               |
+| Department contains invalid characters or is too long | `Department should only contain alphanumeric characters and spaces, and it should not be blank or exceed 100 characters` | Use only letters, digits, and spaces — at most 100 characters long                                                       |
+| Position contains invalid characters or is too long | `Positions should only contain alphanumeric characters and spaces, and it should not be blank or exceed 100 characters` | Use only letters, digits, and spaces — at most 100 characters long                                                       |
+| Tag contains invalid characters or is too long | `Tag names should be alphanumeric and between 1 and 50 characters long` | Use only letters and digits (no spaces or special characters) — between 1 and 50 characters long |
 
 <div style="height: 20px;"></div>
 
@@ -890,10 +975,12 @@ If a command you entered did not produce the expected result and ManageUp displa
 
 ### Troubleshooting `show`
 
-| Error message | Reason | Fix |
-|---------------|--------|-----|
-| `Invalid command format. Please use the following format: [usage]` | No filters provided | Include at least one prefix filter, e.g. `show d/IT` |
-| `[Field] field should not be empty.` (e.g. `Name field should not be empty.`) | A prefix was provided but its value is blank | Add a keyword after the prefix, e.g. `show n/John` instead of `show n/` |
+Use this section when `show` fails.
+
+| Scenario | Message shown | How to fix |
+|----------|---------------|------------|
+| No filters provided | `Invalid command format. Please use the following format: ...` | Use the format: `show [n/NAME] [d/DEPARTMENT] [p/PHONE] [e/EMAIL] [pos/POSITION] [t/TAG] [task/TASK]...` — include at least one prefix filter |
+| A prefix is provided but its value is blank | `[Field] field should not be empty.` (e.g. `Name field should not be empty.`) | Add a keyword after the prefix, e.g. `show n/John` instead of `show n/` |
 
 <div style="height: 20px;"></div>
 
@@ -901,13 +988,15 @@ If a command you entered did not produce the expected result and ManageUp displa
 
 ### Troubleshooting `delete`
 
-| Error message | Reason | Fix |
-|---------------|--------|-----|
-| `Invalid employee index. Please enter an index shown in the current employee list.` | Index doesn't exist in the current list | Run `list` to see valid indexes |
-| `No employee named '[name]' was found in the current list.` | Name not found | Check spelling; run `list` to confirm the employee exists |
-| `More than one employee named '[name]' was found. Please use the employee index instead.` | Ambiguous name | Use `delete INDEX` instead |
-| `Invalid employee name. Names should only contain alphanumeric characters, spaces, hyphens or apostrophes, and it should not be blank or exceed 100 characters` | Invalid name format | Use only letters, digits, spaces, `-`, or `'` |
-| `Duplicate employee indices are not allowed.` | Same index repeated in batch delete | Each index may appear only once per command |
+Use this section when `delete` fails.
+
+| Scenario | Message shown | How to fix |
+|----------|---------------|------------|
+| Index provided is out of range | `Invalid employee index. Please enter an index shown in the current employee list.` | Run `list` to see valid indexes and use one from the displayed list |
+| No employee matches the given name | `No employee named '[name]' was found in the current list.` | Check the spelling and run `list` to confirm the employee exists |
+| More than one employee matches the given name | `More than one employee named '[name]' was found. Please use the employee index instead.` | Use `delete INDEX` to delete by number instead of name |
+| Name contains invalid characters | `Invalid employee name. Names should only contain alphanumeric characters, spaces, hyphens or apostrophes, and it should not be blank or exceed 100 characters` | Use only letters, digits, spaces, `-` or `'` in the name |
+| Same index given more than once in batch delete | `Duplicate employee indices are not allowed.` | Each index may appear only once per command |
 
 <div style="height: 20px;"></div>
 
@@ -915,13 +1004,15 @@ If a command you entered did not produce the expected result and ManageUp displa
 
 ### Troubleshooting `addtask`
 
-| Error message | Reason | Fix |
-|---------------|--------|-----|
-| `Invalid task command format. Please use the following format: [usage]` | Missing fields or wrong format | Include `EMPLOYEE_INDEX`, `task/TASK_NAME`, and `desc/TASK_DESCRIPTION` |
-| `Task name should not be empty and should be between 1 and 40 characters.` | Task name is blank or exceeds 40 characters | Provide a task name of 1–40 characters |
-| `Task description should not be empty and should be between 1 and 120 characters.` | Task description is blank or exceeds 120 characters | Provide a description of 1–120 characters |
-| `Invalid employee index. Please enter an index shown in the current employee list.` | Employee index doesn't exist | Run `list` and use a valid employee index |
-| `This employee already has a task with the same name and same description.` | Duplicate task | Change the task name or description |
+Use this section when `addtask` fails.
+
+| Scenario                                                             | Message shown | How to fix |
+|----------------------------------------------------------------------|---------------|------------|
+| Missing fields, duplicate fields or wrong syntax                     | `Invalid task command format. Please use the following format: ...` | Use the format: `addtask EMPLOYEE_INDEX task/TASK_NAME desc/TASK_DESCRIPTION` |
+| Task name is blank or too long                                       | `Task name should not be empty and should be between 1 and 40 characters.` | Re-enter a task name between 1 and 40 characters long |
+| Task description is blank or too long                                | `Task description should not be empty and should be between 1 and 120 characters.` | Re-enter a task description between 1 and 120 characters long |
+| Employee index is out of range                                       | `Invalid employee index. Please enter an index shown in the current employee list.` | Run `list` and use a valid employee index |
+| Task with same name and description already exists for this employee | `This employee already has a task with the same name and same description.` | Change the task name or description |
 
 <div style="height: 20px;"></div>
 
@@ -929,13 +1020,17 @@ If a command you entered did not produce the expected result and ManageUp displa
 
 ### Troubleshooting `edittask`
 
-| Error message | Reason | Fix |
-|---------------|--------|-----|
-| `Invalid command format. Please use the following format: [usage]` | No task index given or wrong format | Format: `edittask TASK_INDEX [task/...] [desc/...]` |
-| `Please provide at least one task field to update.` | No fields given | Include at least `task/TASK_NAME` or `desc/TASK_DESCRIPTION` |
-| `Task name should not be empty and should be between 1 and 40 characters.` | Task name is blank or exceeds 40 characters | Provide a task name of 1–40 characters |
-| `Task description should not be empty and should be between 1 and 120 characters.` | Task description is blank or exceeds 120 characters | Provide a description of 1–120 characters |
-| `Invalid task index. Please enter a task index that is currently shown in ManageUp.` | Task index doesn't exist | Check the `#N` on the employee card |
+Use this section when `edittask` fails.
+
+| Scenario | Message shown | How to fix |
+|----------|---------------|------------|
+| Task index is missing or non-numeric | `Invalid command format. Please use the following format: ...` | Use the format: `edittask TASK_INDEX [task/TASK_NAME] [desc/TASK_DESCRIPTION]` |
+| No fields provided to update | `Please provide at least one task field to update.` | Include at least one of `task/TASK_NAME` or `desc/TASK_DESCRIPTION` |
+| `task/` used more than once | `Multiple values were provided for these fields, but each field accepts only one value: task/` | Remove the extra `task/` — it may only appear once per command |
+| `desc/` used more than once | `Multiple values were provided for these fields, but each field accepts only one value: desc/` | Remove the extra `desc/` — it may only appear once per command |
+| Task name is blank or too long | `Task name should not be empty and should be between 1 and 40 characters.` | Re-enter a task name between 1 and 40 characters long |
+| Task description is blank or too long | `Task description should not be empty and should be between 1 and 120 characters.` | Re-enter a task description between 1 and 120 characters long |
+| Task index is 0, negative, or does not exist | `Invalid task index. Please enter a task index that is currently shown in ManageUp.` | Enter a positive integer matching a task index shown as `#N` on an employee card |
 
 <div style="height: 20px;"></div>
 
@@ -943,12 +1038,14 @@ If a command you entered did not produce the expected result and ManageUp displa
 
 ### Troubleshooting `deletetask`
 
-| Error message | Reason | Fix |
-|---------------|--------|-----|
-| `Invalid command format. Please use the following format: [usage]` | No index provided | Provide at least one task index |
-| `Invalid task index. Please enter only positive task indices.` | Index is 0 or negative | Task indexes start from 1 |
-| `Invalid task index. Please enter task indices that are currently shown in ManageUp.` | Index doesn't match any existing task | Check the `#N` numbers on employee cards |
-| `Duplicate task indices are not allowed.` | Same index repeated | Each task index may appear only once per command |
+Use this section when `deletetask` fails.
+
+| Scenario | Message shown | How to fix |
+|----------|---------------|------------|
+| No index provided or wrong syntax | `Invalid command format. Please use the following format: ...` | Use the format: `deletetask TASK_INDEX [MORE_INDICES]...` — provide at least one task index |
+| Index is 0 or negative | `Invalid task index. Please enter only positive task indices.` | Task indexes start from 1 — check the `#N` shown on the employee card |
+| Index does not match any existing task | `Invalid task index. Please enter task indices that are currently shown in ManageUp.` | Check the `#N` numbers on employee cards to find valid indexes |
+| Same index given more than once | `Duplicate task indices are not allowed.` | Each task index may appear only once per command |
 
 <div style="height: 20px;"></div>
 
@@ -956,9 +1053,11 @@ If a command you entered did not produce the expected result and ManageUp displa
 
 ### Troubleshooting `cleartasks`
 
-| Error message | Reason | Fix |
-|---------------|--------|-----|
-| `Invalid employee index. Please enter an index shown in the current employee list.` | Employee index doesn't exist | Run `list` and use a valid employee index |
-| `No employee named '[name]' was found in the current list.` | Name not found | Check spelling; run `list` to confirm the employee exists |
-| `More than one employee named '[name]' was found. Please use the employee index instead.` | Ambiguous name | Use `cleartasks INDEX` instead |
-| `Invalid employee name. Names should only contain alphanumeric characters, spaces, hyphens or apostrophes, and it should not be blank or exceed 100 characters` | Invalid name format | Use only letters, digits, spaces, `-`, or `'` |
+Use this section when `cleartasks` fails.
+
+| Scenario | Message shown | How to fix |
+|----------|---------------|------------|
+| Index provided is out of range | `Invalid employee index. Please enter an index shown in the current employee list.` | Run `list` and use a valid employee index |
+| No employee matches the given name | `No employee named '[name]' was found in the current list.` | Check the spelling and run `list` to confirm the employee exists |
+| More than one employee matches the given name | `More than one employee named '[name]' was found. Please use the employee index instead.` | Use `cleartasks INDEX` to clear by number instead of name |
+| Name contains invalid characters | `Invalid employee name. Names should only contain alphanumeric characters, spaces, hyphens or apostrophes, and it should not be blank or exceed 100 characters` | Use only letters, digits, spaces, `-` or `'` in the name |

@@ -216,5 +216,10 @@ public class ModelManager implements Model {
         }
     }
 
+    @Override
+    public void clearTask() {
+        tasks.clear();
+    }
+
 
 }

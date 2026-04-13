@@ -221,6 +221,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public void clearTask() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void deleteTask(int taskIndex) {
             throw new AssertionError("This method should not be called.");
         }

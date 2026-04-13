@@ -12,7 +12,7 @@ public class Tag {
     public static final int MAX_TAG_LENGTH = 50;
     public static final String VALIDATION_REGEX = "\\p{Alnum}{1," + MAX_TAG_LENGTH + "}";
     public static final String MESSAGE_CONSTRAINTS =
-            "Tag names should be alphanumeric and at most " + MAX_TAG_LENGTH + " characters long";
+            "Tag names should be alphanumeric and between 1 and " + MAX_TAG_LENGTH + " characters long";
 
     public final String tagName;
 
