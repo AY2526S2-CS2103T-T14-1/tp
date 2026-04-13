@@ -799,6 +799,9 @@ After a successful batch `deletetask` command, ManageUp lists all deleted task d
 
 </box>
 
+#### Errors
+Facing errors? See [Troubleshooting `deletetask`](#troubleshooting-deletetask).
+
 <a id="clearing-all-tasks-for-an-employee"></a>
 ### Clearing all tasks for an employee : `cleartasks`
 
@@ -850,6 +853,9 @@ After a successful `cleartasks` command, ManageUp confirms all deleted task deta
 ![Clear tasks success](images/ClearTask.png)
 
 </box>
+
+#### Errors
+Facing errors? See [Troubleshooting `cleartasks`](#troubleshooting-cleartasks).
 
 <a id="clearing-all-entries"></a>
 ### Clearing all entries : `clear`
