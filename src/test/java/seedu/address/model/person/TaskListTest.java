@@ -97,4 +97,18 @@ public class TaskListTest {
         assertEquals(t1, taskList.deleteTask(1));
         assertEquals("No tasks assigned.", taskList.showFullTaskList());
     }
+
+    @Test
+    public void emptyTaskList_showFullTaskList_returnsNoTasksMessage() {
+        TaskList taskList = new TaskList();
+        Task t1 = new Task("task1", "desc1", 1);
+        Employee person = new Employee(new Name("John Doe"), new Phone("96969696"),
+                new Email("anirudhnush@gmail.com"), new Department("IT"), new Position("Developer"),
+                new HashSet<>(), new TaskListStorage(new ArrayList<>()));
+
+        taskList.addTaskOverall(t1, person);
+        taskList.clear();
+
+        assertEquals("No tasks assigned.", taskList.showFullTaskList());
+    }
 }
