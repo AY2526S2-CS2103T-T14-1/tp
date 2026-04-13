@@ -16,31 +16,44 @@ import seedu.address.model.employee.Position;
 import seedu.address.model.employee.TaskListStorage;
 import seedu.address.model.tag.Tag;
 
-
 /**
  * Contains utility methods for populating {@code AddressBook} with sample data.
  */
 public class SampleDataUtil {
+
     public static Employee[] getSamplePersons() {
         return new Employee[] {
-            new Employee(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
-                    new Department("IT"), new Position("Junior software developer"),
-                    getTagSet("friends"), new TaskListStorage(new ArrayList<>())),
-            new Employee(new Name("Bernice Yu"), new Phone("99272758"), new Email("berniceyu@example.com"),
-                    new Department("Sales"), new Position("HR manager"),
-                    getTagSet("colleagues", "friends"), new TaskListStorage(new ArrayList<>())),
-            new Employee(new Name("Charlotte Oliveiro"), new Phone("93210283"), new Email("charlotte@example.com"),
-                    new Department("HR"), new Position("Team leader"),
-                    getTagSet("neighbours"), new TaskListStorage(new ArrayList<>())),
-            new Employee(new Name("David Li"), new Phone("91031282"), new Email("lidavid@example.com"),
-                    new Department("Marketing"), new Position("Marketing lead"),
-                    getTagSet("family"), new TaskListStorage(new ArrayList<>())),
-            new Employee(new Name("Irfan Ibrahim"), new Phone("92492021"), new Email("irfan@example.com"),
-                    new Department("Finance"), new Position("Frontend developer"),
-                    getTagSet("classmates"), new TaskListStorage(new ArrayList<>())),
-            new Employee(new Name("Roy Balakrishnan"), new Phone("92624417"), new Email("royb@example.com"),
-                    new Department("Creative"), new Position("Product manager"),
-                    getTagSet("colleagues"), new TaskListStorage(new ArrayList<>()))
+            new Employee(new Name("Olivia Tan"), new Phone("91234567"), new Email("olivia.tan@manageup.com"),
+                    new Department("Engineering"), new Position("Backend engineer"),
+                    getTagSet("mentor", "reliable"), new TaskListStorage(new ArrayList<>())),
+
+            new Employee(new Name("Marcus Lee"), new Phone("92345678"), new Email("marcus.lee@manageup.com"),
+                    new Department("Engineering"), new Position("Frontend engineer"),
+                    getTagSet("ui", "responsive"), new TaskListStorage(new ArrayList<>())),
+
+            new Employee(new Name("Aisha Rahman"), new Phone("93456789"), new Email("aisha.rahman@manageup.com"),
+                    new Department("Product"), new Position("Product manager"),
+                    getTagSet("organised", "leadership"), new TaskListStorage(new ArrayList<>())),
+
+            new Employee(new Name("Daniel Wong"), new Phone("94567890"), new Email("daniel.wong@manageup.com"),
+                    new Department("Operations"), new Position("Operations executive"),
+                    getTagSet("detailoriented"), new TaskListStorage(new ArrayList<>())),
+
+            new Employee(new Name("Siti Noor"), new Phone("95678901"), new Email("siti.noor@manageup.com"),
+                    new Department("Human Resources"), new Position("HR executive"),
+                    getTagSet("peoplefocused"), new TaskListStorage(new ArrayList<>())),
+
+            new Employee(new Name("Ethan Koh"), new Phone("96789012"), new Email("ethan.koh@manageup.com"),
+                    new Department("Finance"), new Position("Finance analyst"),
+                    getTagSet("accurate"), new TaskListStorage(new ArrayList<>())),
+
+            new Employee(new Name("Cheryl Goh"), new Phone("97890123"), new Email("cheryl.goh@manageup.com"),
+                    new Department("Sales"), new Position("Account executive"),
+                    getTagSet("clientfacing", "driven"), new TaskListStorage(new ArrayList<>())),
+
+            new Employee(new Name("Ryan Ng"), new Phone("98901234"), new Email("ryan.ng@manageup.com"),
+                    new Department("Customer Success"), new Position("Customer success manager"),
+                    getTagSet("supportive"), new TaskListStorage(new ArrayList<>()))
         };
     }
 
@@ -60,5 +73,4 @@ public class SampleDataUtil {
                 .map(Tag::new)
                 .collect(Collectors.toSet());
     }
-
 }

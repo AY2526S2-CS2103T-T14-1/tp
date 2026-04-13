@@ -7,7 +7,11 @@ import java.util.function.Predicate;
 
 import seedu.address.logic.commands.ShowCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.employee.Department;
 import seedu.address.model.employee.Employee;
+import seedu.address.model.employee.Name;
+import seedu.address.model.employee.Phone;
+import seedu.address.model.employee.Position;
 import seedu.address.model.employee.predicatechecker.DepartmentContainsKeywordsPredicate;
 import seedu.address.model.employee.predicatechecker.EmailContainsKeywordsPredicate;
 import seedu.address.model.employee.predicatechecker.NameContainsKeywordsPredicate;
@@ -47,6 +51,7 @@ public class ShowCommandParser implements Parser<ShowCommand> {
             if (value.isEmpty()) {
                 throw createEmptyFieldException("Name");
             }
+            validateNameValue(value);
             predicate = predicate.and(
                     new NameContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
             );
@@ -59,6 +64,7 @@ public class ShowCommandParser implements Parser<ShowCommand> {
             if (value.isEmpty()) {
                 throw createEmptyFieldException("Department");
             }
+            validateDepartmentValue(value);
             predicate = predicate.and(
                     new DepartmentContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
             );
@@ -71,6 +77,7 @@ public class ShowCommandParser implements Parser<ShowCommand> {
             if (value.isEmpty()) {
                 throw createEmptyFieldException("Phone");
             }
+            validatePhoneValue(value);
             predicate = predicate.and(
                     new PhoneContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
             );
@@ -83,6 +90,7 @@ public class ShowCommandParser implements Parser<ShowCommand> {
             if (value.isEmpty()) {
                 throw createEmptyFieldException("Position");
             }
+            validatePositionValue(value);
             predicate = predicate.and(
                     new PositionContainsKeywordsPredicate(Arrays.asList(value.split("\\s+")))
             );
@@ -164,6 +172,50 @@ public class ShowCommandParser implements Parser<ShowCommand> {
 
         assert start <= end : "Extraction start index should not exceed end index";
         return input.substring(start, end).trim();
+    }
+
+    /**
+     * Validates the name value used in the show command.
+     */
+    private void validateNameValue(String value) throws ParseException {
+        assert value != null : "Name value should not be null";
+
+        if (!Name.isValidName(value)) {
+            throw new ParseException(Name.MESSAGE_CONSTRAINTS);
+        }
+    }
+
+    /**
+     * Validates the department value used in the show command.
+     */
+    private void validateDepartmentValue(String value) throws ParseException {
+        assert value != null : "Department value should not be null";
+
+        if (!Department.isValidDepartment(value)) {
+            throw new ParseException(Department.MESSAGE_CONSTRAINTS);
+        }
+    }
+
+    /**
+     * Validates the phone value used in the show command.
+     */
+    private void validatePhoneValue(String value) throws ParseException {
+        assert value != null : "Phone value should not be null";
+
+        if (!Phone.isValidPhone(value)) {
+            throw new ParseException(Phone.MESSAGE_CONSTRAINTS);
+        }
+    }
+
+    /**
+     * Validates the position value used in the show command.
+     */
+    private void validatePositionValue(String value) throws ParseException {
+        assert value != null : "Position value should not be null";
+
+        if (!Position.isValidPosition(value)) {
+            throw new ParseException(Position.MESSAGE_CONSTRAINTS);
+        }
     }
 
     /**
