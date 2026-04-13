@@ -841,7 +841,7 @@ There is no need to save manually.
 <a id="editing-the-data-file"></a>
 ### Editing the data file
 
-ManageUp data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`.
+ManageUp data are saved automatically as a JSON file `[JAR file location]/data/manageup.json`.
 Advanced users are welcome to update data directly by editing that data file.
 
 **Caution:**

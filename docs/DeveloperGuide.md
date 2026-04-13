@@ -891,7 +891,7 @@ testers are expected to do more *exploratory* testing.
 
 1. Dealing with missing/corrupted data files
 
-   1. Open the data file at `data/addressbook.json` and edit it manually.
+   1. Open the data file at `data/manageup.json` and edit it manually.
 
    1. Invalid JSON example:
       delete a closing brace from the file and launch the app.<br>
