@@ -163,54 +163,6 @@ An email must follow the format `local-part@domain` and adhere to these rules:
 
 </box>
 
-<a id="viewing-help"></a>
-### Viewing help : `help`
-
-Shows an in-app help window with supported commands, allowed inputs, and examples.
-
-Format: `help`
-
-#### Overview
-
-When you enter `help`, ManageUp opens a separate help window inside the app.
-
-The help window gives a quick summary of:
-
-* supported commands
-* the allowed input format for each command
-* one or more examples you can follow directly
-
-This is useful when you want a quick reminder without scrolling through the full User Guide.
-
-#### Command usage
-
-`help` does not require any additional parameters.
-
-If you type extra text after `help`, ManageUp will still interpret it as `help`.
-
-The help window displays a compact command reference and a button that copies the online User Guide URL to your
-clipboard so you can open the full guide in a browser if needed.
-
-After entering `help`, ManageUp opens the Help Window shown below.
-
-![Help Window](images/Help_PopOutWindow.png)
-
-#### Important notes
-
-<box type="tip" seamless>
-
-**Tip:** Use `help` when you forget a command format or want a quick example before trying a command.
-</box>
-
-* The help window is intended as a quick reference. The full User Guide still contains more detailed explanations and examples.
-
-
-#### Examples
-
-* `help`
-  Opens the in-app Help Window.
-
-
 <a id="adding-an-employee"></a>
 ### Adding an employee: `add`
 
@@ -294,6 +246,438 @@ Facing errors? See [Troubleshooting `add`](#troubleshooting-add).
 Shows a list of all employees in the address book.
 
 Format: `list`
+
+<a id="editing-an-employee"></a>
+### Editing an employee: `edit`
+
+Edits the details of an existing employee identified by the employee index. Only fields you include are changed.
+
+Format:
+```
+edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...
+```
+
+* `INDEX` refers to the employee index shown in the currently displayed employee list.
+* At least one of the optional fields must be provided.
+* Duplicate prefixes for `n/`, `p/`, `e/`, `d/`, and `pos/` are not allowed.
+
+<box type="info" seamless>
+
+**Note:** If you provide duplicate tags in the same command (e.g. `t/intern t/intern`), ManageUp will treat them as one — only a single tag will be saved.
+
+</box>
+
+<box type="info" seamless>
+
+**Parameter constraints for this command:**
+
+| Parameter    | Length           | Allowed Characters                                                    |
+|--------------|------------------|-----------------------------------------------------------------------|
+| `INDEX`       | – | Positive integer that exists in the current employee list             |
+| `NAME`       | 1–100 characters | Alphanumeric characters, hyphens (`-`), apostrophes (`'`), and spaces |
+| `PHONE`      | 3–15 digits      | Numbers only                                                          |
+| `EMAIL`      | 1–100 characters | Follows [valid email format](#email-format)                           |
+| `DEPARTMENT` | 1–100 characters | Alphanumeric characters and spaces only                               |
+| `POSITION`   | 1–100 characters | Alphanumeric characters and spaces only                               |
+| `TAG`        | 1–50 characters  | Alphanumeric characters only                                          |
+
+</box>
+
+<box type="warning" seamless>
+
+**Warning:** When editing tags, **all** existing tags are **replaced** by the newly provided ones.
+
+</box>
+
+<box type="warning" seamless>
+
+**Warning:** Editing an employee to have the same name and the same phone number or email address as an existing employee is not allowed and will be rejected. 
+
+</box>
+
+<box type="warning" seamless>
+
+**Warning:** Phone numbers must be unique across all employees. Editing an employee's phone number to one already belonging to another employee will be rejected.
+
+</box>
+
+<box type="warning" seamless>
+
+**Warning:** Email addresses must be unique across all employees and are compared case-insensitively. Editing an employee's email to one already belonging to another employee will be rejected.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** `edit` uses the index from the **currently displayed list**. If you have filtered the list with `show`, use the indexes shown in the filtered list.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** To remove all tags from an employee, use `t/` without any value after it.
+</box>
+
+
+#### Examples
+
+* `edit 1 p/91234567 e/johndoe@example.com` – edits the phone number and email of the 1st employee.
+* `edit 2 pos/Team Lead` – edits the position of the 2nd employee.
+* `edit 3 n/Betsy Crower t/` – edits the name of the 3rd employee and clears all existing tags.
+* `edit 4 d/Finance t/likesCats t/golfs` – edits the department of the 4th employee and replaces all existing tags.
+
+After a successful `edit` command, ManageUp confirms the update and shows the **full** employee list.
+
+<box type="info" seamless>
+
+**Expected output:**
+![Edit employee success](images/EditEmployee_Successful.png)
+
+</box>
+
+#### Errors
+Facing errors? See [Troubleshooting `edit`](#troubleshooting-edit).
+
+<a id="deleting-an-employee"></a>
+### Deleting an employee : `delete`
+
+Deletes one or more employees from the currently displayed employee list.
+
+Format:
+```text
+delete NAME
+delete INDEX [MORE_INDEXES]...
+```
+
+* `NAME` must match exactly one employee in the currently displayed employee list.
+* `INDEX` refers to the employee index shown in the currently displayed employee list.
+* `MORE_INDEXES` refers to additional employee indexes from the currently displayed employee list.
+* Every provided index must be valid before ManageUp deletes any employee.
+* Duplicate indexes in the same command are not allowed.
+
+<box type="info" seamless>
+
+**Parameter constraints for this command:**
+
+| Parameter | Length | Allowed Characters |
+|-----------|--------|--------------------|
+| `NAME` | 1-100 characters | Alphanumeric characters, hyphens (`-`), apostrophes (`'`), and spaces; must match exactly one employee in the **currently displayed** list |
+| `INDEX` | - | Positive integer from the **currently displayed** employee list |
+| `MORE_INDEXES` | - | Additional positive integers from the **currently displayed** employee list |
+
+</box>
+
+<box type="warning" seamless>
+
+**Warning:** If more than one displayed employee has the same name, `delete NAME` will fail. In that case, use `delete INDEX` instead.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** If you want to delete from the full employee list after using `show`, run `list` first so the indexes are reset to the full list.
+
+</box>
+
+#### Examples
+
+* `list` followed by `delete 2`
+  Deletes the 2nd employee in the full employee list.
+
+* `show d/HR` followed by `delete 1`
+  Deletes the 1st employee in the filtered employee list.
+
+* `list` followed by `delete 1 3 5`
+  Deletes the 1st, 3rd, and 5th employees in the displayed employee list.
+
+* `delete John Doe`
+  Deletes the employee named `John Doe` if exactly one displayed employee matches that name.
+
+After a successful `delete NAME` command, ManageUp confirms the deleted employee in the result box.
+
+<box type="info" seamless>
+
+**Expected output (`delete NAME`):**
+![Deleting an employee by name successfully](images/DeleteEmployee_ByName_Successful.png)
+
+</box>
+
+After a successful `delete INDEX` command, ManageUp confirms the deleted employee in the result box.
+
+<box type="info" seamless>
+
+**Expected output (`delete INDEX`):**
+![Deleting an employee by index successfully](images/DeleteEmployee_ByIndex_Successful.png)
+
+</box>
+
+After a successful batch `delete` command, ManageUp lists all deleted employees in the result box.
+
+<box type="info" seamless>
+
+**Expected output (`delete INDEX [MORE_INDEXES]...`):**
+![Batch deleting employees by index successfully](images/DeleteEmployee_BatchDeleteByIndex_Successful.png)
+
+</box>
+
+#### Errors
+Facing errors? See [Troubleshooting `delete`](#troubleshooting-delete).
+
+<a id="adding-a-task-to-an-employee"></a>
+### Adding a task: `addtask`
+
+Adds a task to a specific employee identified by employee index.
+
+Format: 
+```
+addtask EMPLOYEE_INDEX task/TASK_NAME desc/TASK_DESCRIPTION
+```
+
+* `EMPLOYEE_INDEX` refers to the employee index shown in the currently displayed employee list.
+* The task will be added to that employee's personal task list and shown on the employee card.
+* The task will have an index number attached to it, to indicate task number.
+* Only 1 `task/` and 1 `desc/` are allowed in the command. Duplicate prefixes are not allowed.
+* Both `task/` and `desc/` must be provided.
+* The format and order of `task/` and `desc/` should be followed exactly as stated in the format and no field should be left out.
+
+<box type="info" seamless>
+
+**Note:** This task index number does not follow a sequence and is merely a way to identify the task on the employee card. For example, if an employee has 2 tasks, and you delete the first one, the second task will still have the index `#2` on the employee card. If you add another task after that, it will be indexed as `#3` on the employee card.
+
+</box>
+
+<box type="info" seamless>
+
+**Note:** `TASK_NAME` and `TASK_DESCRIPTION` are intentionally validated by length only to allow more flexibility for users. ManageUp allows punctuation, symbols, and numbers, including inputs such as `**`, `---`, `UI/UX review`, `v2.1 patch`, or `Follow up by Fri!`, so users can record realistic task details, shorthand, ticket IDs, and status markers.
+
+</box>
+
+
+<box type="info" seamless>
+
+**Parameter constraints for this command:**
+
+| Parameter          | Length                                                | Allowed Characters                                        |
+|--------------------|-------------------------------------------------------|-----------------------------------------------------------|
+| `EMPLOYEE_INDEX`   | – | Positive integer that exists in the current employee list |
+| `TASK_NAME`        | 1–40 characters                                       | Any characters                                            |
+| `TASK_DESCRIPTION` | 1–120 characters                                      | Any characters                                            |
+
+</box>
+
+
+#### Examples
+* `addtask 2 task/Prepare Report desc/Submit by Friday` 
+   adds a task named `Prepare Report` with description `Submit by Friday` to employee at index 2.
+* `addtask 2 task/Client Followup desc/Call client before Monday` 
+   adds a task named `Client Followup` with description `Call client before Monday` to employee at index 2.
+
+<box type="info" seamless>
+
+**Expected output:**
+![addTask message](images/addtaskmessage.png)
+
+</box>
+
+#### Errors
+Facing errors? See [Troubleshooting `addtask`](#troubleshooting-addtask).
+
+<a id="editing-a-task"></a>
+### Editing a task: `edittask`
+
+Edits the name and/or description of an existing task identified by its task index.
+
+Format:
+```
+edittask TASK_INDEX [task/TASK_NAME] [desc/TASK_DESCRIPTION]
+```
+
+* `TASK_INDEX` refers to the task index shown beside the task on the employee card (e.g. `#1`, `#2`).
+* At least one of `task/` or `desc/` must be provided.
+* Fields not provided remain unchanged.
+* Duplicate prefixes are not allowed (e.g. two `task/` in one command).
+
+<box type="info" seamless>
+
+**Note:** You can edit any task using its `TASK_INDEX` index, even if the employee it belongs to is not currently shown on screen. For example, if you have used `show` to filter the list, tasks belonging to hidden employees can still be edited using their task index.
+
+</box>
+
+<box type="info" seamless>
+
+**Parameter constraints for this command:**
+
+| Parameter          | Length                                               | Allowed Characters                                    |
+|--------------------|------------------------------------------------------|-------------------------------------------------------|
+| `TASK_INDEX`       | – | Positive integer that exists in the current task list |
+| `TASK_NAME`        | 1–40 characters                                      | Any characters                                        |
+| `TASK_DESCRIPTION` | 1–120 characters                                     | Any characters                                        |
+
+</box>
+
+
+#### Examples
+
+* `edittask 1 task/Prepare Report desc/Submit by Friday` – edits both the name and description of task `#1`.
+* `edittask 2 task/Client Followup` – edits only the name of task `#2`.
+* `edittask 3 desc/Submit by Friday` – edits only the description of task `#3`.
+
+After entering a valid `edittask` command, ManageUp confirms the update and shows the edited task.
+
+<box type="info" seamless>
+
+**Expected output:**
+![Edit task success](images/EditTask_Successful.png)
+
+</box>
+
+#### Errors
+Facing errors? See [Troubleshooting `edittask`](#troubleshooting-edittask).
+
+<a id="deleting-a-task"></a>
+### Deleting a task : `deletetask`
+
+Deletes one or more tasks identified by their absolute task indices.
+
+Format:
+```text
+deletetask INDEX [MORE_INDICES]...
+```
+
+* `INDEX` refers to the absolute task index assigned to the task.
+* At least one task index must be provided.
+* Duplicate task indices are not allowed.
+
+<box type="info" seamless>
+
+**Parameter constraints for this command:**
+
+| Parameter | Length | Allowed Characters |
+|-----------|------|--------------------|
+| `INDEX` | – | Positive integer referring to an existing absolute task index |
+| `MORE_INDICES` | – | Additional positive integers referring to existing absolute task indices |
+
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** `deletetask` uses the task's absolute task index, not the employee index.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** `deletetask` does not depend on the currently displayed employee list. Even after applying a filter with `show`, a task can still be deleted if its absolute task index is known.
+
+</box>
+
+#### Examples
+
+* `deletetask 1` – deletes the task with absolute task index `1`.
+* `deletetask 2 4` – deletes the tasks with absolute task indices `2` and `4` in a single command, even if those tasks are not currently visible in a filtered employee list.
+
+After a successful `deletetask` command, ManageUp confirms the deleted task details in the result box.
+
+<box type="info" seamless>
+
+**Expected output (`deletetask INDEX`):**
+![Delete task success](images/DeleteTask.png)
+
+</box>
+
+After a successful batch `deletetask` command, ManageUp lists all deleted task details in the result box.
+
+<box type="info" seamless>
+
+**Expected output (`deletetask INDEX [MORE_INDICES]...`):**
+![Batch delete task success](images/BatchDeleteTask.png)
+
+</box>
+
+#### Errors
+Facing errors? See [Troubleshooting `deletetask`](#troubleshooting-deletetask).
+
+<a id="clearing-all-tasks-for-an-employee"></a>
+### Clearing all tasks for an employee : `cleartasks`
+
+Deletes all tasks belonging to one employee identified by employee index or employee name.
+
+Format:
+```text
+cleartasks INDEX
+cleartasks n/NAME
+```
+
+* `INDEX` refers to the employee index shown in the currently displayed employee list.
+* `n/NAME` refers to one uniquely matching employee in the currently displayed employee list.
+* Exactly one target employee must be identified.
+
+<box type="info" seamless>
+
+**Parameter constraints for this command:**
+
+| Parameter | Constraints |
+|-----------|-------------|
+| `INDEX` | Positive integer from the **currently displayed** employee list |
+| `NAME` | Must match exactly one employee in the **currently displayed** list |
+
+</box>
+
+<box type="warning" seamless>
+
+**Warning:** If more than one displayed employee has the same name, `cleartasks n/NAME` will fail. In that case, use `cleartasks INDEX` instead.
+
+</box>
+
+<box type="tip" seamless>
+
+**Tip:** `cleartasks` uses the index from the **currently displayed list**. If you have filtered the list with `show`, use the indexes shown in the filtered list.
+
+</box>
+
+#### Examples
+
+* `cleartasks 1` – deletes all tasks assigned to the 1st displayed employee.
+* `cleartasks n/John Doe` – deletes all tasks assigned to employee `John Doe`.
+
+After a successful `cleartasks` command, ManageUp confirms all deleted task details for that employee.
+
+<box type="info" seamless>
+
+**Expected output:**
+![Clear tasks success](images/ClearTask.png)
+
+</box>
+
+#### Errors
+Facing errors? See [Troubleshooting `cleartasks`](#troubleshooting-cleartasks).
+
+<a id="viewing-help"></a>
+### Viewing help : `help`
+
+Opens the in-app Help Window.
+
+Format:
+```text
+help
+```
+
+* No additional parameters are required.
+* `help` opens a separate Help Window inside the app.
+* If the Help Window is already open, ManageUp focuses the existing window instead.
+* The Help Window shows supported commands, allowed inputs, and example usages.
+* The Help Window also includes a button that copies the online User Guide URL to your clipboard.
+
+#### Examples
+
+* `help` – opens the in-app Help Window.
+
+<box type="info" seamless>
+
+**Expected output:**
+![Help Window](images/Help_PopOutWindow.png)
+
+</box>
 
 ### Showing filtered employees: `show`
 
@@ -406,430 +790,6 @@ For example:
 - `show t/intern task/report`  
   Shows employees with a tag containing `intern` **and** a task containing `report`.
 
-<a id="editing-an-employee"></a>
-### Editing an employee: `edit`
-
-Edits the details of an existing employee identified by the employee index. Only fields you include are changed.
-
-Format:
-```
-edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...
-```
-
-* `INDEX` refers to the employee index shown in the currently displayed employee list.
-* At least one of the optional fields must be provided.
-* Duplicate prefixes for `n/`, `p/`, `e/`, `d/`, and `pos/` are not allowed.
-
-<box type="info" seamless>
-
-**Note:** If you provide duplicate tags in the same command (e.g. `t/intern t/intern`), ManageUp will treat them as one — only a single tag will be saved.
-
-</box>
-
-<box type="info" seamless>
-
-**Parameter constraints for this command:**
-
-| Parameter    | Length           | Allowed Characters                                                    |
-|--------------|------------------|-----------------------------------------------------------------------|
-| `INDEX`       | – | Positive integer that exists in the current employee list             |
-| `NAME`       | 1–100 characters | Alphanumeric characters, hyphens (`-`), apostrophes (`'`), and spaces |
-| `PHONE`      | 3–15 digits      | Numbers only                                                          |
-| `EMAIL`      | 1–100 characters | Follows [valid email format](#email-format)                           |
-| `DEPARTMENT` | 1–100 characters | Alphanumeric characters and spaces only                               |
-| `POSITION`   | 1–100 characters | Alphanumeric characters and spaces only                               |
-| `TAG`        | 1–50 characters  | Alphanumeric characters only                                          |
-
-</box>
-
-<box type="warning" seamless>
-
-**Warning:** When editing tags, **all** existing tags are **replaced** by the newly provided ones.
-
-</box>
-
-<box type="warning" seamless>
-
-**Warning:** Editing an employee to have the same name and the same phone number or email address as an existing employee is not allowed and will be rejected. 
-
-</box>
-
-<box type="warning" seamless>
-
-**Warning:** Phone numbers must be unique across all employees. Editing an employee's phone number to one already belonging to another employee will be rejected.
-
-</box>
-
-<box type="warning" seamless>
-
-**Warning:** Email addresses must be unique across all employees and are compared case-insensitively. Editing an employee's email to one already belonging to another employee will be rejected.
-
-</box>
-
-<box type="tip" seamless>
-
-**Tip:** `edit` uses the index from the **currently displayed list**. If you have filtered the list with `show`, use the indexes shown in the filtered list.
-
-</box>
-
-<box type="tip" seamless>
-
-**Tip:** To remove all tags from an employee, use `t/` without any value after it.
-</box>
-
-
-#### Examples
-
-* `edit 1 p/91234567 e/johndoe@example.com` – edits the phone number and email of the 1st employee.
-* `edit 2 pos/Team Lead` – edits the position of the 2nd employee.
-* `edit 3 n/Betsy Crower t/` – edits the name of the 3rd employee and clears all existing tags.
-* `edit 4 d/Finance t/likesCats t/golfs` – edits the department of the 4th employee and replaces all existing tags.
-
-After a successful `edit` command, ManageUp confirms the update and shows the **full** employee list.
-
-<box type="info" seamless>
-
-**Expected output:**
-![Edit employee success](images/EditEmployee_Successful.png)
-
-</box>
-
-#### Errors
-Facing errors? See [Troubleshooting `edit`](#troubleshooting-edit).
-
-<a id="deleting-an-employee"></a>
-### Deleting an employee : `delete`
-
-Deletes one or more specified employees from the address book.
-
-Format: `delete NAME` or `delete INDEX [MORE_INDEXES]...`
-
-#### Overview
-
-The `delete` command supports two ways to remove employees:
-
-* by `NAME`
-* by one or more displayed `INDEX` values
-
-Both forms operate on the **currently displayed employee list**.
-
-This means the result depends on what is currently shown in the app window. For example, after a `show` command, the indexes
-refer to the filtered list instead of the full list.
-
-#### Command usage
-
-##### Deleting by name
-
-Use `delete NAME` when you want to remove an employee by name instead of list position.
-
-* Name matching is **case-insensitive**.
-* Extra spaces in the input are ignored.
-* The entered name must match **one unique employee** in the currently displayed list.
-
-For example, after entering `delete betsy Crowe`, ManageUp deletes the matching employee and shows a success message.
-
-![Deleting an employee by name successfully](images/DeleteEmployee_ByName_Successful.png)
-
-##### Deleting by index
-
-Use `delete INDEX` when you want to remove one displayed employee by position in the current list.
-
-* The index refers to the number shown in the currently displayed employee list.
-* The index **must be a positive integer** such as `1`, `2`, or `3`.
-* Index-based deletion is useful when multiple employees have similar or identical names.
-
-For example, after entering `delete 2`, ManageUp deletes the 2nd displayed employee and shows a success message.
-
-![Deleting an employee by index successfully](images/DeleteEmployee_ByIndex_Successful.png)
-
-##### Batch deletion
-
-You can delete several employees in one command by listing multiple indexes.
-
-* Example format: `delete 1 3 5`
-* Every index must be valid before ManageUp deletes any employee.
-* The order of the indexes does not matter. For example, `delete 13 5 10` and `delete 5 10 13` are both valid as long as all the indexes exist in the currently displayed list.
-* Duplicate indexes in the same command are not allowed. For example, `delete 1 2 2` is not valid because index `2` is duplicated.
-
-This prevents partial deletion when one of the indexes is wrong.
-
-For example, after entering `delete 1 2 3`, ManageUp deletes all three displayed employees and lists them in the success message.
-
-![Batch deleting employees by index successfully](images/DeleteEmployee_BatchDeleteByIndex_Successful.png)
-
-#### Important notes
-
-<box type="tip" seamless>
-
-**Tip:** If you want to delete from the full employee list again after using `show`, run `list` first so the indexes are
-reset to the full list.
-</box>
-
-* `delete NAME` checks only the employees currently shown on screen.
-* `delete INDEX` and batch delete also use the currently displayed list.
-* If an invalid index is provided, no employee will be deleted.
-* If no employee matches the given name, the command will fail.
-* If the entered name contains invalid characters, the command will fail.
-
-For example, entering `delete 100` fails because the provided index is invalid.
-
-![Deleting with an invalid index](images/DeleteEmployee_Error_InvalidIndex.png)
-
-For example, entering `delete max` fails because no displayed employee matches that name.
-
-![Deleting by a name that does not exist](images/DeleteEmployee_Error_NameNotFound.png)
-
-For example, entering `delete 1b#` fails because the name contains invalid characters.
-
-![Deleting with an invalid name](images/DeleteEmployee_Error_InvalidName.png)
-
-<box type="warning" seamless>
-
-**Warning:** If more than one displayed employee has the same name, `delete NAME` will fail. In that case, use
-`delete INDEX` instead.
-</box>
-
-For example, entering `delete john doe` fails because multiple displayed employees have the same name.
-
-![Deleting by name when duplicate names exist](images/DeleteEmployee_Error_DuplicatedNames.png)
-
-#### Examples
-
-* `list` followed by `delete 2`
-  Deletes the 2nd employee in the full employee list.
-
-* `show d/HR` followed by `delete 1`
-  Deletes the 1st employee in the filtered employee list.
-
-* `list` followed by `delete 1 3 5`
-  Deletes the 1st, 3rd, and 5th employees in the displayed employee list.
-
-* `delete John Doe`
-  Deletes the employee named `John Doe` if exactly one displayed employee matches that name.
-
-<a id="adding-a-task-to-an-employee"></a>
-### Adding a task: `addtask`
-
-Adds a task to a specific employee identified by employee index.
-
-Format: 
-```
-addtask EMPLOYEE_INDEX task/TASK_NAME desc/TASK_DESCRIPTION
-```
-
-* `EMPLOYEE_INDEX` refers to the employee index shown in the currently displayed employee list.
-* The task will be added to that employee's personal task list and shown on the employee card.
-* The task will have an index number attached to it, to indicate task number.
-* Only 1 `task/` and 1 `desc/` are allowed in the command. Duplicate prefixes are not allowed.
-* Both `task/` and `desc/` must be provided.
-* The format and order of `task/` and `desc/` should be followed exactly as stated in the format and no field should be left out.
-
-<box type="info" seamless>
-
-**Note:** This task index number does not follow a sequence and is merely a way to identify the task on the employee card. For example, if an employee has 2 tasks, and you delete the first one, the second task will still have the index `#2` on the employee card. If you add another task after that, it will be indexed as `#3` on the employee card.
-
-</box>
-
-
-<box type="info" seamless>
-
-**Parameter constraints for this command:**
-
-| Parameter          | Length                                                | Allowed Characters                                        |
-|--------------------|-------------------------------------------------------|-----------------------------------------------------------|
-| `EMPLOYEE_INDEX`   | – | Positive integer that exists in the current employee list |
-| `TASK_NAME`        | 1–40 characters                                       | Any characters                                            |
-| `TASK_DESCRIPTION` | 1–120 characters                                      | Any characters                                            |
-
-</box>
-
-
-#### Examples
-* `addtask 2 task/Prepare Report desc/Submit by Friday` 
-   adds a task named `Prepare Report` with description `Submit by Friday` to employee at index 2.
-* `addtask 2 task/Client Followup desc/Call client before Monday` 
-   adds a task named `Client Followup` with description `Call client before Monday` to employee at index 2.
-
-<box type="info" seamless>
-
-**Expected output:**
-![addTask message](images/addtaskmessage.png)
-
-</box>
-
-#### Errors
-Facing errors? See [Troubleshooting `addtask`](#troubleshooting-addtask).
-
-<a id="editing-a-task"></a>
-### Editing a task: `edittask`
-
-Edits the name and/or description of an existing task identified by its task index.
-
-Format:
-```
-edittask TASK_INDEX [task/TASK_NAME] [desc/TASK_DESCRIPTION]
-```
-
-* `TASK_INDEX` refers to the task index shown beside the task on the employee card (e.g. `#1`, `#2`).
-* At least one of `task/` or `desc/` must be provided.
-* Fields not provided remain unchanged.
-* Duplicate prefixes are not allowed (e.g. two `task/` in one command).
-
-<box type="info" seamless>
-
-**Note:** You can edit any task using its `TASK_INDEX` index, even if the employee it belongs to is not currently shown on screen. For example, if you have used `show` to filter the list, tasks belonging to hidden employees can still be edited using their task index.
-
-</box>
-
-<box type="info" seamless>
-
-**Parameter constraints for this command:**
-
-| Parameter          | Length                                                | Allowed Characters                                    |
-|--------------------|-------------------------------------------------------|-------------------------------------------------------|
-| `TASK_INDEX`       | – | Positive integer that exists in the current task list |
-| `TASK_NAME`        | 1–40 characters                                       | Any characters                                        |
-| `TASK_DESCRIPTION` | 1–120 characters                                      | Any characters                                        |
-
-</box>
-
-
-#### Examples
-
-* `edittask 1 task/Prepare Report desc/Submit by Friday` – edits both the name and description of task `#1`.
-* `edittask 2 task/Client Followup` – edits only the name of task `#2`.
-* `edittask 3 desc/Submit by Friday` – edits only the description of task `#3`.
-
-After entering a valid `edittask` command, ManageUp confirms the update and shows the edited task.
-
-<box type="info" seamless>
-
-**Expected output:**
-![Edit task success](images/EditTask_Successful.png)
-
-</box>
-
-#### Errors
-Facing errors? See [Troubleshooting `edittask`](#troubleshooting-edittask).
-
-<a id="deleting-a-task"></a>
-### Deleting a task : `deletetask`
-
-Deletes one or more tasks identified by their absolute task indices.
-
-Format:
-```text
-deletetask INDEX [MORE_INDICES]...
-```
-
-* `INDEX` refers to the absolute task index assigned to the task.
-* At least one task index must be provided.
-* Duplicate task indices are not allowed.
-
-<box type="info" seamless>
-
-**Parameter constraints for this command:**
-
-| Parameter | Constraints |
-|-----------|-------------|
-| `INDEX` | Positive integer referring to an existing absolute task index |
-| `MORE_INDICES` | Additional positive integers referring to existing absolute task indices |
-
-</box>
-
-<box type="tip" seamless>
-
-**Tip:** `deletetask` uses the task's absolute task index, not the employee index.
-
-</box>
-
-<box type="tip" seamless>
-
-**Tip:** `deletetask` does not depend on the currently displayed employee list. Even after applying a filter with `show`, a task can still be deleted if its absolute task index is known.
-
-</box>
-
-#### Examples
-
-* `deletetask 1` – deletes the task with absolute task index `1`.
-* `deletetask 2 4` – deletes the tasks with absolute task indices `2` and `4` in a single command, even if those tasks are not currently visible in a filtered employee list.
-
-After a successful `deletetask` command, ManageUp confirms the deleted task details in the result box.
-
-<box type="info" seamless>
-
-**Expected output:**
-![Delete task success](images/DeleteTask.png)
-
-</box>
-
-After a successful batch `deletetask` command, ManageUp lists all deleted task details in the result box.
-
-<box type="info" seamless>
-
-**Expected output for batch deletion:**
-![Batch delete task success](images/BatchDeleteTask.png)
-
-</box>
-
-#### Errors
-Facing errors? See [Troubleshooting `deletetask`](#troubleshooting-deletetask).
-
-<a id="clearing-all-tasks-for-an-employee"></a>
-### Clearing all tasks for an employee : `cleartasks`
-
-Deletes all tasks belonging to one employee identified by employee index or employee name.
-
-Format:
-```text
-cleartasks INDEX
-cleartasks n/NAME
-```
-
-* `INDEX` refers to the employee index shown in the currently displayed employee list.
-* `n/NAME` refers to one uniquely matching employee in the currently displayed employee list.
-* Exactly one target employee must be identified.
-
-<box type="info" seamless>
-
-**Parameter constraints for this command:**
-
-| Parameter | Constraints |
-|-----------|-------------|
-| `INDEX` | Positive integer from the **currently displayed** employee list |
-| `NAME` | Must match exactly one employee in the **currently displayed** list |
-
-</box>
-
-<box type="warning" seamless>
-
-**Warning:** If more than one displayed employee has the same name, `cleartasks n/NAME` will fail. In that case, use `cleartasks INDEX` instead.
-
-</box>
-
-<box type="tip" seamless>
-
-**Tip:** `cleartasks` uses the index from the **currently displayed list**. If you have filtered the list with `show`, use the indexes shown in the filtered list.
-
-</box>
-
-#### Examples
-
-* `cleartasks 1` – deletes all tasks assigned to the 1st displayed employee.
-* `cleartasks n/John Doe` – deletes all tasks assigned to employee `John Doe`.
-
-After a successful `cleartasks` command, ManageUp confirms all deleted task details for that employee.
-
-<box type="info" seamless>
-
-**Expected output:**
-![Clear tasks success](images/ClearTask.png)
-
-</box>
-
-#### Errors
-Facing errors? See [Troubleshooting `cleartasks`](#troubleshooting-cleartasks).
-
 <a id="clearing-all-entries"></a>
 ### Clearing all entries : `clear`
 
@@ -876,7 +836,6 @@ _More features coming soon ..._
 ## Known issues
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
-2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 
 --------------------------------------------------------------------------------------------------------------------
 

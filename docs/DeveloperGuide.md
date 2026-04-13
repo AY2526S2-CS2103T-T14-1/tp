@@ -292,6 +292,21 @@ separate internal task identity from user-facing display order. Each task can ke
 storage and updates, while the UI presents a smaller context-specific display number to the user. This preserves
 reliable task tracking internally while avoiding unwieldy visible task numbers in long-running usage.
 
+#### Task input validation design
+
+Task names and task descriptions are intentionally validated by length only. In `Task#isValidTaskName` and
+`Task#isValidTaskDescription`, ManageUp accepts any non-blank input up to the configured maximum lengths instead of
+restricting users to alphanumeric-only text.
+
+This is a deliberate usability trade-off to allow more flexibility for users. Real task entries often contain
+punctuation, shorthand, symbols, ticket IDs, version markers, dates, or emphasis, such as `**`, `---`,
+`UI/UX review`, `v2.1 patch`, `Follow up by Fri!`, or `Call client @ 3pm`. Rejecting those characters would make
+task entry less natural and force users to rewrite realistic work items into less useful text.
+
+The trade-off is that task content is less normalized than fields such as names, departments, and tags. The team chose
+to accept that lower normalization because task names and descriptions function as flexible work notes rather than
+identity fields, and the existing non-blank plus length limits still prevent empty or excessively long inputs.
+
 #### Add task implementation
 
 `addtask` is parsed by `AddTaskCommandParser`, which extracts the task name, task description, and employee index from
@@ -430,7 +445,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *` | user handling many departments | filter employees by department | quickly find employees in a particular sector |
 | `* *` | user | search employees working on a specific task | identify people responsible for that task |
 | `* *` | user | search tasks by keywords | quickly locate tasks already assigned |
-| `* *` | user | set task deadline | easily refer to when a task is due |
 | `* *` | user | see all tasks assigned to a department | allocate work more evenly across departments |
 | `* *` | user | sort tasks based on deadlines | identify overdue or upcoming tasks |
 | `*` | busy user | batch delete assigned tasks | update records more efficiently |
