@@ -25,22 +25,22 @@ public class SampleDataUtil {
         return new Employee[] {
             new Employee(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
                     new Department("IT"), new Position("Junior software developer"),
-                    getTagSet("friends"), new TaskListStorage(new ArrayList<>())),
+                    getTagSet("AI Expert"), new TaskListStorage(new ArrayList<>())),
             new Employee(new Name("Bernice Yu"), new Phone("99272758"), new Email("berniceyu@example.com"),
                     new Department("Sales"), new Position("HR manager"),
-                    getTagSet("colleagues", "friends"), new TaskListStorage(new ArrayList<>())),
+                    getTagSet("hardworking", "friends"), new TaskListStorage(new ArrayList<>())),
             new Employee(new Name("Charlotte Oliveiro"), new Phone("93210283"), new Email("charlotte@example.com"),
                     new Department("HR"), new Position("Team leader"),
-                    getTagSet("neighbours"), new TaskListStorage(new ArrayList<>())),
+                    getTagSet("newcomer"), new TaskListStorage(new ArrayList<>())),
             new Employee(new Name("David Li"), new Phone("91031282"), new Email("lidavid@example.com"),
                     new Department("Marketing"), new Position("Marketing lead"),
-                    getTagSet("family"), new TaskListStorage(new ArrayList<>())),
+                    getTagSet("effecient"), new TaskListStorage(new ArrayList<>())),
             new Employee(new Name("Irfan Ibrahim"), new Phone("92492021"), new Email("irfan@example.com"),
                     new Department("Finance"), new Position("Frontend developer"),
-                    getTagSet("classmates"), new TaskListStorage(new ArrayList<>())),
+                    getTagSet("effecient"), new TaskListStorage(new ArrayList<>())),
             new Employee(new Name("Roy Balakrishnan"), new Phone("92624417"), new Email("royb@example.com"),
                     new Department("Creative"), new Position("Product manager"),
-                    getTagSet("colleagues"), new TaskListStorage(new ArrayList<>()))
+                    getTagSet("hardworking"), new TaskListStorage(new ArrayList<>()))
         };
     }
 
