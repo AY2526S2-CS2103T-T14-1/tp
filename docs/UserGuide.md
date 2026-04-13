@@ -188,7 +188,7 @@ add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...
 
 | Parameter | Length         | Allowed Characters                                                    |
 |-----------|----------------|-----------------------------------------------------------------------|
-| `NAME`    | 1–100 characters  | Alphanumeric characters, hyphen-minus (`-`), straight apostrophes (`'`), and spaces |
+| `NAME`    | 1–100 characters  | Must start with an alphanumeric character; after that, may contain alphanumeric characters, spaces, hyphen-minus (`-`), and straight apostrophes (`'`) |
 | `PHONE`   | 3–15 digits    | Numbers only                                                          |
 | `EMAIL`   | 1–100 characters  | Follows [valid email format](#email-format)                           |
 | `DEPARTMENT` | 1–100 characters | Alphanumeric characters and spaces only                            |
@@ -243,9 +243,20 @@ Facing errors? See [Troubleshooting `add`](#troubleshooting-add).
 
 ### Listing all employees : `list`
 
-Shows a list of all employees in the address book.
+Shows all employees in ManageUp.
 
-Format: `list`
+Format:
+```text
+list
+```
+
+* No additional parameters are required.
+* `list` resets the displayed employee list to show every employee in ManageUp.
+* This is useful after using `show`, because it restores the full employee list and its displayed indexes.
+
+#### Examples
+
+* `list` – shows the full employee list.
 
 <a id="editing-an-employee"></a>
 ### Editing an employee: `edit`
@@ -274,7 +285,7 @@ edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [d/DEPARTMENT] [pos/POSITION] [t/TAG]...
 | Parameter    | Length           | Allowed Characters                                                    |
 |--------------|------------------|-----------------------------------------------------------------------|
 | `INDEX`       | – | Positive integer that exists in the current employee list             |
-| `NAME`       | 1–100 characters | Alphanumeric characters, hyphen-minus (`-`), straight apostrophes (`'`), and spaces |
+| `NAME`       | 1–100 characters | Must start with an alphanumeric character; after that, may contain alphanumeric characters, spaces, hyphen-minus (`-`), and straight apostrophes (`'`) |
 | `PHONE`      | 3–15 digits      | Numbers only                                                          |
 | `EMAIL`      | 1–100 characters | Follows [valid email format](#email-format)                           |
 | `DEPARTMENT` | 1–100 characters | Alphanumeric characters and spaces only                               |
@@ -361,7 +372,7 @@ delete INDEX [MORE_INDEXES]...
 
 | Parameter | Length | Allowed Characters |
 |-----------|--------|--------------------|
-| `NAME` | 1-100 characters | Alphanumeric characters, hyphen-minus (`-`), straight apostrophes (`'`), and spaces; must match exactly one employee in the **currently displayed** list |
+| `NAME` | 1-100 characters | Must start with an alphanumeric character; after that, may contain alphanumeric characters, spaces, hyphen-minus (`-`), and straight apostrophes (`'`); must match exactly one employee in the **currently displayed** list |
 | `INDEX` | - | Positive integer from the **currently displayed** employee list |
 | `MORE_INDEXES` | - | Additional positive integers from the **currently displayed** employee list |
 
@@ -794,9 +805,20 @@ For example:
 <a id="clearing-all-entries"></a>
 ### Clearing all entries : `clear`
 
-Clears all entries from the address book.
+Clears all employee records from ManageUp.
 
-Format: `clear`
+Format:
+```text
+clear
+```
+
+* No additional parameters are required.
+* `clear` removes all employees from the address book.
+* `clear` also removes all tasks linked to those employees.
+
+#### Examples
+
+* `clear` – removes all employees and their tasks from ManageUp.
 
 <a id="exiting-the-program"></a>
 ### Exiting the program : `exit`
@@ -875,7 +897,7 @@ Use this section when `add` fails.
 | Scenario | Message shown | How to fix                                                                                                               |
 |----------|---------------|--------------------------------------------------------------------------------------------------------------------------|
 | Missing required fields or wrong syntax | `Invalid command format. Please use the following format: ...` | Use the format: `add n/NAME p/PHONE e/EMAIL d/DEPARTMENT pos/POSITION [t/TAG]...`                                        |
-| Name contains invalid characters or is too long | `Names should only contain alphanumeric characters, spaces, hyphens or apostrophes, and it should not be blank or exceed 100 characters` | Use only letters, digits, spaces, the hyphen-minus `-`, or the straight apostrophe `'` — name must start with a letter or digit and be at most 100 characters long |
+| Name contains invalid characters or is too long | `Names should start with an alphanumeric character, and may contain alphanumeric characters, spaces, hyphens (-), or apostrophes ('). It should not be blank or exceed 100 characters` | Use only letters, digits, spaces, the hyphen-minus `-`, or the straight apostrophe `'` — name must start with an alphanumeric character and be at most 100 characters long |
 | Phone contains non-digits or wrong length | `Phone numbers should only contain numbers, and it should be 3 to 15 digits long` | Use digits only, between 3 and 15 digits long                                                                            |
 | Email format is invalid | `Emails should be of the format local-part@domain and adhere to the following constraints: ...` | Re-enter a valid email, e.g. `johnd@example.com` (see [valid email format](#email-format))                               |
 | Department contains invalid characters or is too long | `Department should only contain alphanumeric characters and spaces, and it should not be blank or exceed 100 characters` | Use only letters, digits, and spaces — at most 100 characters long                                                       |
@@ -903,7 +925,7 @@ Use this section when `edit` fails.
 | New phone number already belongs to another employee | `This phone number is already assigned to another employee: ...` | Use a phone number not already assigned to another employee                                                              |
 | New email already belongs to another employee | `This email address is already assigned to another employee: ...` | Use an email address not already assigned to another employee                                                            |
 | Same prefix used more than once | `Multiple values were provided for these fields, but each field accepts only one value: [field(s)]` | Remove the extra prefix — each of `n/`, `p/`, `e/`, `d/`, `pos/` may only appear once                                    |
-| Name contains invalid characters or is too long | `Names should only contain alphanumeric characters, spaces, hyphens or apostrophes, and it should not be blank or exceed 100 characters` | Use only letters, digits, spaces, the hyphen-minus `-`, or the straight apostrophe `'` — name must start with a letter or digit and be at most 100 characters long |
+| Name contains invalid characters or is too long | `Names should start with an alphanumeric character, and may contain alphanumeric characters, spaces, hyphens (-), or apostrophes ('). It should not be blank or exceed 100 characters` | Use only letters, digits, spaces, the hyphen-minus `-`, or the straight apostrophe `'` — name must start with an alphanumeric character and be at most 100 characters long |
 | Phone contains non-digits or wrong length | `Phone numbers should only contain numbers, and it should be 3 to 15 digits long` | Use digits only, between 3 and 15 digits long                                                                            |
 | Email format is invalid | `Emails should be of the format local-part@domain and adhere to the following constraints: ...` | Re-enter a valid email, e.g. `johnd@example.com` (see [valid email format](#email-format))                               |
 | Department contains invalid characters or is too long | `Department should only contain alphanumeric characters and spaces, and it should not be blank or exceed 100 characters` | Use only letters, digits, and spaces — at most 100 characters long                                                       |
@@ -937,8 +959,8 @@ Use this section when `delete` fails.
 | No name or index provided | `Invalid command format. Please use the following format: ...` | Use either `delete NAME` or `delete INDEX [MORE_INDEXES]...` |
 | No employee matches the given name | `No employee named '[name]' was found in the current list.` | Check the spelling and run `list` to confirm the employee exists |
 | More than one employee matches the given name | `More than one employee named '[name]' was found. Please use the employee index instead.` | Use `delete INDEX` to delete by number instead of name |
-| Name contains invalid characters | `Invalid employee name. Names should only contain alphanumeric characters, spaces, hyphens or apostrophes, and it should not be blank or exceed 100 characters` | Use only letters, digits, spaces, the hyphen-minus `-`, or the straight apostrophe `'` in the name |
-| Same index given more than once in batch delete | `Duplicate employee indices are not allowed.` | Each index may appear only once per command |
+| Name contains invalid characters | `Invalid employee name. Names should start with an alphanumeric character, and may contain alphanumeric characters, spaces, hyphens (-), or apostrophes ('). It should not be blank or exceed 100 characters` | Use only letters, digits, spaces, the hyphen-minus `-`, or the straight apostrophe `'` in the name |
+| Same index given more than once | `Duplicate employee indices are not allowed.` | Each index may appear only once per command |
 
 <div style="height: 20px;"></div>
 
@@ -1004,4 +1026,4 @@ Use this section when `cleartasks` fails.
 | Index provided is out of range | `Invalid employee index. Please enter an index shown in the current employee list.` | Run `list` and use a valid employee index |
 | No employee matches the given name | `No employee named '[name]' was found in the current list.` | Check the spelling and run `list` to confirm the employee exists |
 | More than one employee matches the given name | `More than one employee named '[name]' was found. Please use the employee index instead.` | Use `cleartasks INDEX` to clear by number instead of name |
-| Name contains invalid characters | `Invalid employee name. Names should only contain alphanumeric characters, spaces, hyphens or apostrophes, and it should not be blank or exceed 100 characters` | Use only letters, digits, spaces, the hyphen-minus `-`, or the straight apostrophe `'` in the name |
+| Name contains invalid characters | `Invalid employee name. Names should start with an alphanumeric character, and may contain alphanumeric characters, spaces, hyphens (-), or apostrophes ('). It should not be blank or exceed 100 characters` | Use only letters, digits, spaces, the hyphen-minus `-`, or the straight apostrophe `'` in the name |
