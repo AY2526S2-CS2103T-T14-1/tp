@@ -51,7 +51,7 @@
         "storage-component": "Storage component",
         "common-classes": "Common classes",
         "implementation": "Implementation",
-        "delete-employee": "Delete employee",
+        "employee-management": "Employee management",
         "task-management": "Task management",
         "documentation-logging-testing-configuration-dev-ops": "Documentation, logging, testing, configuration, dev-ops",
         "appendix-requirements": "Appendix: Requirements",
@@ -64,6 +64,8 @@
         "undo-redo-feature": "Undo/redo feature",
         "appendix-instructions-for-manual-testing": "Appendix: Instructions for manual testing",
         "launch-and-shutdown": "Launch and shutdown",
+        "adding-an-employee": "Adding an employee",
+        "adding-a-task": "Adding a task",
         "deleting-an-employee": "Deleting an employee",
         "saving-data": "Saving data"
       },
