@@ -484,6 +484,12 @@ addtask EMPLOYEE_INDEX task/TASK_NAME desc/TASK_DESCRIPTION
 
 </box>
 
+<box type="warning" seamless>
+
+**Warning:** Duplicate tasks are not allowed. You cannot add a task with the same task name and description as an existing task under the same employee.
+
+</box>
+
 
 #### Examples
 * `addtask 2 task/Prepare Report desc/Submit by Friday`
@@ -531,6 +537,12 @@ edittask TASK_INDEX [task/TASK_NAME] [desc/TASK_DESCRIPTION]
 | `TASK_INDEX`       | – | Positive integer that exists in the current task list |
 | `TASK_NAME`        | 1–40 characters                                      | Any characters                                        |
 | `TASK_DESCRIPTION` | 1–120 characters                                     | Any characters                                        |
+
+</box>
+
+<box type="warning" seamless>
+
+**Warning:** Duplicate tasks are not allowed. You cannot edit a task to have the same task name and description as an existing task under the same employee.
 
 </box>
 
@@ -1009,6 +1021,7 @@ Use this section when `edittask` fails.
 | Task name is blank or too long | `Task name should not be empty and should be between 1 and 40 characters.` | Re-enter a task name between 1 and 40 characters long |
 | Task description is blank or too long | `Task description should not be empty and should be between 1 and 120 characters.` | Re-enter a task description between 1 and 120 characters long |
 | Task index is 0, negative, or does not exist | `Invalid task index. Please enter a task index that is currently shown in ManageUp.` | Enter a positive integer matching a task index shown as `#N` on an employee card |
+| Task with same name and description already exists for this employee | `This employee already has a task with the same name and same description.` | Change the task name or description |
 
 <div style="height: 20px;"></div>
 
