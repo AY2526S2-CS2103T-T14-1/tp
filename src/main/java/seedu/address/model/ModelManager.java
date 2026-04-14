@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -219,6 +220,18 @@ public class ModelManager implements Model {
     @Override
     public void clearTask() {
         tasks.clear();
+    }
+
+    @Override
+    public boolean employeeOfTaskHasDuplicateTask(int taskIndex, String name, String desc) {
+        try {
+            Employee owner = tasks.getPersonAssignedToTask(taskIndex);
+            return owner.getTaskListStorage().getTasks().stream()
+                    .filter(t -> t.getCurrentTaskIndex() != taskIndex)
+                    .anyMatch(t -> t.getTaskName().equals(name) && t.getTaskDescription().equals(desc));
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 
 

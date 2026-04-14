@@ -226,6 +226,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean employeeOfTaskHasDuplicateTask(int taskIndex, String name, String desc) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public void deleteTask(int taskIndex) {
             throw new AssertionError("This method should not be called.");
         }

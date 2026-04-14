@@ -41,8 +41,9 @@ public class EditTaskCommand extends Command {
 
     /**
      * Creates a EditTaskCommand to edit the specified task identified by the given {@code taskIndex}
-     * @param taskIndex  the task index of the task to edit
-     * @param editTaskDescriptor  the task fields to update
+     *
+     * @param taskIndex          the task index of the task to edit
+     * @param editTaskDescriptor the task fields to update
      */
     public EditTaskCommand(int taskIndex, EditTaskDescriptor editTaskDescriptor) {
         requireNonNull(editTaskDescriptor);
@@ -63,12 +64,13 @@ public class EditTaskCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        Task oldTask = model.getTaskByIndex(taskIndex)
-                            .orElseThrow(() -> new CommandException(MESSAGE_INVALID_INDEX));
+        Task oldTask = model.getTaskByIndex(taskIndex).orElseThrow(() -> new CommandException(MESSAGE_INVALID_INDEX));
         String newName = editTaskDescriptor.getTaskName().orElse(oldTask.getTaskName());
         String newDescription = editTaskDescriptor.getTaskDescription().orElse(oldTask.getTaskDescription());
         Task newTask = new Task(newName, newDescription, oldTask.getCurrentTaskIndex());
-
+        if (model.employeeOfTaskHasDuplicateTask(taskIndex, newName, newDescription)) {
+            throw new CommandException(AddTaskCommand.MESSAGE_DUPLICATE_TASK);
+        }
         model.setTask(taskIndex, newTask);
         return new CommandResult(String.format(MESSAGE_EDIT_TASK_SUCCESS, newTask));
 
@@ -78,8 +80,7 @@ public class EditTaskCommand extends Command {
      * Checks if this EditTaskCommand is equal to another object.
      *
      * @param other the object to compare with this EditTaskCommand.
-     * @return true if the other object is an EditTaskCommand with the same
-     *         {@code taskIndex} and {@code editTaskDescriptor}, false otherwise.
+     * @return true if other object is an EditTaskCommand with the same task index and edit task descriptor, false else.
      */
     @Override
     public boolean equals(Object other) {
@@ -110,7 +111,8 @@ public class EditTaskCommand extends Command {
         private String taskName;
         private String taskDescription;
 
-        public EditTaskDescriptor() {}
+        public EditTaskDescriptor() {
+        }
 
         /**
          * Copy constructor.
