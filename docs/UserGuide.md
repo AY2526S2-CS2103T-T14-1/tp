@@ -27,9 +27,9 @@ ManageUp is built for **managers overseeing multiple teams or departments** who:
 </box>
 
 **Key features:**
-* Manage employee records — [`add`](#adding-an-employee-add), [`edit`](#editing-an-employee-edit), [`delete`](#deleting-an-employee-delete) employees and their details
+* Manage employee records — [`add`](#adding-an-employee), [`edit`](#editing-an-employee), [`delete`](#deleting-an-employee) employees and their details
 * Filter employees by name, department, position, tag, or task — [`show`](#showing-filtered-employees)
-* Assign and track tasks per employee — [`addtask`](#adding-a-task-addtask), [`edittask`](#editing-a-task-edittask), [`deletetask`](#deleting-a-task-deletetask), [`cleartasks`](#clearing-all-tasks-for-an-employee-cleartasks)
+* Assign and track tasks per employee — [`addtask`](#adding-a-task-to-an-employee), [`edittask`](#editing-a-task), [`deletetask`](#deleting-a-task), [`cleartasks`](#clearing-all-tasks-for-an-employee)
 * Works fully offline — no internet connection required
 
 New to ManageUp? Start with [Quick Start](#quick-start). Already installed? Jump to [Features](#features) or [Command Summary](#command-summary).
@@ -241,6 +241,7 @@ After entering a valid `add` command, ManageUp confirms the new employee was add
 #### Errors
 Facing errors? See [Troubleshooting `add`](#troubleshooting-add).
 
+<a id="listing-all-employees"></a>
 ### Listing all employees : `list`
 
 Shows all employees in ManageUp.
