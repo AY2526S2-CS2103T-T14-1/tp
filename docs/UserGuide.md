@@ -971,6 +971,8 @@ Use this section when `show` fails.
 |----------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | No filters provided | `Invalid command format. Please use the following format: ...` | Use the format: `show [n/NAME...] [d/DEPARTMENT...] [p/PHONE...] [e/EMAIL...] [pos/POSITION...] [t/TAG...] [task/TASK...]` — include at least one prefix filter |
 | A prefix is provided but its value is blank | `[Field] field should not be empty.` (e.g. `Name field should not be empty.`) | Add a keyword after the prefix, e.g. `show n/John` instead of `show n/`                                                                                         |
+| The same prefix is used more than once | `Multiple values were provided for these fields, but each field accepts only one value: [PREFIX]` (e.g. `...: n/` or `...: n/ d/`) | Use each prefix at most once. Put multiple keywords after a single prefix instead, e.g. `show n/John Alex` instead of `show n/John n/Alex`                      |
+
 
 <div style="height: 20px;"></div>
 
@@ -1004,6 +1006,8 @@ Use this section when `addtask` fails.
 | Task description is blank or too long                                | `Task description should not be empty and should be between 1 and 120 characters.` | Re-enter a task description between 1 and 120 characters long |
 | Employee index is out of range                                       | `Invalid employee index. Please enter an index shown in the current employee list.` | Run `list` and use a valid employee index |
 | Task with same name and description already exists for this employee | `This employee already has a task with the same name and same description.` | Change the task name or description |
+| `task/` used more than once | `Multiple values were provided for these fields, but each field accepts only one value: task/` | Remove the extra `task/` — it may only appear once per command |
+| `desc/` used more than once | `Multiple values were provided for these fields, but each field accepts only one value: desc/` | Remove the extra `desc/` — it may only appear once per command |
 
 <div style="height: 20px;"></div>
 
