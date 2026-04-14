@@ -198,5 +198,30 @@ public class EditTaskCommandTest {
         assertEquals(expected, command.toString());
     }
 
+    @Test
+    public void execute_editTaskToDuplicateOfAnotherTask_throwsCommandException() throws Exception {
+        Task task1 = new Task(ORIGINAL_TASK_NAME, ORIGINAL_TASK_DESCRIPTION, 1);
+        Task task2 = new Task(VALID_TASK_NAME_REPORT, VALID_TASK_DESCRIPTION_REPORT, 2);
+        TaskListStorage taskListStorage = new TaskListStorage(new ArrayList<>());
+        taskListStorage.addTask(task1);
+        taskListStorage.addTask(task2);
+        Employee employee = new Employee(
+                new Name("John Doe"), new Phone("12345678"),
+                new Email("johnd@example.com"), new Department("IT"),
+                new Position("Developer"), Collections.emptySet(), taskListStorage
+        );
+        AddressBook addressBook = new AddressBook();
+        addressBook.addPerson(employee);
+        ModelManager model = new ModelManager(addressBook, new UserPrefs());
+        model.addTaskOverall(task1, employee);
+        model.addTaskOverall(task2, employee);
+        EditTaskDescriptor descriptor = new EditTaskDescriptorBuilder()
+                .withTaskName(ORIGINAL_TASK_NAME)
+                .withTaskDescription(ORIGINAL_TASK_DESCRIPTION)
+                .build();
+        EditTaskCommand command = new EditTaskCommand(2, descriptor);
+        assertCommandFailure(command, model, AddTaskCommand.MESSAGE_DUPLICATE_TASK);
+    }
+
 }
 

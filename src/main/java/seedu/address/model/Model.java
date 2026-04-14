@@ -137,4 +137,6 @@ public interface Model {
      * Clears all tasks from the overall task list and from each employee's individual task list.
      */
     void clearTask();
+
+    boolean employeeOfTaskHasDuplicateTask(int taskIndex, String name, String desc);
 }
