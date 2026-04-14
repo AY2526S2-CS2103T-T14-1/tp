@@ -62,6 +62,8 @@
         "glossary": "Glossary",
         "appendix-planned-enhancements": "Appendix: Planned Enhancements",
         "undo-redo-feature": "Undo/redo feature",
+        "advanced-error-handling-for-duplicate-prefixes": "Advanced error handling for duplicate prefixes",
+        "allowance-of-special-characters-in-employee-names": "Allowance of special characters in employee names",
         "appendix-instructions-for-manual-testing": "Appendix: Instructions for manual testing",
         "launch-and-shutdown": "Launch and shutdown",
         "adding-an-employee": "Adding an employee",
