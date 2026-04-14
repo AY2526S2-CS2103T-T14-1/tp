@@ -71,4 +71,15 @@ class AddTaskCommandParserTest {
         assertThrows(ParseException.class, () -> parser.parse(whitespaceTaskDescription));
     }
 
+    @Test
+    void parse_duplicatePrefixes_throwsParseException() {
+        String duplicateTaskName = "1 task/" + VALID_TASK_NAME_1 + " task/" + VALID_TASK_NAME_1
+                + " desc/" + VALID_TASK_DESCRIPTION_1;
+        assertThrows(ParseException.class, () -> parser.parse(duplicateTaskName));
+
+        String duplicateTaskDescription = "1 task/" + VALID_TASK_NAME_1
+                + " desc/" + VALID_TASK_DESCRIPTION_1 + " desc/" + VALID_TASK_DESCRIPTION_1;
+        assertThrows(ParseException.class, () -> parser.parse(duplicateTaskDescription));
+    }
+
 }
